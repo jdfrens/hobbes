@@ -1,0 +1,10 @@
+Compiles a simple, larger integer.
+====
+665
+====
+.sub main
+	print 665
+	print "\n"
+.end
+====
+665
