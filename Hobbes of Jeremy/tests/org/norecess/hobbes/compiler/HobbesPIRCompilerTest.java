@@ -11,15 +11,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
 
-public class HobbesCompilerTest {
+public class HobbesPIRCompilerTest {
 
-    private IMocksControl  myControl;
-    private HobbesCompiler myCompiler;
+    private IMocksControl     myControl;
+    private HobbesPIRCompiler myCompiler;
 
     @Before
     public void setUp() {
         myControl = EasyMock.createControl();
-        myCompiler = new HobbesCompiler();
+        myCompiler = new HobbesPIRCompiler();
     }
 
     @Test
@@ -28,8 +28,12 @@ public class HobbesCompilerTest {
         expect(frontEnd.process()).andReturn(8);
 
         myControl.replay();
-        assertEquals(".sub main\n\tprint 8\n\tprint \"\\n\"\n.end\n",
-                myCompiler.compile(frontEnd, new StringBuilder()).toString());
+        assertEquals(//
+                new Code<String>().add(".sub main") //
+                        .add("print 8") //
+                        .add("print \"\\n\"") //
+                        .add(".end"),//
+                myCompiler.compile(frontEnd, new Code<String>()));
         myControl.verify();
     }
 

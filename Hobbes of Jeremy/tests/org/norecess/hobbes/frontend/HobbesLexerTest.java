@@ -1,6 +1,6 @@
 package org.norecess.hobbes.frontend;
 
-import static org.norecess.antlr.Assert.assertToken;
+import static org.norecess.antlr.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,4 +28,6 @@ public class HobbesLexerTest {
         assertToken(HobbesLexer.INTEGER, "-123", myTester.scanInput("-123"));
         assertToken(HobbesLexer.INTEGER, "-665", myTester.scanInput("-665"));
     }
+
+    // TODO: test bad integers (like "123x5")
 }
