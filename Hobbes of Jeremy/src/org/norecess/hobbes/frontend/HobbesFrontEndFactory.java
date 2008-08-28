@@ -15,7 +15,7 @@ public class HobbesFrontEndFactory implements IANTLRFrontEnd {
     }
 
     public Parser createParser(TokenStream stream) {
-        throw new IllegalStateException("unimplemented!");
+        return new HobbesParser(stream);
     }
 
     public TreeParser createTreeParser(Tree tree) {

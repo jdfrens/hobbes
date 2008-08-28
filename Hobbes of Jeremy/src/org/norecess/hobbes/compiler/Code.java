@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+/*
+ * Mostly just a fancy name for "a list of instructions".  At least for now.
+ */
 public class Code<T> implements ICode<T> {
 
     private final List<T> myInstructions;

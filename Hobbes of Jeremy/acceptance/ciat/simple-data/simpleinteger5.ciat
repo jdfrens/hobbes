@@ -3,7 +3,8 @@ Compiles a simple, small integer.
 5
 ====
 .sub main
-	print 5
+	$I0 = 5
+	print $I0
 	print "\n"
 .end
 ====

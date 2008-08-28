@@ -1,10 +1,12 @@
 package org.norecess.hobbes.compiler;
 
 import static org.easymock.EasyMock.expect;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import java.io.IOException;
 
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.tree.Tree;
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.Before;
@@ -13,27 +15,35 @@ import org.norecess.hobbes.frontend.IHobbesFrontEnd;
 
 public class HobbesPIRCompilerTest {
 
-    private IMocksControl     myControl;
-    private HobbesPIRCompiler myCompiler;
+    private IMocksControl               myControl;
+    private IHobbesPIRComponentCompiler myComponentCompiler;
+    private HobbesPIRCompiler           myCompiler;
 
     @Before
     public void setUp() {
         myControl = EasyMock.createControl();
-        myCompiler = new HobbesPIRCompiler();
+
+        myComponentCompiler = myControl
+                .createMock(IHobbesPIRComponentCompiler.class);
+
+        myCompiler = new HobbesPIRCompiler(myComponentCompiler);
     }
 
+    @SuppressWarnings("unchecked")
     @Test
-    public void shouldCompile() throws IOException {
+    public void shouldCompile() throws RecognitionException, IOException {
         IHobbesFrontEnd frontEnd = myControl.createMock(IHobbesFrontEnd.class);
-        expect(frontEnd.process()).andReturn(8);
+        ICode<String> code = myControl.createMock(ICode.class);
+        Tree tree = myControl.createMock(Tree.class);
+
+        expect(frontEnd.process()).andReturn(tree);
+        expect(myComponentCompiler.generateProlog(code)).andReturn(code);
+        expect(myComponentCompiler.generateCode(code, "$I0", tree)).andReturn(
+                code);
+        expect(myComponentCompiler.generateEpilog(code)).andReturn(code);
 
         myControl.replay();
-        assertEquals(//
-                new Code<String>().add(".sub main") //
-                        .add("print 8") //
-                        .add("print \"\\n\"") //
-                        .add(".end"),//
-                myCompiler.compile(frontEnd, new Code<String>()));
+        assertSame(code, myCompiler.compile(frontEnd, code));
         myControl.verify();
     }
 

@@ -4,24 +4,44 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import org.antlr.runtime.RecognitionException;
 import org.norecess.hobbes.compiler.Code;
 import org.norecess.hobbes.compiler.HobbesPIRCompiler;
-import org.norecess.hobbes.compiler.ICode;
 import org.norecess.hobbes.drivers.targetcode.PIRWriter;
 import org.norecess.hobbes.frontend.HobbesFrontEnd;
 
+/**
+ * The main driver. Usage: java org.norecess.hobbes.drivers.PIRCompiler
+ * infile.hob outfile.pir
+ */
 public class PIRCompiler {
 
-    public static void main(String[] args) throws IOException {
-        PrintWriter printWriter = new PrintWriter(args[1]);
-        new PIRWriter(printWriter).writeCode(new PIRCompiler()
-                .generateCode(args[0]));
-        printWriter.close();
+    private final HobbesFrontEnd myFrontEnd;
+    private final PrintWriter    myWriter;
+
+    public PIRCompiler(String sourceFile, String targetFile) throws IOException {
+        myFrontEnd = new HobbesFrontEnd(new File(sourceFile));
+        myWriter = new PrintWriter(targetFile);
     }
 
-    public ICode<String> generateCode(String sourceFile) throws IOException {
-        return new HobbesPIRCompiler().compile(new HobbesFrontEnd(new File(
-                sourceFile)), new Code<String>());
+    public void init() {
+    }
+
+    public void generateCode() throws IOException, RecognitionException {
+        new PIRWriter(myWriter).writeCode(new HobbesPIRCompiler().compile(
+                myFrontEnd, new Code<String>()));
+    }
+
+    public void done() {
+        myWriter.close();
+    }
+
+    public static void main(String[] args) throws IOException,
+            RecognitionException {
+        PIRCompiler compiler = new PIRCompiler(args[0], args[1]);
+        compiler.init();
+        compiler.generateCode();
+        compiler.done();
     }
 
 }

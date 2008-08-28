@@ -1,7 +1,10 @@
 package org.norecess.hobbes.frontend;
 
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.tree.Tree;
+
 public interface IHobbesFrontEnd {
 
-    public int process();
+    public Tree process() throws RecognitionException;
 
 }

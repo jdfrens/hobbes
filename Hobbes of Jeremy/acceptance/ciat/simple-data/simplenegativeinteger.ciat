@@ -3,7 +3,8 @@ Compiles a simple, negative integer.
 -1024
 ====
 .sub main
-	print -1024
+	$I0 = -1024
+	print $I0
 	print "\n"
 .end
 ====
