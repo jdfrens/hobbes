@@ -16,6 +16,16 @@ public class HobbesParserTest {
     }
 
     @Test
+    public void shouldParseAnInteger() {
+        assertTree(HobbesParser.INTEGER, "(23)", myTester.scanInput("23")
+                .parseAs("program"));
+        assertTree(HobbesParser.INTEGER, "(-23)", myTester.scanInput("-23")
+                .parseAs("program"));
+        assertTree(HobbesParser.INTEGER, "(1234)", myTester.scanInput("1234")
+                .parseAs("program"));
+    }
+
+    @Test
     public void shouldParseAnAddition() {
         assertTree(HobbesParser.PLUS, "(+(1)(2))", myTester.scanInput("1+2")
                 .parseAs("program"));
