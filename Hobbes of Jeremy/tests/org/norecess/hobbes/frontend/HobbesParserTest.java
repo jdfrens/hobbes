@@ -34,4 +34,14 @@ public class HobbesParserTest {
         assertTree(HobbesParser.PLUS, "(+(-1)(-32))", myTester.scanInput(
                 "-1+-32").parseAs("program"));
     }
+
+    @Test
+    public void shouldParseACommandLineArgumentRequest() {
+        assertTree(HobbesParser.ARGV, "(ARGV(1))", myTester
+                .scanInput("ARGV[1]").parseAs("program"));
+        assertTree(HobbesParser.ARGV, "(ARGV(8))", myTester
+                .scanInput("ARGV[8]").parseAs("program"));
+        assertTree(HobbesParser.ARGV, "(ARGV(100))", myTester.scanInput(
+                "ARGV[100]").parseAs("program"));
+    }
 }

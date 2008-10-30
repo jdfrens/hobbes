@@ -1,7 +1,7 @@
 Should be able to add two integers together, one of them negative.
-====
+==== source
 100+-36
-====
+==== compilation
 .sub main
 	$I0 = 100
 	$I1 = -36
@@ -9,5 +9,5 @@ Should be able to add two integers together, one of them negative.
 	print $I0
 	print "\n"
 .end
-====
+==== execution
 64

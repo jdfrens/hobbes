@@ -22,7 +22,9 @@ public class PIRWriter {
 
     public void writeCode(ICode<String> code) throws IOException {
         for (String instruction : code) {
-            if (!instruction.startsWith(".")) {
+            if (instruction.startsWith(".sub")
+                    || instruction.startsWith(".end")) {
+            } else {
                 getWriter().append("\t");
             }
             getWriter().append(instruction).append("\n");

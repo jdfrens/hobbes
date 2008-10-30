@@ -2,8 +2,10 @@ require 'ciat'
 require 'ciat/compilers/java'
 require 'ciat/executors/parrot'
 
+task :default => :ciat
+
 task :ciat do
-  CIAT::Suite.new(compiler, executor).run
+  CIAT::Suite.new(:processors => [compiler, executor]).run
 end
 
 def compiler

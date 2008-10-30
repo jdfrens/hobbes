@@ -1,11 +1,11 @@
 Compiles a simple, larger integer.
-====
+==== source
 665
-====
+==== compilation
 .sub main
 	$I0 = 665
 	print $I0
 	print "\n"
 .end
-====
+==== execution
 665

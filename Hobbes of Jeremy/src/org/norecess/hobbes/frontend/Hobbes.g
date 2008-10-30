@@ -5,6 +5,9 @@ options {
   output=AST;
   ASTLabelType=CommonTree;
 }
+tokens {
+  ARGV;
+}
 
 @header {
   package org.norecess.hobbes.frontend;
@@ -22,15 +25,18 @@ expression
 	:	INTEGER
 	|	INTEGER PLUS INTEGER
 		-> ^(PLUS INTEGER+)
+	| 'ARGV[' INTEGER ']'
+	  -> ^(ARGV INTEGER)
 	;
 
 	
-INTEGER	:	'-'? ('0'..'9')+
+INTEGER
+  :	'-'? ('0'..'9')+
 	;
 
-PLUS	:	'+'
-	;
-	
-WS	:	(' ' | '\t' | '\n')+
+PLUS  : '+' ;
+
+WS
+  :	(' ' | '\t' | '\n')+
 		{ skip(); }
 	;

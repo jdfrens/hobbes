@@ -1,7 +1,7 @@
 Should be able to add two multi-digit integers together.
-====
+==== source
 1024+36
-====
+==== compilation
 .sub main
 	$I0 = 1024
 	$I1 = 36
@@ -9,5 +9,5 @@ Should be able to add two multi-digit integers together.
 	print $I0
 	print "\n"
 .end
-====
+==== execution
 1060

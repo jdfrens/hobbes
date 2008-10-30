@@ -46,16 +46,31 @@ public class PIRWriterTest {
     }
 
     @Test
-    public void shouldWriteCodeWithoutTabs() throws IOException {
-        ICode<String> code = new Code<String>(".instruction 1",
-                ".instruction 2", ".instruction 3");
+    public void shouldWriteDirectivesWithTabs() throws IOException {
+        ICode<String> code = new Code<String>(".param something",
+                ".somethingelse");
 
         EasyMock.resetToStrict(myAppendable);
-        expectAppended(".instruction 1");
+        expectAppended("\t");
+        expectAppended(".param something");
         expectAppended("\n");
-        expectAppended(".instruction 2");
+        expectAppended("\t");
+        expectAppended(".somethingelse");
         expectAppended("\n");
-        expectAppended(".instruction 3");
+
+        myControl.replay();
+        myWriter.writeCode(code);
+        myControl.verify();
+    }
+
+    @Test
+    public void shouldWriteDirectivesWithoutTabs() throws IOException {
+        ICode<String> code = new Code<String>(".sub something", ".end");
+
+        EasyMock.resetToStrict(myAppendable);
+        expectAppended(".sub something");
+        expectAppended("\n");
+        expectAppended(".end");
         expectAppended("\n");
 
         myControl.replay();

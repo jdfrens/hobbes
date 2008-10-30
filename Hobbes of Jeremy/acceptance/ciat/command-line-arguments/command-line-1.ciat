@@ -1,0 +1,14 @@
+Displays the value of the first command-line argument.
+==== source
+ARGV[1]
+==== compilation
+.sub main
+	.param pmc argv
+	$I0 = argv[1]
+	print $I0
+	print "\n"
+.end
+==== command line
+5
+==== execution
+5

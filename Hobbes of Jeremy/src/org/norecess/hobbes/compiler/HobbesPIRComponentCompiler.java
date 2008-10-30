@@ -32,10 +32,13 @@ public class HobbesPIRComponentCompiler implements IHobbesPIRComponentCompiler {
             generateCode(code, "$I1", ast.getChild(1));
             code.add("$I0 += $I1");
             break;
+        case HobbesParser.ARGV:
+            code.add(".param pmc argv");
+            code.add(target + " = argv[" + ast.getChild(0) + "]");
+            break;
         default:
             throw new IllegalArgumentException("invalid ast: " + ast);
         }
         return code;
     }
-
 }

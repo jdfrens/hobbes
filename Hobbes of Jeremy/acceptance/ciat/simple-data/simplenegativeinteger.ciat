@@ -1,11 +1,11 @@
 Compiles a simple, negative integer.
-====
+==== source
 -1024
-====
+==== compilation
 .sub main
 	$I0 = -1024
 	print $I0
 	print "\n"
 .end
-====
+==== execution
 -1024

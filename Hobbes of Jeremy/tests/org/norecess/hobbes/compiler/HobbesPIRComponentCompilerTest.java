@@ -11,6 +11,7 @@ import org.antlr.runtime.tree.Tree;
 import org.junit.Before;
 import org.junit.Test;
 import org.norecess.hobbes.frontend.HobbesLexer;
+import org.norecess.hobbes.frontend.HobbesParser;
 
 public class HobbesPIRComponentCompilerTest {
 
@@ -32,7 +33,7 @@ public class HobbesPIRComponentCompilerTest {
         assertEquals(//
                 new Code<String>("$I0 = 8"), //
                 myCompiler.generateCode(new Code<String>(), "$I0",
-                        createTree(8)));
+                        createIntegerTree(8)));
     }
 
     @Test
@@ -40,7 +41,7 @@ public class HobbesPIRComponentCompilerTest {
             RecognitionException {
         assertEquals(new Code<String>("$I55 = -1024"), //
                 myCompiler.generateCode(new Code<String>(), "$I55",
-                        createTree(-1024)));
+                        createIntegerTree(-1024)));
     }
 
     @Test
@@ -49,18 +50,44 @@ public class HobbesPIRComponentCompilerTest {
                 new Code<String>("$I0 = 5", //
                         "$I1 = 9", //
                         "$I0 += $I1"), //
-                myCompiler.generateCode(new Code<String>(), "$I0", createTree(
-                        5, 9)));
+                myCompiler.generateCode(new Code<String>(), "$I0",
+                        createPlusTree(5, 9)));
+        assertEquals(//
+                new Code<String>("$I0 = -5", //
+                        "$I1 = 99", //
+                        "$I0 += $I1"), //
+                myCompiler.generateCode(new Code<String>(), "$I0",
+                        createPlusTree(-5, 99)));
     }
 
-    private Tree createTree(int i, int j) {
-        CommonTree root = new CommonTree(new CommonToken(HobbesLexer.PLUS, "+"));
-        root.addChild(createTree(i));
-        root.addChild(createTree(j));
+    @Test
+    public void shouldCompileArgvReference() {
+        assertEquals(new Code<String>(".param pmc argv", "$I0 = argv[1]"),
+                myCompiler.generateCode(new Code<String>(), "$I0",
+                        createArgvTree(1)));
+        assertEquals(new Code<String>(".param pmc argv", "$I3 = argv[1]"),
+                myCompiler.generateCode(new Code<String>(), "$I3",
+                        createArgvTree(1)));
+        assertEquals(new Code<String>(".param pmc argv", "$I3 = argv[88]"),
+                myCompiler.generateCode(new Code<String>(), "$I3",
+                        createArgvTree(88)));
+    }
+
+    private Tree createArgvTree(int i) {
+        CommonTree root = new CommonTree(new CommonToken(HobbesParser.ARGV,
+                "ARGV"));
+        root.addChild(createIntegerTree(i));
         return root;
     }
 
-    private Tree createTree(int i) {
+    private Tree createPlusTree(int i, int j) {
+        CommonTree root = new CommonTree(new CommonToken(HobbesLexer.PLUS, "+"));
+        root.addChild(createIntegerTree(i));
+        root.addChild(createIntegerTree(j));
+        return root;
+    }
+
+    private Tree createIntegerTree(int i) {
         return new CommonTree(new CommonToken(HobbesLexer.INTEGER, String
                 .valueOf(i)));
     }
