@@ -1,4 +1,4 @@
-package org.norecess.hobbes.drivers.targetcode;
+package org.norecess.hobbes.backend;
 
 import java.io.IOException;
 
@@ -8,11 +8,11 @@ import org.norecess.hobbes.compiler.ICode;
  * Writes out the instructions for PIR.  Mostly this means putting a tab
  * in front of the real instructions.
  */
-public class PIRWriter {
+public class CodeWriter {
 
     private final Appendable myWriter;
 
-    public PIRWriter(Appendable writer) {
+    public CodeWriter(Appendable writer) {
         myWriter = writer;
     }
 
@@ -22,13 +22,7 @@ public class PIRWriter {
 
     public void writeCode(ICode<String> code) throws IOException {
         for (String instruction : code) {
-            if (instruction.startsWith(".sub")
-                    || instruction.startsWith(".end")) {
-            } else {
-                getWriter().append("\t");
-            }
             getWriter().append(instruction).append("\n");
         }
     }
-
 }

@@ -1,0 +1,16 @@
+Adds argv[1] to 8.
+==== source
+ARGV[5] + 8
+==== compilation
+.sub main
+	.param pmc argv
+	$I0 = argv[5]
+	$I1 = 8
+	$I0 += $I1
+	print $I0
+	print "\n"
+.end
+==== command line
+x x x x 20
+==== execution
+28

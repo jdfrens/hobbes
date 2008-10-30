@@ -24,8 +24,21 @@ public class HobbesPIRComponentCompilerTest {
 
     @Test
     public void shouldGenerateProlog() {
-        assertEquals(new Code<String>(".sub main"), myCompiler
-                .generateProlog(new Code<String>()));
+        assertEquals(new Code<String>(".sub main"), myCompiler.generateProlog(
+                new Code<String>(), createIntegerTree(5)));
+        assertEquals(new Code<String>(".sub main", ".param pmc argv"),
+                myCompiler
+                        .generateProlog(new Code<String>(), createArgvTree(5)));
+        assertEquals(new Code<String>(".sub main", ".param pmc argv"),
+                myCompiler.generateProlog(new Code<String>(), createPlusTree(
+                        createArgvTree(5), createIntegerTree(9))));
+        assertEquals(new Code<String>(".sub main", ".param pmc argv"),
+                myCompiler.generateProlog(new Code<String>(), createPlusTree(
+                        createIntegerTree(5), createArgvTree(9))));
+        assertEquals(new Code<String>(".sub main", ".param pmc argv",
+                ".param pmc argv"), myCompiler.generateProlog(
+                new Code<String>(), createPlusTree(createArgvTree(5),
+                        createArgvTree(9))));
     }
 
     @Test
@@ -51,26 +64,25 @@ public class HobbesPIRComponentCompilerTest {
                         "$I1 = 9", //
                         "$I0 += $I1"), //
                 myCompiler.generateCode(new Code<String>(), "$I0",
-                        createPlusTree(5, 9)));
+                        createPlusTree(createIntegerTree(5),
+                                createIntegerTree(9))));
         assertEquals(//
                 new Code<String>("$I0 = -5", //
                         "$I1 = 99", //
                         "$I0 += $I1"), //
                 myCompiler.generateCode(new Code<String>(), "$I0",
-                        createPlusTree(-5, 99)));
+                        createPlusTree(createIntegerTree((-5)),
+                                createIntegerTree(99))));
     }
 
     @Test
     public void shouldCompileArgvReference() {
-        assertEquals(new Code<String>(".param pmc argv", "$I0 = argv[1]"),
-                myCompiler.generateCode(new Code<String>(), "$I0",
-                        createArgvTree(1)));
-        assertEquals(new Code<String>(".param pmc argv", "$I3 = argv[1]"),
-                myCompiler.generateCode(new Code<String>(), "$I3",
-                        createArgvTree(1)));
-        assertEquals(new Code<String>(".param pmc argv", "$I3 = argv[88]"),
-                myCompiler.generateCode(new Code<String>(), "$I3",
-                        createArgvTree(88)));
+        assertEquals(new Code<String>("$I0 = argv[1]"), myCompiler
+                .generateCode(new Code<String>(), "$I0", createArgvTree(1)));
+        assertEquals(new Code<String>("$I3 = argv[1]"), myCompiler
+                .generateCode(new Code<String>(), "$I3", createArgvTree(1)));
+        assertEquals(new Code<String>("$I3 = argv[88]"), myCompiler
+                .generateCode(new Code<String>(), "$I3", createArgvTree(88)));
     }
 
     private Tree createArgvTree(int i) {
@@ -80,10 +92,10 @@ public class HobbesPIRComponentCompilerTest {
         return root;
     }
 
-    private Tree createPlusTree(int i, int j) {
+    private Tree createPlusTree(Tree left, Tree right) {
         CommonTree root = new CommonTree(new CommonToken(HobbesLexer.PLUS, "+"));
-        root.addChild(createIntegerTree(i));
-        root.addChild(createIntegerTree(j));
+        root.addChild(left);
+        root.addChild(right);
         return root;
     }
 

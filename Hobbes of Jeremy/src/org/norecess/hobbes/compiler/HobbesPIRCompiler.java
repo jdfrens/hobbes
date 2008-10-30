@@ -3,6 +3,7 @@ package org.norecess.hobbes.compiler;
 import java.io.IOException;
 
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.tree.Tree;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
 
 /*
@@ -22,8 +23,9 @@ public class HobbesPIRCompiler {
 
     public ICode<String> compile(IHobbesFrontEnd frontEnd, ICode<String> code)
             throws IOException, RecognitionException {
-        myComponentCompiler.generateProlog(code);
-        myComponentCompiler.generateCode(code, "$I0", frontEnd.process());
+        Tree tree = frontEnd.process();
+        myComponentCompiler.generateProlog(code, tree);
+        myComponentCompiler.generateCode(code, "$I0", tree);
         myComponentCompiler.generateEpilog(code);
         return code;
     }

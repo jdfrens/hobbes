@@ -9,9 +9,26 @@ import org.norecess.hobbes.frontend.HobbesParser;
  */
 public class HobbesPIRComponentCompiler implements IHobbesPIRComponentCompiler {
 
-    public ICode<String> generateProlog(ICode<String> code) {
+    public ICode<String> generateProlog(ICode<String> code, Tree ast) {
         code.add(".sub main");
+        generateParameterProlog(code, ast);
         return code;
+    }
+
+    private void generateParameterProlog(ICode<String> code, Tree ast) {
+        switch (ast.getType()) {
+        case HobbesParser.INTEGER:
+            break;
+        case HobbesParser.PLUS:
+            generateParameterProlog(code, ast.getChild(0));
+            generateParameterProlog(code, ast.getChild(1));
+            break;
+        case HobbesParser.ARGV:
+            code.add(".param pmc argv");
+            break;
+        default:
+            throw new RuntimeException("Unrecognized AST: " + ast);
+        }
     }
 
     public ICode<String> generateEpilog(ICode<String> code) {
@@ -33,7 +50,6 @@ public class HobbesPIRComponentCompiler implements IHobbesPIRComponentCompiler {
             code.add("$I0 += $I1");
             break;
         case HobbesParser.ARGV:
-            code.add(".param pmc argv");
             code.add(target + " = argv[" + ast.getChild(0) + "]");
             break;
         default:

@@ -44,4 +44,10 @@ public class HobbesParserTest {
         assertTree(HobbesParser.ARGV, "(ARGV(100))", myTester.scanInput(
                 "ARGV[100]").parseAs("program"));
     }
+
+    @Test
+    public void shouldParseCommandLineArgumentInPlus() {
+        assertTree(HobbesParser.PLUS, "(+(ARGV(1))(ARGV(8)))", myTester
+                .scanInput("ARGV[1] + ARGV[8]").parseAs("program"));
+    }
 }

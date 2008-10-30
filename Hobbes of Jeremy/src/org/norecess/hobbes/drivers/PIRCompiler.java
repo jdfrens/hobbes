@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import org.antlr.runtime.RecognitionException;
+import org.norecess.hobbes.backend.CodeWriter;
+import org.norecess.hobbes.backend.PIRCleaner;
 import org.norecess.hobbes.compiler.Code;
 import org.norecess.hobbes.compiler.HobbesPIRCompiler;
-import org.norecess.hobbes.drivers.targetcode.PIRWriter;
 import org.norecess.hobbes.frontend.HobbesFrontEnd;
 
 /**
@@ -28,8 +29,9 @@ public class PIRCompiler {
     }
 
     public void generateCode() throws IOException, RecognitionException {
-        new PIRWriter(myWriter).writeCode(new HobbesPIRCompiler().compile(
-                myFrontEnd, new Code<String>()));
+        new CodeWriter(myWriter).writeCode(new PIRCleaner()
+                .process(new HobbesPIRCompiler().compile(myFrontEnd,
+                        new Code<String>())));
     }
 
     public void done() {

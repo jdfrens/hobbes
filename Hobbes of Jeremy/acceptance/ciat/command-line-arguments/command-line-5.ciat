@@ -1,0 +1,16 @@
+Adds the first two command-line arguments.
+==== source
+ARGV[1] + ARGV[2]
+==== compilation
+.sub main
+	.param pmc argv
+	$I0 = argv[1]
+	$I1 = argv[2]
+	$I0 += $I1
+	print $I0
+	print "\n"
+.end
+==== command line
+30 104
+==== execution
+134

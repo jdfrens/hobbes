@@ -36,8 +36,8 @@ public class HobbesPIRCompilerTest {
         ICode<String> code = myControl.createMock(ICode.class);
         Tree tree = myControl.createMock(Tree.class);
 
-        expect(frontEnd.process()).andReturn(tree);
-        expect(myComponentCompiler.generateProlog(code)).andReturn(code);
+        expect(frontEnd.process()).andReturn(tree).atLeastOnce();
+        expect(myComponentCompiler.generateProlog(code, tree)).andReturn(code);
         expect(myComponentCompiler.generateCode(code, "$I0", tree)).andReturn(
                 code);
         expect(myComponentCompiler.generateEpilog(code)).andReturn(code);

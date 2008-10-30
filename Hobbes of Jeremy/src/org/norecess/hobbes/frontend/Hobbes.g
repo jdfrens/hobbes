@@ -22,14 +22,17 @@ program
 	;
 
 expression
-	:	INTEGER
-	|	INTEGER PLUS INTEGER
-		-> ^(PLUS INTEGER+)
-	| 'ARGV[' INTEGER ']'
-	  -> ^(ARGV INTEGER)
+	:	simple_expression
+	|	simple_expression PLUS simple_expression
+		-> ^(PLUS simple_expression+)
 	;
-
 	
+simple_expression
+  : INTEGER
+  | 'ARGV[' INTEGER ']'
+    -> ^(ARGV INTEGER)
+  ;  
+
 INTEGER
   :	'-'? ('0'..'9')+
 	;
