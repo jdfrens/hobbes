@@ -9,13 +9,13 @@ import org.norecess.hobbes.frontend.HobbesParser;
  */
 public class HobbesPIRComponentCompiler implements IHobbesPIRComponentCompiler {
 
-    public ICode<String> generateProlog(ICode<String> code, Tree ast) {
+    public ICode generateProlog(ICode code, Tree ast) {
         code.add(".sub main");
         generateParameterProlog(code, ast);
         return code;
     }
 
-    private void generateParameterProlog(ICode<String> code, Tree ast) {
+    private void generateParameterProlog(ICode code, Tree ast) {
         switch (ast.getType()) {
         case HobbesParser.INTEGER:
             break;
@@ -31,15 +31,14 @@ public class HobbesPIRComponentCompiler implements IHobbesPIRComponentCompiler {
         }
     }
 
-    public ICode<String> generateEpilog(ICode<String> code) {
+    public ICode generateEpilog(ICode code) {
         code.add("print $I0");
         code.add("print \"\\n\"");
         code.add(".end");
         return code;
     }
 
-    public ICode<String> generateCode(ICode<String> code, String target,
-            Tree ast) {
+    public ICode generateCode(ICode code, String target, Tree ast) {
         switch (ast.getType()) {
         case HobbesParser.INTEGER:
             code.add(target + " = " + ast);

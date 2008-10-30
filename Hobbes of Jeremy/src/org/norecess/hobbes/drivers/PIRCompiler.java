@@ -30,8 +30,8 @@ public class PIRCompiler {
 
     public void generateCode() throws IOException, RecognitionException {
         new CodeWriter(myWriter).writeCode(new PIRCleaner()
-                .process(new HobbesPIRCompiler().compile(myFrontEnd,
-                        new Code<String>())));
+                .process(new HobbesPIRCompiler()
+                        .compile(myFrontEnd, new Code())));
     }
 
     public void done() {

@@ -3,8 +3,8 @@ package org.norecess.hobbes.compiler;
 /**
  * @see Code
  */
-public interface ICode<T> extends Iterable<T> {
+public interface ICode extends Iterable<String> {
 
-    ICode<T> add(T command);
+    ICode add(String command);
 
 }

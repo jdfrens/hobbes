@@ -9,8 +9,8 @@ public class PIRCleaner implements IPIRCleaner {
         return requiresTab(instruction) ? "\t" + instruction : instruction;
     }
 
-    public ICode<String> process(ICode<String> code) {
-        Code<String> processed = new Code<String>();
+    public ICode process(ICode code) {
+        Code processed = new Code();
         String previous = "";
         for (String instruction : code) {
             if (!isUnnecessaryRepeat(previous, instruction)) {

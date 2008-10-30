@@ -29,11 +29,10 @@ public class HobbesPIRCompilerTest {
         myCompiler = new HobbesPIRCompiler(myComponentCompiler);
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void shouldCompile() throws RecognitionException, IOException {
         IHobbesFrontEnd frontEnd = myControl.createMock(IHobbesFrontEnd.class);
-        ICode<String> code = myControl.createMock(ICode.class);
+        ICode code = myControl.createMock(ICode.class);
         Tree tree = myControl.createMock(Tree.class);
 
         expect(frontEnd.process()).andReturn(tree).atLeastOnce();

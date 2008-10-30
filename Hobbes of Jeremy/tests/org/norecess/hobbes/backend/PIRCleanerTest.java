@@ -30,18 +30,15 @@ public class PIRCleanerTest {
 
     @Test
     public void shouldProcessCode() {
-        assertEquals(
-                new Code<String>(".sub me", "\tprint 5", ".end"),
-                myCleaner
-                        .process(new Code<String>(".sub me", "print 5", ".end")));
+        assertEquals(new Code(".sub me", "\tprint 5", ".end"), myCleaner
+                .process(new Code(".sub me", "print 5", ".end")));
     }
 
     @Test
     public void shouldRemoveDuplicateParamDirectives() {
-        assertEquals(new Code<String>("\t.param pmc argv"), myCleaner
-                .process(new Code<String>(".param pmc argv")));
-        assertEquals(new Code<String>("\t.param pmc argv"),
-                myCleaner.process(new Code<String>(".param pmc argv",
-                        ".param pmc argv")));
+        assertEquals(new Code("\t.param pmc argv"), myCleaner.process(new Code(
+                ".param pmc argv")));
+        assertEquals(new Code("\t.param pmc argv"), myCleaner.process(new Code(
+                ".param pmc argv", ".param pmc argv")));
     }
 }

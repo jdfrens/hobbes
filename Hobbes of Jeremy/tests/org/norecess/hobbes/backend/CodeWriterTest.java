@@ -26,17 +26,14 @@ public class CodeWriterTest {
 
     @Test
     public void shouldWriteNoCode() throws IOException {
-        ICode<String> code = new Code<String>();
-
         myControl.replay();
-        myWriter.writeCode(code);
+        myWriter.writeCode(new Code());
         myControl.verify();
     }
 
     @Test
     public void shouldWriteCode() throws IOException {
-        ICode<String> code = new Code<String>("instruction 1", "instruction 2",
-                "instruction 3");
+        ICode code = new Code("instruction 1", "instruction 2", "instruction 3");
 
         EasyMock.resetToStrict(myAppendable);
         expectAppended("instruction 1");

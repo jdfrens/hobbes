@@ -21,7 +21,7 @@ public class HobbesPIRCompiler {
         myComponentCompiler = componentCompiler;
     }
 
-    public ICode<String> compile(IHobbesFrontEnd frontEnd, ICode<String> code)
+    public ICode compile(IHobbesFrontEnd frontEnd, ICode code)
             throws IOException, RecognitionException {
         Tree tree = frontEnd.process();
         myComponentCompiler.generateProlog(code, tree);

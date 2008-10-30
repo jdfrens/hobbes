@@ -8,19 +8,19 @@ import java.util.List;
 /*
  * Mostly just a fancy name for "a list of instructions".  At least for now.
  */
-public class Code<T> implements ICode<T> {
+public class Code implements ICode {
 
-    private final List<T> myInstructions;
+    private final List<String> myInstructions;
 
     public Code() {
-        myInstructions = new ArrayList<T>();
+        myInstructions = new ArrayList<String>();
     }
 
-    public Code(T... instructions) {
+    public Code(String... instructions) {
         myInstructions = Arrays.asList(instructions);
     }
 
-    public ICode<T> add(T command) {
+    public ICode add(String command) {
         myInstructions.add(command);
         return this;
     }
@@ -34,7 +34,6 @@ public class Code<T> implements ICode<T> {
         return result;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -62,7 +61,7 @@ public class Code<T> implements ICode<T> {
         return myInstructions.toString();
     }
 
-    public Iterator<T> iterator() {
+    public Iterator<String> iterator() {
         return myInstructions.iterator();
     }
 

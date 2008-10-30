@@ -24,65 +24,62 @@ public class HobbesPIRComponentCompilerTest {
 
     @Test
     public void shouldGenerateProlog() {
-        assertEquals(new Code<String>(".sub main"), myCompiler.generateProlog(
-                new Code<String>(), createIntegerTree(5)));
-        assertEquals(new Code<String>(".sub main", ".param pmc argv"),
-                myCompiler
-                        .generateProlog(new Code<String>(), createArgvTree(5)));
-        assertEquals(new Code<String>(".sub main", ".param pmc argv"),
-                myCompiler.generateProlog(new Code<String>(), createPlusTree(
-                        createArgvTree(5), createIntegerTree(9))));
-        assertEquals(new Code<String>(".sub main", ".param pmc argv"),
-                myCompiler.generateProlog(new Code<String>(), createPlusTree(
+        assertEquals(new Code(".sub main"), myCompiler.generateProlog(
+                new Code(), createIntegerTree(5)));
+        assertEquals(new Code(".sub main", ".param pmc argv"), myCompiler
+                .generateProlog(new Code(), createArgvTree(5)));
+        assertEquals(new Code(".sub main", ".param pmc argv"), myCompiler
+                .generateProlog(new Code(), createPlusTree(createArgvTree(5),
+                        createIntegerTree(9))));
+        assertEquals(new Code(".sub main", ".param pmc argv"), myCompiler
+                .generateProlog(new Code(), createPlusTree(
                         createIntegerTree(5), createArgvTree(9))));
-        assertEquals(new Code<String>(".sub main", ".param pmc argv",
-                ".param pmc argv"), myCompiler.generateProlog(
-                new Code<String>(), createPlusTree(createArgvTree(5),
-                        createArgvTree(9))));
+        assertEquals(
+                new Code(".sub main", ".param pmc argv", ".param pmc argv"),
+                myCompiler.generateProlog(new Code(), createPlusTree(
+                        createArgvTree(5), createArgvTree(9))));
     }
 
     @Test
     public void shouldCompileInteger() throws IOException, RecognitionException {
         assertEquals(//
-                new Code<String>("$I0 = 8"), //
-                myCompiler.generateCode(new Code<String>(), "$I0",
-                        createIntegerTree(8)));
+                new Code("$I0 = 8"), //
+                myCompiler
+                        .generateCode(new Code(), "$I0", createIntegerTree(8)));
     }
 
     @Test
     public void shouldCompileAnotherInteger() throws IOException,
             RecognitionException {
-        assertEquals(new Code<String>("$I55 = -1024"), //
-                myCompiler.generateCode(new Code<String>(), "$I55",
+        assertEquals(new Code("$I55 = -1024"), //
+                myCompiler.generateCode(new Code(), "$I55",
                         createIntegerTree(-1024)));
     }
 
     @Test
     public void shouldCompilePlus() throws RecognitionException, IOException {
         assertEquals(//
-                new Code<String>("$I0 = 5", //
+                new Code("$I0 = 5", //
                         "$I1 = 9", //
                         "$I0 += $I1"), //
-                myCompiler.generateCode(new Code<String>(), "$I0",
-                        createPlusTree(createIntegerTree(5),
-                                createIntegerTree(9))));
+                myCompiler.generateCode(new Code(), "$I0", createPlusTree(
+                        createIntegerTree(5), createIntegerTree(9))));
         assertEquals(//
-                new Code<String>("$I0 = -5", //
+                new Code("$I0 = -5", //
                         "$I1 = 99", //
                         "$I0 += $I1"), //
-                myCompiler.generateCode(new Code<String>(), "$I0",
-                        createPlusTree(createIntegerTree((-5)),
-                                createIntegerTree(99))));
+                myCompiler.generateCode(new Code(), "$I0", createPlusTree(
+                        createIntegerTree((-5)), createIntegerTree(99))));
     }
 
     @Test
     public void shouldCompileArgvReference() {
-        assertEquals(new Code<String>("$I0 = argv[1]"), myCompiler
-                .generateCode(new Code<String>(), "$I0", createArgvTree(1)));
-        assertEquals(new Code<String>("$I3 = argv[1]"), myCompiler
-                .generateCode(new Code<String>(), "$I3", createArgvTree(1)));
-        assertEquals(new Code<String>("$I3 = argv[88]"), myCompiler
-                .generateCode(new Code<String>(), "$I3", createArgvTree(88)));
+        assertEquals(new Code("$I0 = argv[1]"), myCompiler.generateCode(
+                new Code(), "$I0", createArgvTree(1)));
+        assertEquals(new Code("$I3 = argv[1]"), myCompiler.generateCode(
+                new Code(), "$I3", createArgvTree(1)));
+        assertEquals(new Code("$I3 = argv[88]"), myCompiler.generateCode(
+                new Code(), "$I3", createArgvTree(88)));
     }
 
     private Tree createArgvTree(int i) {

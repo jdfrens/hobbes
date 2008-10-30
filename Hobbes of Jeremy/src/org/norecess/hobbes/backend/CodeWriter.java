@@ -20,7 +20,7 @@ public class CodeWriter {
         return myWriter;
     }
 
-    public void writeCode(ICode<String> code) throws IOException {
+    public void writeCode(ICode code) throws IOException {
         for (String instruction : code) {
             getWriter().append(instruction).append("\n");
         }
