@@ -1,0 +1,15 @@
+Should be able to multiply three integers together.
+==== source
+2*3*4
+==== compilation
+.sub main
+	$I0 = 2
+	$I1 = 3
+	$I0 *= $I1
+	$I1 = 4
+	$I0 *= $1
+	print $I0
+	print "\n"
+.end
+==== execution
+24
