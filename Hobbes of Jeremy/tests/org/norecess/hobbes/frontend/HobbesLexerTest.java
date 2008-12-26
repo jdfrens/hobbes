@@ -40,6 +40,7 @@ public class HobbesLexerTest {
     @Test
     public void shouldRecognizeOperators() {
         assertToken(HobbesLexer.PLUS, "+", myTester.scanInput("+"));
+        assertToken(HobbesLexer.MULTIPLY, "*", myTester.scanInput("*"));
     }
 
     @Test

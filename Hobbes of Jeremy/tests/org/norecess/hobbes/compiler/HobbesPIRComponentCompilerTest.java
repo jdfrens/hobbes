@@ -15,6 +15,13 @@ import org.norecess.hobbes.frontend.HobbesParser;
 
 public class HobbesPIRComponentCompilerTest {
 
+    private static final CommonToken   PLUS_TOKEN     = new CommonToken(
+                                                              HobbesLexer.PLUS,
+                                                              "+");
+    private static final CommonToken   MULTIPLY_TOKEN = new CommonToken(
+                                                              HobbesLexer.MULTIPLY,
+                                                              "*");
+
     private HobbesPIRComponentCompiler myCompiler;
 
     @Before
@@ -28,15 +35,23 @@ public class HobbesPIRComponentCompilerTest {
                 new Code(), createIntegerTree(5)));
         assertEquals(new Code(".sub main", ".param pmc argv"), myCompiler
                 .generateProlog(new Code(), createArgvTree(5)));
+        assertPrologForOp(PLUS_TOKEN);
+        assertPrologForOp(MULTIPLY_TOKEN);
+    }
+
+    private void assertPrologForOp(CommonToken token) {
         assertEquals(new Code(".sub main", ".param pmc argv"), myCompiler
-                .generateProlog(new Code(), createPlusTree(createArgvTree(5),
-                        createIntegerTree(9))));
+                .generateProlog(new Code(), createOpTree(token,
+                        createArgvTree(5), createIntegerTree(9))));
         assertEquals(new Code(".sub main", ".param pmc argv"), myCompiler
-                .generateProlog(new Code(), createPlusTree(
+                .generateProlog(new Code(), createOpTree(token,
+                        createIntegerTree(5), createArgvTree(9))));
+        assertEquals(new Code(".sub main", ".param pmc argv"), myCompiler
+                .generateProlog(new Code(), createOpTree(token,
                         createIntegerTree(5), createArgvTree(9))));
         assertEquals(
                 new Code(".sub main", ".param pmc argv", ".param pmc argv"),
-                myCompiler.generateProlog(new Code(), createPlusTree(
+                myCompiler.generateProlog(new Code(), createOpTree(token,
                         createArgvTree(5), createArgvTree(9))));
     }
 
@@ -62,14 +77,36 @@ public class HobbesPIRComponentCompilerTest {
                 new Code("$I0 = 5", //
                         "$I1 = 9", //
                         "$I0 += $I1"), //
-                myCompiler.generateCode(new Code(), "$I0", createPlusTree(
-                        createIntegerTree(5), createIntegerTree(9))));
+                myCompiler
+                        .generateCode(new Code(), "$I0", createOpTree(
+                                PLUS_TOKEN, createIntegerTree(5),
+                                createIntegerTree(9))));
         assertEquals(//
                 new Code("$I0 = -5", //
                         "$I1 = 99", //
                         "$I0 += $I1"), //
-                myCompiler.generateCode(new Code(), "$I0", createPlusTree(
-                        createIntegerTree((-5)), createIntegerTree(99))));
+                myCompiler.generateCode(new Code(), "$I0", createOpTree(
+                        PLUS_TOKEN, createIntegerTree((-5)),
+                        createIntegerTree(99))));
+    }
+
+    @Test
+    public void shouldCompileMultiplication() throws RecognitionException,
+            IOException {
+        assertEquals(//
+                new Code("$I0 = 5", //
+                        "$I1 = 9", //
+                        "$I0 *= $I1"), //
+                myCompiler.generateCode(new Code(), "$I0", createOpTree(
+                        MULTIPLY_TOKEN, createIntegerTree(5),
+                        createIntegerTree(9))));
+        assertEquals(//
+                new Code("$I0 = -5", //
+                        "$I1 = 99", //
+                        "$I0 *= $I1"), //
+                myCompiler.generateCode(new Code(), "$I0", createOpTree(
+                        MULTIPLY_TOKEN, createIntegerTree((-5)),
+                        createIntegerTree(99))));
     }
 
     @Test
@@ -89,8 +126,8 @@ public class HobbesPIRComponentCompilerTest {
         return root;
     }
 
-    private Tree createPlusTree(Tree left, Tree right) {
-        CommonTree root = new CommonTree(new CommonToken(HobbesLexer.PLUS, "+"));
+    private Tree createOpTree(CommonToken token, Tree left, Tree right) {
+        CommonTree root = new CommonTree(token);
         root.addChild(left);
         root.addChild(right);
         return root;

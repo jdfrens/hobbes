@@ -36,6 +36,16 @@ public class HobbesParserTest {
     }
 
     @Test
+    public void shouldParseAMultiplication() {
+        assertTree(HobbesParser.MULTIPLY, "(*(1)(2))", myTester
+                .scanInput("1*2").parseAs("program"));
+        assertTree(HobbesParser.MULTIPLY, "(*(1055)(222))", myTester.scanInput(
+                "1055*222").parseAs("program"));
+        assertTree(HobbesParser.MULTIPLY, "(*(-1)(-32))", myTester.scanInput(
+                "-1*-32").parseAs("program"));
+    }
+
+    @Test
     public void shouldParseACommandLineArgumentRequest() {
         assertTree(HobbesParser.ARGV, "(ARGV(1))", myTester
                 .scanInput("ARGV[1]").parseAs("program"));

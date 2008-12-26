@@ -23,9 +23,13 @@ program
 
 expression
 	:	simple_expression
-	|	simple_expression PLUS simple_expression
-		-> ^(PLUS simple_expression+)
+	|	simple_expression op simple_expression
+		-> ^(op simple_expression+)
 	;
+	
+op
+  : PLUS | MULTIPLY
+  ;
 	
 simple_expression
   : INTEGER
@@ -38,6 +42,7 @@ INTEGER
 	;
 
 PLUS  : '+' ;
+MULTIPLY : '*' ;
 
 WS
   :	(' ' | '\t' | '\n')+

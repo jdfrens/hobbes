@@ -20,6 +20,7 @@ public class HobbesPIRComponentCompiler implements IHobbesPIRComponentCompiler {
         case HobbesParser.INTEGER:
             break;
         case HobbesParser.PLUS:
+        case HobbesParser.MULTIPLY:
             generateParameterProlog(code, ast.getChild(0));
             generateParameterProlog(code, ast.getChild(1));
             break;
@@ -44,9 +45,10 @@ public class HobbesPIRComponentCompiler implements IHobbesPIRComponentCompiler {
             code.add(target + " = " + ast);
             break;
         case HobbesParser.PLUS:
+        case HobbesParser.MULTIPLY:
             generateCode(code, "$I0", ast.getChild(0));
             generateCode(code, "$I1", ast.getChild(1));
-            code.add("$I0 += $I1");
+            code.add("$I0 " + ast.getText() + "= $I1");
             break;
         case HobbesParser.ARGV:
             code.add(target + " = argv[" + ast.getChild(0) + "]");

@@ -10,9 +10,10 @@ end
 
 def compiler
   classpath = Dir.glob('../lib/*.jar').join(':') + ":../bin"
-  CIAT::Compilers::Java.new(classpath, 'org.norecess.hobbes.drivers.PIRCompiler')
+  CIAT::Compilers::Java.new(classpath, 'org.norecess.hobbes.drivers.PIRCompiler',
+    :description => 'Hobbes Compiler')
 end
 
 def executor
-  CIAT::Executors::Parrot.new
+  CIAT::Executors::Parrot.new(:description => 'PIR VM')
 end
