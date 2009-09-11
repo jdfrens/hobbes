@@ -8,10 +8,10 @@ import org.antlr.runtime.tree.Tree;
  */
 public interface IHobbesPIRComponentCompiler {
 
-    public ICode generateProlog(ICode code, Tree ast);
+	public ICode generateProlog(ICode code, Tree ast);
 
-    public ICode generateEpilog(ICode code);
+	public ICode generateEpilog(ICode code);
 
-    public ICode generateCode(ICode code, String target, Tree ast);
+	public ICode generateCode(ICode code, Tree ast);
 
 }

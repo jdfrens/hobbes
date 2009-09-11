@@ -15,35 +15,34 @@ import org.norecess.hobbes.frontend.IHobbesFrontEnd;
 
 public class HobbesPIRCompilerTest {
 
-    private IMocksControl               myControl;
-    private IHobbesPIRComponentCompiler myComponentCompiler;
-    private HobbesPIRCompiler           myCompiler;
+	private IMocksControl				myControl;
+	private IHobbesPIRComponentCompiler	myComponentCompiler;
+	private HobbesPIRCompiler			myCompiler;
 
-    @Before
-    public void setUp() {
-        myControl = EasyMock.createControl();
+	@Before
+	public void setUp() {
+		myControl = EasyMock.createControl();
 
-        myComponentCompiler = myControl
-                .createMock(IHobbesPIRComponentCompiler.class);
+		myComponentCompiler = myControl
+				.createMock(IHobbesPIRComponentCompiler.class);
 
-        myCompiler = new HobbesPIRCompiler(myComponentCompiler);
-    }
+		myCompiler = new HobbesPIRCompiler(myComponentCompiler);
+	}
 
-    @Test
-    public void shouldCompile() throws RecognitionException, IOException {
-        IHobbesFrontEnd frontEnd = myControl.createMock(IHobbesFrontEnd.class);
-        ICode code = myControl.createMock(ICode.class);
-        Tree tree = myControl.createMock(Tree.class);
+	@Test
+	public void shouldCompile() throws RecognitionException, IOException {
+		IHobbesFrontEnd frontEnd = myControl.createMock(IHobbesFrontEnd.class);
+		ICode code = myControl.createMock(ICode.class);
+		Tree tree = myControl.createMock(Tree.class);
 
-        expect(frontEnd.process()).andReturn(tree).atLeastOnce();
-        expect(myComponentCompiler.generateProlog(code, tree)).andReturn(code);
-        expect(myComponentCompiler.generateCode(code, "$I0", tree)).andReturn(
-                code);
-        expect(myComponentCompiler.generateEpilog(code)).andReturn(code);
+		expect(frontEnd.process()).andReturn(tree).atLeastOnce();
+		expect(myComponentCompiler.generateProlog(code, tree)).andReturn(code);
+		expect(myComponentCompiler.generateCode(code, tree)).andReturn(code);
+		expect(myComponentCompiler.generateEpilog(code)).andReturn(code);
 
-        myControl.replay();
-        assertSame(code, myCompiler.compile(frontEnd, code));
-        myControl.verify();
-    }
+		myControl.replay();
+		assertSame(code, myCompiler.compile(frontEnd, code));
+		myControl.verify();
+	}
 
 }

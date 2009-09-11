@@ -15,5 +15,5 @@ def compiler
 end
 
 def executor
-  CIAT::Executors::Parrot.new(:description => 'PIR VM')
+  CIAT::Executors::Parrot.new(:description => 'PIR VM', :processor_kind => CIAT::Processors::CompilationInterpreter.new)
 end

@@ -22,9 +22,7 @@ program
 	;
 
 expression
-	:	simple_expression
-	|	simple_expression op simple_expression
-		-> ^(op simple_expression+)
+	:	simple_expression (op^ simple_expression)*
 	;
 	
 op

@@ -17,33 +17,33 @@ import org.norecess.hobbes.frontend.HobbesFrontEnd;
  */
 public class PIRCompiler {
 
-    private final HobbesFrontEnd myFrontEnd;
-    private final PrintWriter    myWriter;
+	private final HobbesFrontEnd	myFrontEnd;
+	private final PrintWriter		myWriter;
 
-    public PIRCompiler(String sourceFile, String targetFile) throws IOException {
-        myFrontEnd = new HobbesFrontEnd(new File(sourceFile));
-        myWriter = new PrintWriter(targetFile);
-    }
+	public PIRCompiler(String sourceFile, String targetFile) throws IOException {
+		myFrontEnd = new HobbesFrontEnd(new File(sourceFile));
+		myWriter = new PrintWriter(System.out); // new PrintWriter(targetFile);
+	}
 
-    public void init() {
-    }
+	public void init() {
+	}
 
-    public void generateCode() throws IOException, RecognitionException {
-        new CodeWriter(myWriter).writeCode(new PIRCleaner()
-                .process(new HobbesPIRCompiler()
-                        .compile(myFrontEnd, new Code())));
-    }
+	public void generateCode() throws IOException, RecognitionException {
+		new CodeWriter(myWriter).writeCode(new PIRCleaner()
+				.process(new HobbesPIRCompiler()
+						.compile(myFrontEnd, new Code())));
+	}
 
-    public void done() {
-        myWriter.close();
-    }
+	public void done() {
+		myWriter.close();
+	}
 
-    public static void main(String[] args) throws IOException,
-            RecognitionException {
-        PIRCompiler compiler = new PIRCompiler(args[0], args[1]);
-        compiler.init();
-        compiler.generateCode();
-        compiler.done();
-    }
+	public static void main(String[] args) throws IOException,
+			RecognitionException {
+		PIRCompiler compiler = new PIRCompiler(args[0], null);
+		compiler.init();
+		compiler.generateCode();
+		compiler.done();
+	}
 
 }

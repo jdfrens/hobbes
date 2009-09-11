@@ -5,25 +5,25 @@ Should be able to add ten integers together.
 .sub main
 	$I0 = 1
 	$I1 = 2
-	$I0 += $1
-	$I1 = 3
 	$I0 += $I1
-	$I1 = 4
-	$I0 += $I1
-	$I1 = 5
-	$I0 += $I1
-	$I1 = 6
-	$I0 += $I1
-	$I1 = 7
-	$I0 += $I1
-	$I1 = 8
-	$I0 += $I1
-	$I1 = 9
-	$I0 += $I1
-	$I1 = 10
-	$I0 += $I1
+	$I2 = 3
+	$I0 += $I2
+	$I3 = 4
+	$I0 += $I3
+	$I4 = 5
+	$I0 += $I4
+	$I5 = 6
+	$I0 += $I5
+	$I6 = 7
+	$I0 += $I6
+	$I7 = 8
+	$I0 += $I7
+	$I8 = 9
+	$I0 += $I8
+	$I9 = 10
+	$I0 += $I9
 	print $I0
 	print "\n"
 .end
 ==== execution
-9
+55

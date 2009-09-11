@@ -11,23 +11,23 @@ import org.norecess.hobbes.frontend.IHobbesFrontEnd;
  */
 public class HobbesPIRCompiler {
 
-    private final IHobbesPIRComponentCompiler myComponentCompiler;
+	private final IHobbesPIRComponentCompiler	myComponentCompiler;
 
-    public HobbesPIRCompiler() {
-        this(new HobbesPIRComponentCompiler());
-    }
+	public HobbesPIRCompiler() {
+		this(new HobbesPIRComponentCompiler(new RegisterAllocator()));
+	}
 
-    public HobbesPIRCompiler(IHobbesPIRComponentCompiler componentCompiler) {
-        myComponentCompiler = componentCompiler;
-    }
+	public HobbesPIRCompiler(IHobbesPIRComponentCompiler componentCompiler) {
+		myComponentCompiler = componentCompiler;
+	}
 
-    public ICode compile(IHobbesFrontEnd frontEnd, ICode code)
-            throws IOException, RecognitionException {
-        Tree tree = frontEnd.process();
-        myComponentCompiler.generateProlog(code, tree);
-        myComponentCompiler.generateCode(code, "$I0", tree);
-        myComponentCompiler.generateEpilog(code);
-        return code;
-    }
+	public ICode compile(IHobbesFrontEnd frontEnd, ICode code)
+			throws IOException, RecognitionException {
+		Tree tree = frontEnd.process();
+		myComponentCompiler.generateProlog(code, tree);
+		myComponentCompiler.generateCode(code, tree);
+		myComponentCompiler.generateEpilog(code);
+		return code;
+	}
 
 }
