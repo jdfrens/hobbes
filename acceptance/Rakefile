@@ -4,10 +4,6 @@ require 'ciat/executors/parrot'
 
 task :default => :ciat
 
-task :ciat do
-  CIAT::Suite.new(:processors => [compiler, executor]).run
-end
-
 def compiler
   classpath = Dir.glob('../lib/*.jar').join(':') + ":../bin"
   CIAT::Compilers::Java.new(classpath, 'org.norecess.hobbes.drivers.PIRCompiler',
@@ -16,4 +12,9 @@ end
 
 def executor
   CIAT::Executors::Parrot.new(:description => 'PIR VM', :processor_kind => CIAT::Processors::CompilationInterpreter.new)
+end
+
+CIAT::RakeTask.new do |task|
+  task.processors << compiler
+  task.processors << executor
 end
