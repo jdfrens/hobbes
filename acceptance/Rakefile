@@ -25,7 +25,10 @@ def executor
   CIAT::Executors::Parrot.new(:description => 'PIR VM', :processor_kind => CIAT::Processors::CompilationInterpreter.new)
 end
 
-task :ciat => [:compiler_tests, :interpreter_tests]
+task :ciat do
+  Rake::Task['interpreter_tests'].invoke
+  Rake::Task['compiler_tests'].invoke
+end
 
 CIAT::RakeTask.new(:compiler_tests) do |task|
   task.processors << compiler

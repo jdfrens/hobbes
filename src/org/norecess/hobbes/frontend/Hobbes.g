@@ -22,9 +22,17 @@ program
 	;
 
 expression
-	:	simple_expression (op^ simple_expression)*
+  : additive_expression
+  ;
+  
+additive_expression
+	:	multiplicative_expression (PLUS^ multiplicative_expression)*
 	;
 	
+multiplicative_expression
+  : simple_expression (MULTIPLY^ simple_expression)*
+  ;
+  
 op
   : PLUS | MULTIPLY
   ;
@@ -33,8 +41,8 @@ simple_expression
   : INTEGER
   | 'ARGV[' INTEGER ']'
     -> ^(ARGV INTEGER)
-  ;  
-
+  ;
+  
 INTEGER
   :	'-'? ('0'..'9')+
 	;

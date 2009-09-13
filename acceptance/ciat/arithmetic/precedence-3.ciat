@@ -1,29 +1,29 @@
-Should be able to add and multiply ten integers together (without precedence).
+Should be able to add and multiply ten integers together.
 ==== source
 1+2*3+4*5+6*7+8*9+10
 ==== compilation
 .sub main
 	$I0 = 1
 	$I1 = 2
-	$I0 += $I1
 	$I2 = 3
-	$I0 *= $I2
+	$I1 *= $I2
+	$I0 += $I1
 	$I3 = 4
-	$I0 += $I3
 	$I4 = 5
-	$I0 *= $I4
+	$I3 *= $I4
+	$I0 += $I3
 	$I5 = 6
-	$I0 += $I5
 	$I6 = 7
-	$I0 *= $I6
+	$I5 *= $I6
+	$I0 += $I5
 	$I7 = 8
-	$I0 += $I7
 	$I8 = 9
-	$I0 *= $I8
+	$I7 *= $I8
+	$I0 += $I7
 	$I9 = 10
 	$I0 += $I9
 	print $I0
 	print "\n"
 .end
 ==== execution
-4555
+151

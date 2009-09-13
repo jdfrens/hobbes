@@ -157,6 +157,25 @@ public class HobbesPIRComponentCompilerTest {
 	}
 
 	@Test
+	public void shouldCompileAnotherNestedExpression() {
+		EasyMock.expect(myRegisterAllocator.next()).andReturn("$I0");
+		EasyMock.expect(myRegisterAllocator.next()).andReturn("$I1");
+		EasyMock.expect(myRegisterAllocator.next()).andReturn("$I2");
+
+		myMockControl.replay();
+		assertEquals(//
+				new Code("$I0 = 1", //
+						"$I1 = 2", //
+						"$I2 = 3", //
+						"$I1 *= $I2", //
+						"$I0 += $I1"), //
+				myCompiler.generateCode(new Code(), createOpTree(PLUS_TOKEN,
+						createIntegerTree(1), createOpTree(MULTIPLY_TOKEN,
+								createIntegerTree(2), createIntegerTree(3)))));
+		myMockControl.verify();
+	}
+
+	@Test
 	public void shouldCompileArgvReference() {
 		EasyMock.expect(myRegisterAllocator.next()).andReturn("$I3");
 
