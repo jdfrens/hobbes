@@ -169,21 +169,21 @@ public class HobbesPIRComponentCompilerTest {
 	//
 	// Helpers
 	//
-	private Tree createArgvTree(int i) {
+	public static Tree createArgvTree(int i) {
 		CommonTree root = new CommonTree(new CommonToken(HobbesParser.ARGV,
 				"ARGV"));
 		root.addChild(createIntegerTree(i));
 		return root;
 	}
 
-	private Tree createOpTree(CommonToken token, Tree left, Tree right) {
+	public static Tree createOpTree(CommonToken token, Tree left, Tree right) {
 		CommonTree root = new CommonTree(token);
 		root.addChild(left);
 		root.addChild(right);
 		return root;
 	}
 
-	private Tree createIntegerTree(int i) {
+	public static Tree createIntegerTree(int i) {
 		return new CommonTree(new CommonToken(HobbesLexer.INTEGER, String
 				.valueOf(i)));
 	}

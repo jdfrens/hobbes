@@ -20,9 +20,9 @@ public class PIRCompiler {
 	private final HobbesFrontEnd	myFrontEnd;
 	private final PrintWriter		myWriter;
 
-	public PIRCompiler(String sourceFile, String targetFile) throws IOException {
-		myFrontEnd = new HobbesFrontEnd(new File(sourceFile));
-		myWriter = new PrintWriter(System.out); // new PrintWriter(targetFile);
+	public PIRCompiler(HobbesFrontEnd frontEnd, PrintWriter writer) {
+		myFrontEnd = frontEnd;
+		myWriter = writer;
 	}
 
 	public void init() {
@@ -40,7 +40,8 @@ public class PIRCompiler {
 
 	public static void main(String[] args) throws IOException,
 			RecognitionException {
-		PIRCompiler compiler = new PIRCompiler(args[0], null);
+		PIRCompiler compiler = new PIRCompiler(new HobbesFrontEnd(new File(
+				args[0])), new PrintWriter(System.out));
 		compiler.init();
 		compiler.generateCode();
 		compiler.done();

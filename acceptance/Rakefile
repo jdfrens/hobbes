@@ -1,12 +1,21 @@
 require 'ciat'
 require 'ciat/compilers/java'
+require 'ciat/executors/java'
 require 'ciat/executors/parrot'
 
 task :default => :ciat
 
+def classpath
+  Dir.glob('../lib/*.jar').join(':') + ":../bin"
+end
+
 def compiler
-  classpath = Dir.glob('../lib/*.jar').join(':') + ":../bin"
   CIAT::Compilers::Java.new(classpath, 'org.norecess.hobbes.drivers.PIRCompiler',
+    :description => 'Hobbes Interpreter')
+end
+
+def interpreter
+  CIAT::Executors::Java.new(classpath, 'org.norecess.hobbes.drivers.Interpreter',
     :description => 'Hobbes Compiler')
 end
 
@@ -14,7 +23,14 @@ def executor
   CIAT::Executors::Parrot.new(:description => 'PIR VM', :processor_kind => CIAT::Processors::CompilationInterpreter.new)
 end
 
-CIAT::RakeTask.new do |task|
+task :ciat => [:compiler_tests, :interpreter_tests]
+
+CIAT::RakeTask.new(:compiler_tests) do |task|
   task.processors << compiler
   task.processors << executor
+end
+
+CIAT::RakeTask.new(:interpreter_tests) do |task|
+  task.processors << interpreter
+  task.report_filename = "interpreter.html"
 end
