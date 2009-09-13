@@ -17,6 +17,10 @@ public class HobbesInterpreter {
 			return ast.getText();
 		case HobbesParser.ARGV:
 			return myArgv[Integer.parseInt(ast.getChild(0).getText())];
+		case HobbesParser.PLUS:
+			int left = Integer.parseInt(ast.getChild(0).getText());
+			int right = Integer.parseInt(ast.getChild(1).getText());
+			return String.valueOf(left + right);
 		default:
 			throw new IllegalArgumentException(ast + " cannot be interpreted");
 		}

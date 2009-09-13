@@ -14,10 +14,10 @@ import org.norecess.hobbes.frontend.HobbesParser;
 
 public class HobbesPIRComponentCompilerTest {
 
-	private static final CommonToken	PLUS_TOKEN		= new CommonToken(
+	public static final CommonToken		PLUS_TOKEN		= new CommonToken(
 																HobbesLexer.PLUS,
 																"+");
-	private static final CommonToken	MULTIPLY_TOKEN	= new CommonToken(
+	public static final CommonToken		MULTIPLY_TOKEN	= new CommonToken(
 																HobbesLexer.MULTIPLY,
 																"*");
 
