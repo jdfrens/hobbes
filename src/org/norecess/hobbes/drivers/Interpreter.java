@@ -2,7 +2,6 @@ package org.norecess.hobbes.drivers;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 import org.antlr.runtime.RecognitionException;
 import org.norecess.hobbes.frontend.HobbesFrontEnd;
@@ -24,8 +23,7 @@ public class Interpreter {
 			RecognitionException {
 		Interpreter interpreter = new Interpreter(new HobbesFrontEnd(new File(
 				args[0])));
-		System.out.println(interpreter.interpret(Arrays.copyOfRange(args, 1,
-				args.length)));
+		System.out.println(interpreter.interpret(args));
 	}
 
 }
