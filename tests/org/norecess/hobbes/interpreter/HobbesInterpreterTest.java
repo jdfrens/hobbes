@@ -8,11 +8,14 @@ import org.norecess.hobbes.compiler.HobbesPIRComponentCompilerTest;
 
 public class HobbesInterpreterTest {
 
+	private String[]			myArgv;
+
 	private HobbesInterpreter	myInterpreter;
 
 	@Before
 	public void setUp() {
-		myInterpreter = new HobbesInterpreter();
+		myArgv = new String[10];
+		myInterpreter = new HobbesInterpreter(myArgv);
 	}
 
 	@Test
@@ -22,6 +25,16 @@ public class HobbesInterpreterTest {
 		assertEquals("555", myInterpreter
 				.interpret(HobbesPIRComponentCompilerTest
 						.createIntegerTree(555)));
+	}
+
+	@Test
+	public void shouldInterpretCommandLineArguments() {
+		myArgv[8] = "7";
+		assertEquals("7", myInterpreter
+				.interpret(HobbesPIRComponentCompilerTest.createArgvTree(8)));
+		myArgv[3] = "abc";
+		assertEquals("abc", myInterpreter
+				.interpret(HobbesPIRComponentCompilerTest.createArgvTree(3)));
 	}
 
 }
