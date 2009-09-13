@@ -1,6 +1,7 @@
 package org.norecess.hobbes.interpreter;
 
 import static org.junit.Assert.assertEquals;
+import static org.norecess.hobbes.compiler.HobbesPIRComponentCompilerTest.MULTIPLY_TOKEN;
 import static org.norecess.hobbes.compiler.HobbesPIRComponentCompilerTest.PLUS_TOKEN;
 import static org.norecess.hobbes.compiler.HobbesPIRComponentCompilerTest.createArgvTree;
 import static org.norecess.hobbes.compiler.HobbesPIRComponentCompilerTest.createIntegerTree;
@@ -39,5 +40,27 @@ public class HobbesInterpreterTest {
 	public void shouldInterpretAddition() {
 		assertEquals("10", myInterpreter.interpret(createOpTree(PLUS_TOKEN,
 				createIntegerTree(2), createIntegerTree(8))));
+		assertEquals("5", myInterpreter.interpret(createOpTree(PLUS_TOKEN,
+				createIntegerTree(15), createIntegerTree(-10))));
 	}
+
+	@Test
+	public void shouldInterpretMultiplication() {
+		assertEquals("16", myInterpreter.interpret(createOpTree(MULTIPLY_TOKEN,
+				createIntegerTree(2), createIntegerTree(8))));
+		assertEquals("-150", myInterpreter.interpret(createOpTree(
+				MULTIPLY_TOKEN, createIntegerTree(15), createIntegerTree(-10))));
+	}
+
+	@Test
+	public void shouldInterpretAdditionAndMultiplication() {
+		assertEquals("40", myInterpreter.interpret(createOpTree(MULTIPLY_TOKEN,
+				createOpTree(PLUS_TOKEN, createIntegerTree(2),
+						createIntegerTree(3)), createIntegerTree(8))));
+		assertEquals("240", myInterpreter.interpret(createOpTree(
+				MULTIPLY_TOKEN, createOpTree(PLUS_TOKEN, createIntegerTree(15),
+						createIntegerTree(-5)), createOpTree(MULTIPLY_TOKEN,
+						createIntegerTree(8), createIntegerTree(3)))));
+	}
+
 }
