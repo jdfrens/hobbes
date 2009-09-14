@@ -1,13 +1,14 @@
-Should be able to add two integers together, one of them negative.
+Skipping over whitespace in expression.
 ==== source
-  100	+	-36   
+  100	+
+  	36   
 ==== compilation
 .sub main
 	$I0 = 100
-	$I1 = -36
+	$I1 = 36
 	$I0 += $I1
 	print $I0
 	print "\n"
 .end
 ==== execution
-64
+136

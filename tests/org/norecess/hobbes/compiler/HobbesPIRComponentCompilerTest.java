@@ -17,6 +17,9 @@ public class HobbesPIRComponentCompilerTest {
 	public static final CommonToken		PLUS_TOKEN		= new CommonToken(
 																HobbesLexer.PLUS,
 																"+");
+	public static final CommonToken		MINUS_TOKEN		= new CommonToken(
+																HobbesLexer.MINUS,
+																"-");
 	public static final CommonToken		MULTIPLY_TOKEN	= new CommonToken(
 																HobbesLexer.MULTIPLY,
 																"*");
@@ -36,41 +39,6 @@ public class HobbesPIRComponentCompilerTest {
 	}
 
 	@Test
-	public void shouldGenerateProlog() {
-		myMockControl.replay();
-		assertEquals(new Code(".sub main"), myCompiler.generateProlog(
-				new Code(), createIntegerTree(5)));
-		myMockControl.verify();
-	}
-
-	@Test
-	public void shouldGeneratePrologForArgv() {
-		myMockControl.replay();
-		assertEquals(new Code(".sub main", ".param pmc argv"), myCompiler
-				.generateProlog(new Code(), createArgvTree(5)));
-		myMockControl.verify();
-	}
-
-	@Test
-	public void shouldGeneratePrologForOp() {
-		myMockControl.replay();
-		assertEquals(new Code(".sub main", ".param pmc argv"), myCompiler
-				.generateProlog(new Code(), createOpTree(PLUS_TOKEN,
-						createArgvTree(5), createIntegerTree(9))));
-		myMockControl.verify();
-	}
-
-	@Test
-	public void shouldGeneratePrologForArgvAndOp() {
-		myMockControl.replay();
-		assertEquals(
-				new Code(".sub main", ".param pmc argv", ".param pmc argv"),
-				myCompiler.generateProlog(new Code(), createOpTree(PLUS_TOKEN,
-						createArgvTree(5), createArgvTree(9))));
-		myMockControl.verify();
-	}
-
-	@Test
 	public void shouldCompileInteger() {
 		EasyMock.expect(myRegisterAllocator.next()).andReturn("$I0");
 
@@ -86,8 +54,19 @@ public class HobbesPIRComponentCompilerTest {
 		EasyMock.expect(myRegisterAllocator.next()).andReturn("$I55");
 
 		myMockControl.replay();
-		assertEquals(new Code("$I55 = -1024"), //
-				myCompiler.generateCode(new Code(), createIntegerTree(-1024)));
+		assertEquals(new Code("$I55 = 1024"), //
+				myCompiler.generateCode(new Code(), createIntegerTree(1024)));
+		myMockControl.verify();
+	}
+
+	@Test
+	public void shouldCompileUnaryMinus() {
+		EasyMock.expect(myRegisterAllocator.next()).andReturn("$I6");
+
+		myMockControl.replay();
+		assertEquals(new Code("$I6 = 1024", "$I6 *= -1"), //
+				myCompiler.generateCode(new Code(), createOpTree(MINUS_TOKEN,
+						createIntegerTree(1024))));
 		myMockControl.verify();
 	}
 
@@ -199,6 +178,12 @@ public class HobbesPIRComponentCompilerTest {
 		CommonTree root = new CommonTree(token);
 		root.addChild(left);
 		root.addChild(right);
+		return root;
+	}
+
+	public static Tree createOpTree(CommonToken token, Tree left) {
+		CommonTree root = new CommonTree(token);
+		root.addChild(left);
 		return root;
 	}
 

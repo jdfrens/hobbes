@@ -4,7 +4,8 @@ Should be able to multiply two integers together, one of them negative.
 ==== compilation
 .sub main
 	$I0 = 100
-	$I1 = -36
+	$I1 = 36
+	$I1 *= -1
 	$I0 *= $I1
 	print $I0
 	print "\n"

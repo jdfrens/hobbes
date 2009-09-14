@@ -8,25 +8,31 @@ import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.antlr.runtime.tree.Tree;
+import org.norecess.citkit.tir.ExpressionTIR;
 
 /*
  * Provides an front end for the front-end testers and compilers.
  */
 public class HobbesFrontEnd implements IHobbesFrontEnd {
 
-    private final ANTLRStringStream myInputFile;
+	private final ANTLRStringStream	myInputFile;
 
-    public HobbesFrontEnd(ANTLRStringStream myInputStream) {
-        myInputFile = myInputStream;
-    }
+	public HobbesFrontEnd(ANTLRStringStream myInputStream) {
+		myInputFile = myInputStream;
+	}
 
-    public HobbesFrontEnd(File file) throws IOException {
-        myInputFile = new ANTLRInputStream(new FileInputStream(file));
-    }
+	public HobbesFrontEnd(File file) throws IOException {
+		myInputFile = new ANTLRInputStream(new FileInputStream(file));
+	}
 
-    public Tree process() throws RecognitionException {
-        return new HobbesParser(new CommonTokenStream(new HobbesLexer(
-                myInputFile))).program().tree;
-    }
+	public Tree process() throws RecognitionException {
+		return new HobbesParser(new CommonTokenStream(new HobbesLexer(
+				myInputFile))).program().tree;
+	}
+
+	public ExpressionTIR process(Tree tree) throws RecognitionException {
+		return new HobbesTIRBuilder(new CommonTreeNodeStream(tree)).program();
+	}
 }

@@ -11,13 +11,13 @@ end
 
 def compiler
   CIAT::Compilers::Java.new(classpath,
-    'org.norecess.hobbes.drivers.PIRCompiler',
+    'org.norecess.hobbes.drivers.PIRCompilerCLI',
     :description => 'Hobbes Compiler')
 end
 
 def interpreter
   CIAT::Executors::Java.new(classpath, 
-    'org.norecess.hobbes.drivers.Interpreter',
+    'org.norecess.hobbes.drivers.InterpreterCLI',
     :description => 'Hobbes Interpreter')
 end
 

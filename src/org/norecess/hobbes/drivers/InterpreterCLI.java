@@ -7,11 +7,11 @@ import org.antlr.runtime.RecognitionException;
 import org.norecess.hobbes.frontend.HobbesFrontEnd;
 import org.norecess.hobbes.interpreter.HobbesInterpreter;
 
-public class Interpreter {
+public class InterpreterCLI {
 
 	private final HobbesFrontEnd	myFrontEnd;
 
-	public Interpreter(HobbesFrontEnd frontEnd) {
+	public InterpreterCLI(HobbesFrontEnd frontEnd) {
 		myFrontEnd = frontEnd;
 	}
 
@@ -21,7 +21,7 @@ public class Interpreter {
 
 	public static void main(String[] args) throws IOException,
 			RecognitionException {
-		Interpreter interpreter = new Interpreter(new HobbesFrontEnd(new File(
+		InterpreterCLI interpreter = new InterpreterCLI(new HobbesFrontEnd(new File(
 				args[0])));
 		System.out.println(interpreter.interpret(args));
 	}

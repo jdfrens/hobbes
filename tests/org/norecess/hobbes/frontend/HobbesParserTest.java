@@ -19,20 +19,36 @@ public class HobbesParserTest {
 	public void shouldParseAnInteger() {
 		assertTree(HobbesParser.INTEGER, "(23)", myTester.scanInput("23")
 				.parseAs("program"));
-		assertTree(HobbesParser.INTEGER, "(-23)", myTester.scanInput("-23")
-				.parseAs("program"));
 		assertTree(HobbesParser.INTEGER, "(1234)", myTester.scanInput("1234")
 				.parseAs("program"));
 	}
 
 	@Test
-	public void shouldParseAnAddition() {
+	public void shouldParseAddition() {
 		assertTree(HobbesParser.PLUS, "(+(1)(2))", myTester.scanInput("1+2")
 				.parseAs("program"));
 		assertTree(HobbesParser.PLUS, "(+(1055)(222))", myTester.scanInput(
 				"1055+222").parseAs("program"));
-		assertTree(HobbesParser.PLUS, "(+(-1)(-32))", myTester.scanInput(
-				"-1+-32").parseAs("program"));
+	}
+
+	@Test
+	public void shouldParseSubtraction() {
+		assertTree(HobbesParser.MINUS, "(-(1)(2))", myTester.scanInput("1-2")
+				.parseAs("program"));
+		assertTree(HobbesParser.MINUS, "(-(1055)(222))", myTester.scanInput(
+				"1055-222").parseAs("program"));
+		assertTree(HobbesParser.MINUS, "(-(888)(1442))", myTester.scanInput(
+				"888-1442").parseAs("program"));
+	}
+
+	@Test
+	public void shouldRecognizeUnaryMinus() {
+		assertTree(HobbesLexer.MINUS, "(-(5))", myTester.scanInput("-5")
+				.parseAs("program"));
+		assertTree(HobbesLexer.MINUS, "(-(123))", myTester.scanInput("-123")
+				.parseAs("program"));
+		assertTree(HobbesLexer.MINUS, "(-(665))", myTester.scanInput("-665")
+				.parseAs("program"));
 	}
 
 	@Test
@@ -41,8 +57,8 @@ public class HobbesParserTest {
 				.scanInput("1*2").parseAs("program"));
 		assertTree(HobbesParser.MULTIPLY, "(*(1055)(222))", myTester.scanInput(
 				"1055*222").parseAs("program"));
-		assertTree(HobbesParser.MULTIPLY, "(*(-1)(-32))", myTester.scanInput(
-				"-1*-32").parseAs("program"));
+		assertTree(HobbesParser.MULTIPLY, "(*(888)(32))", myTester.scanInput(
+				"888*32").parseAs("program"));
 	}
 
 	@Test

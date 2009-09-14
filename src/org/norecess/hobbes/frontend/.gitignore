@@ -1,3 +1,5 @@
 Hobbes.tokens
 HobbesLexer.java
 HobbesParser.java
+HobbesTIRBuilder.tokens
+HobbesTIRBuilder.java

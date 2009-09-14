@@ -1,6 +1,7 @@
 package org.norecess.hobbes.interpreter;
 
 import static org.junit.Assert.assertEquals;
+import static org.norecess.hobbes.compiler.HobbesPIRComponentCompilerTest.MINUS_TOKEN;
 import static org.norecess.hobbes.compiler.HobbesPIRComponentCompilerTest.MULTIPLY_TOKEN;
 import static org.norecess.hobbes.compiler.HobbesPIRComponentCompilerTest.PLUS_TOKEN;
 import static org.norecess.hobbes.compiler.HobbesPIRComponentCompilerTest.createArgvTree;
@@ -34,6 +35,14 @@ public class HobbesInterpreterTest {
 		assertEquals("7", myInterpreter.interpret(createArgvTree(8)));
 		myArgv[3] = "abc";
 		assertEquals("abc", myInterpreter.interpret(createArgvTree(3)));
+	}
+
+	@Test
+	public void shouldInterpretUnaryMinus() {
+		assertEquals("-10", myInterpreter.interpret(createOpTree(MINUS_TOKEN,
+				createIntegerTree(10))));
+		assertEquals("-8723", myInterpreter.interpret(createOpTree(MINUS_TOKEN,
+				createIntegerTree(8723))));
 	}
 
 	@Test

@@ -26,28 +26,31 @@ expression
   ;
   
 additive_expression
-	:	multiplicative_expression (PLUS^ multiplicative_expression)*
+	:	multiplicative_expression (additive_op^ multiplicative_expression)*
 	;
 	
 multiplicative_expression
   : simple_expression (MULTIPLY^ simple_expression)*
   ;
   
-op
-  : PLUS | MULTIPLY
+additive_op
+  : PLUS | MINUS
   ;
 	
 simple_expression
   : INTEGER
+  | MINUS INTEGER
+    -> ^(MINUS INTEGER)
   | 'ARGV[' INTEGER ']'
     -> ^(ARGV INTEGER)
   ;
   
 INTEGER
-  :	'-'? ('0'..'9')+
+  : ('0'..'9')+
 	;
 
 PLUS  : '+' ;
+MINUS : '-' ;
 MULTIPLY : '*' ;
 
 WS

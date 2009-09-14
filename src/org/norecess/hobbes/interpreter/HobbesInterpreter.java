@@ -17,6 +17,9 @@ public class HobbesInterpreter {
 			return ast.getText();
 		case HobbesParser.ARGV:
 			return myArgv[Integer.parseInt(ast.getChild(0).getText())];
+		case HobbesParser.MINUS:
+			int child = Integer.parseInt(interpret(ast.getChild(0)));
+			return String.valueOf(-child);
 		case HobbesParser.PLUS:
 		case HobbesParser.MULTIPLY:
 			int left = Integer.parseInt(interpret(ast.getChild(0)));
