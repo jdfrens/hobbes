@@ -18,7 +18,7 @@ public class HobbesPIRCompilerTest {
 	private IMocksControl				myControl;
 
 	private IHobbesPIRPrologCompiler	myPrologCompiler;
-	private IHobbesPIRComponentCompiler	myComponentCompiler;
+	private IHobbesPIRBodyCompiler	myComponentCompiler;
 
 	private HobbesPIRCompiler			myCompiler;
 
@@ -28,7 +28,7 @@ public class HobbesPIRCompilerTest {
 
 		myPrologCompiler = myControl.createMock(IHobbesPIRPrologCompiler.class);
 		myComponentCompiler = myControl
-				.createMock(IHobbesPIRComponentCompiler.class);
+				.createMock(IHobbesPIRBodyCompiler.class);
 
 		myCompiler = new HobbesPIRCompiler(myPrologCompiler,
 				myComponentCompiler);
@@ -41,7 +41,7 @@ public class HobbesPIRCompilerTest {
 		ICode code = myControl.createMock(ICode.class);
 
 		expect(myPrologCompiler.generateProlog(code, tir)).andReturn(code);
-		expect(myComponentCompiler.generateCode(code, tree)).andReturn(code);
+		expect(myComponentCompiler.generate(code, tree)).andReturn(code);
 		expect(myComponentCompiler.generateEpilog(code)).andReturn(code);
 
 		myControl.replay();

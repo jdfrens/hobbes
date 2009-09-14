@@ -7,12 +7,12 @@ import org.norecess.hobbes.frontend.HobbesParser;
  * A "component compiler" is a compiler that compiles only components of a program.
  * Like a single integer.
  */
-public class HobbesPIRComponentCompiler implements IHobbesPIRComponentCompiler {
+public class HobbesPIRBodyCompiler implements IHobbesPIRBodyCompiler {
 
 	private final IRegisterAllocator	myRegisterAllocator;
 	private String						myTarget;
 
-	public HobbesPIRComponentCompiler(IRegisterAllocator registerAllocator) {
+	public HobbesPIRBodyCompiler(IRegisterAllocator registerAllocator) {
 		myRegisterAllocator = registerAllocator;
 	}
 
@@ -23,7 +23,7 @@ public class HobbesPIRComponentCompiler implements IHobbesPIRComponentCompiler {
 		return code;
 	}
 
-	public ICode generateCode(ICode code, Tree ast) {
+	public ICode generate(ICode code, Tree ast) {
 		myTarget = myRegisterAllocator.next();
 		return generateCode(code, myTarget, ast);
 	}

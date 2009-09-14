@@ -12,22 +12,22 @@ import org.junit.Test;
 import org.norecess.hobbes.frontend.HobbesLexer;
 import org.norecess.hobbes.frontend.HobbesParser;
 
-public class HobbesPIRComponentCompilerTest {
+public class HobbesPIRBodyCompilerTest {
 
-	public static final CommonToken		PLUS_TOKEN		= new CommonToken(
-																HobbesLexer.PLUS,
-																"+");
-	public static final CommonToken		MINUS_TOKEN		= new CommonToken(
-																HobbesLexer.MINUS,
-																"-");
-	public static final CommonToken		MULTIPLY_TOKEN	= new CommonToken(
-																HobbesLexer.MULTIPLY,
-																"*");
+	public static final CommonToken	PLUS_TOKEN		= new CommonToken(
+															HobbesLexer.PLUS,
+															"+");
+	public static final CommonToken	MINUS_TOKEN		= new CommonToken(
+															HobbesLexer.MINUS,
+															"-");
+	public static final CommonToken	MULTIPLY_TOKEN	= new CommonToken(
+															HobbesLexer.MULTIPLY,
+															"*");
 
-	private IMocksControl				myMockControl;
+	private IMocksControl			myMockControl;
 
-	private IRegisterAllocator			myRegisterAllocator;
-	private HobbesPIRComponentCompiler	myCompiler;
+	private IRegisterAllocator		myRegisterAllocator;
+	private HobbesPIRBodyCompiler	myCompiler;
 
 	@Before
 	public void setUp() {
@@ -35,7 +35,7 @@ public class HobbesPIRComponentCompilerTest {
 
 		myRegisterAllocator = myMockControl
 				.createMock(IRegisterAllocator.class);
-		myCompiler = new HobbesPIRComponentCompiler(myRegisterAllocator);
+		myCompiler = new HobbesPIRBodyCompiler(myRegisterAllocator);
 	}
 
 	@Test
@@ -45,7 +45,7 @@ public class HobbesPIRComponentCompilerTest {
 		myMockControl.replay();
 		assertEquals(//
 				new Code("$I0 = 8"), //
-				myCompiler.generateCode(new Code(), createIntegerTree(8)));
+				myCompiler.generate(new Code(), createIntegerTree(8)));
 		myMockControl.verify();
 	}
 
@@ -55,7 +55,7 @@ public class HobbesPIRComponentCompilerTest {
 
 		myMockControl.replay();
 		assertEquals(new Code("$I55 = 1024"), //
-				myCompiler.generateCode(new Code(), createIntegerTree(1024)));
+				myCompiler.generate(new Code(), createIntegerTree(1024)));
 		myMockControl.verify();
 	}
 
@@ -65,7 +65,7 @@ public class HobbesPIRComponentCompilerTest {
 
 		myMockControl.replay();
 		assertEquals(new Code("$I6 = 1024", "$I6 *= -1"), //
-				myCompiler.generateCode(new Code(), createOpTree(MINUS_TOKEN,
+				myCompiler.generate(new Code(), createOpTree(MINUS_TOKEN,
 						createIntegerTree(1024))));
 		myMockControl.verify();
 	}
@@ -80,7 +80,7 @@ public class HobbesPIRComponentCompilerTest {
 				new Code("$I0 = 5", //
 						"$I33 = 9", //
 						"$I0 += $I33"), //
-				myCompiler.generateCode(new Code(), createOpTree(PLUS_TOKEN,
+				myCompiler.generate(new Code(), createOpTree(PLUS_TOKEN,
 						createIntegerTree(5), createIntegerTree(9))));
 		myMockControl.verify();
 	}
@@ -95,7 +95,7 @@ public class HobbesPIRComponentCompilerTest {
 				new Code("$I55 = -5", //
 						"$I11 = 99", //
 						"$I55 += $I11"), //
-				myCompiler.generateCode(new Code(), createOpTree(PLUS_TOKEN,
+				myCompiler.generate(new Code(), createOpTree(PLUS_TOKEN,
 						createIntegerTree((-5)), createIntegerTree(99))));
 		myMockControl.verify();
 	}
@@ -110,9 +110,8 @@ public class HobbesPIRComponentCompilerTest {
 				new Code("$I0 = 5", //
 						"$I1 = 9", //
 						"$I0 *= $I1"), //
-				myCompiler.generateCode(new Code(), createOpTree(
-						MULTIPLY_TOKEN, createIntegerTree(5),
-						createIntegerTree(9))));
+				myCompiler.generate(new Code(), createOpTree(MULTIPLY_TOKEN,
+						createIntegerTree(5), createIntegerTree(9))));
 		myMockControl.verify();
 	}
 
@@ -129,7 +128,7 @@ public class HobbesPIRComponentCompilerTest {
 						"$I0 *= $I1", //
 						"$I2 = 3", //
 						"$I0 += $I2"), //
-				myCompiler.generateCode(new Code(), createOpTree(PLUS_TOKEN,
+				myCompiler.generate(new Code(), createOpTree(PLUS_TOKEN,
 						createOpTree(MULTIPLY_TOKEN, createIntegerTree(1),
 								createIntegerTree(2)), createIntegerTree(3))));
 		myMockControl.verify();
@@ -148,7 +147,7 @@ public class HobbesPIRComponentCompilerTest {
 						"$I2 = 3", //
 						"$I1 *= $I2", //
 						"$I0 += $I1"), //
-				myCompiler.generateCode(new Code(), createOpTree(PLUS_TOKEN,
+				myCompiler.generate(new Code(), createOpTree(PLUS_TOKEN,
 						createIntegerTree(1), createOpTree(MULTIPLY_TOKEN,
 								createIntegerTree(2), createIntegerTree(3)))));
 		myMockControl.verify();
@@ -159,7 +158,7 @@ public class HobbesPIRComponentCompilerTest {
 		EasyMock.expect(myRegisterAllocator.next()).andReturn("$I3");
 
 		myMockControl.replay();
-		assertEquals(new Code("$I3 = argv[88]"), myCompiler.generateCode(
+		assertEquals(new Code("$I3 = argv[88]"), myCompiler.generate(
 				new Code(), createArgvTree(88)));
 		myMockControl.verify();
 	}

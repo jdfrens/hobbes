@@ -11,7 +11,7 @@ import org.norecess.citkit.tir.ExpressionTIR;
  */
 public class HobbesPIRCompiler {
 
-	private final IHobbesPIRComponentCompiler	myComponentCompiler;
+	private final IHobbesPIRBodyCompiler	myComponentCompiler;
 	private final IHobbesPIRPrologCompiler		myPrologCompiler;
 
 	// public HobbesPIRCompiler() {
@@ -19,7 +19,7 @@ public class HobbesPIRCompiler {
 	// }
 
 	public HobbesPIRCompiler(IHobbesPIRPrologCompiler prologCompiler,
-			IHobbesPIRComponentCompiler componentCompiler) {
+			IHobbesPIRBodyCompiler componentCompiler) {
 		myPrologCompiler = prologCompiler;
 		myComponentCompiler = componentCompiler;
 	}
@@ -27,7 +27,7 @@ public class HobbesPIRCompiler {
 	public ICode compile(ExpressionTIR tir, Tree tree, ICode code)
 			throws IOException, RecognitionException {
 		myPrologCompiler.generateProlog(code, tir);
-		myComponentCompiler.generateCode(code, tree);
+		myComponentCompiler.generate(code, tree);
 		myComponentCompiler.generateEpilog(code);
 		return code;
 	}

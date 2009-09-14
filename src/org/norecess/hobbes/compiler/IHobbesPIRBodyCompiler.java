@@ -3,13 +3,13 @@ package org.norecess.hobbes.compiler;
 import org.antlr.runtime.tree.Tree;
 
 /**
- * @see HobbesPIRComponentCompiler
+ * @see HobbesPIRBodyCompiler
  * 
  */
-public interface IHobbesPIRComponentCompiler {
+public interface IHobbesPIRBodyCompiler {
 
 	public ICode generateEpilog(ICode code);
 
-	public ICode generateCode(ICode code, Tree ast);
+	public ICode generate(ICode code, Tree ast);
 
 }
