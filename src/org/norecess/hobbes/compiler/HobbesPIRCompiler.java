@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.antlr.runtime.RecognitionException;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.hobbes.backend.Code;
+import org.norecess.hobbes.backend.ICode;
 
 /*
  * This is the top-level compiler.  The component compiler does the hard work.

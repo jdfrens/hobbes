@@ -2,7 +2,6 @@ package org.norecess.hobbes.backend;
 
 import java.io.IOException;
 
-import org.norecess.hobbes.compiler.ICode;
 
 /*
  * Writes out the instructions for PIR.  Mostly this means putting a tab

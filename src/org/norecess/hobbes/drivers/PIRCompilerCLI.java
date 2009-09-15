@@ -6,7 +6,6 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 
 import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.tree.Tree;
 import org.norecess.hobbes.backend.CodeWriter;
 import org.norecess.hobbes.backend.PIRCleaner;
 import org.norecess.hobbes.compiler.HobbesPIRBodyCompiler;
@@ -36,11 +35,10 @@ public class PIRCompilerCLI {
 	}
 
 	public void generateCode() throws IOException, RecognitionException {
-		Tree tree = myFrontEnd.process();
 		new CodeWriter(myWriter).writeCode(new PIRCleaner()
 				.process(new HobbesPIRCompiler(new HobbesPIRPrologCompiler(),
 						new HobbesPIRBodyCompiler(new RegisterAllocator()))
-						.compile(myFrontEnd.process(tree))));
+						.compile(myFrontEnd.process())));
 	}
 
 	public void done() {

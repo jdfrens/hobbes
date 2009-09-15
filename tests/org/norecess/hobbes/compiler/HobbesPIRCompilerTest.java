@@ -11,6 +11,7 @@ import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.hobbes.backend.Code;
 
 public class HobbesPIRCompilerTest {
 

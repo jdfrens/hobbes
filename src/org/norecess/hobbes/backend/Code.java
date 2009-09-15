@@ -1,4 +1,4 @@
-package org.norecess.hobbes.compiler;
+package org.norecess.hobbes.backend;
 
 import java.util.ArrayList;
 import java.util.Arrays;

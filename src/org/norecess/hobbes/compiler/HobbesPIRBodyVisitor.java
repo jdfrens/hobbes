@@ -22,6 +22,8 @@ import org.norecess.citkit.tir.expressions.NilETIR;
 import org.norecess.citkit.tir.lvalues.IFieldValueTIR;
 import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
+import org.norecess.hobbes.backend.Code;
+import org.norecess.hobbes.backend.ICode;
 
 public class HobbesPIRBodyVisitor implements IHobbesPIRBodyVisitor {
 

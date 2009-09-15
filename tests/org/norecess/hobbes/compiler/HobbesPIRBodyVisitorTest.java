@@ -13,6 +13,7 @@ import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
+import org.norecess.hobbes.backend.Code;
 
 public class HobbesPIRBodyVisitorTest {
 

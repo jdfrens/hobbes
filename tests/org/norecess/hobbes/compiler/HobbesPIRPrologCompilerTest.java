@@ -12,6 +12,7 @@ import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
+import org.norecess.hobbes.backend.Code;
 
 public class HobbesPIRPrologCompilerTest {
 

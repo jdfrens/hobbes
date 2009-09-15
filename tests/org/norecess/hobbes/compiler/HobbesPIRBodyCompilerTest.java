@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.visitors.ExpressionTIRVisitor;
+import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.frontend.HobbesLexer;
 
 public class HobbesPIRBodyCompilerTest {

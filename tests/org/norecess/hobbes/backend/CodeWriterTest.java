@@ -8,8 +8,6 @@ import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
-import org.norecess.hobbes.compiler.Code;
-import org.norecess.hobbes.compiler.ICode;
 
 public class CodeWriterTest {
 

@@ -17,22 +17,19 @@ import org.norecess.citkit.tir.ExpressionTIR;
  */
 public class HobbesFrontEnd implements IHobbesFrontEnd {
 
-	private final ANTLRStringStream	myInputFile;
+	private final ANTLRStringStream	myInputStream;
 
-	public HobbesFrontEnd(ANTLRStringStream myInputStream) {
-		myInputFile = myInputStream;
+	public HobbesFrontEnd(ANTLRStringStream inputStream) {
+		myInputStream = inputStream;
 	}
 
 	public HobbesFrontEnd(File file) throws IOException {
-		myInputFile = new ANTLRInputStream(new FileInputStream(file));
+		myInputStream = new ANTLRInputStream(new FileInputStream(file));
 	}
 
-	public Tree process() throws RecognitionException {
-		return new HobbesParser(new CommonTokenStream(new HobbesLexer(
-				myInputFile))).program().tree;
-	}
-
-	public ExpressionTIR process(Tree tree) throws RecognitionException {
+	public ExpressionTIR process() throws RecognitionException {
+		Tree tree = new HobbesParser(new CommonTokenStream(new HobbesLexer(
+				myInputStream))).program().tree;
 		return new HobbesTIRBuilder(new CommonTreeNodeStream(tree)).program();
 	}
 }

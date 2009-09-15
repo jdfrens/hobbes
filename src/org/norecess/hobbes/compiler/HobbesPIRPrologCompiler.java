@@ -19,6 +19,8 @@ import org.norecess.citkit.tir.expressions.IStringETIR;
 import org.norecess.citkit.tir.expressions.IVariableETIR;
 import org.norecess.citkit.tir.expressions.IWhileETIR;
 import org.norecess.citkit.tir.expressions.NilETIR;
+import org.norecess.hobbes.backend.Code;
+import org.norecess.hobbes.backend.ICode;
 
 public class HobbesPIRPrologCompiler implements IHobbesPIRPrologCompiler {
 

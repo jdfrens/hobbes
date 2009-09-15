@@ -7,24 +7,31 @@ import org.antlr.runtime.RecognitionException;
 import org.norecess.citkit.tir.expressions.IIntegerETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.hobbes.frontend.HobbesFrontEnd;
+import org.norecess.hobbes.frontend.IHobbesFrontEnd;
 import org.norecess.hobbes.interpreter.HobbesInterpreter;
 
 public class InterpreterCLI {
 
-	private final HobbesFrontEnd	myFrontEnd;
+	private final IHobbesFrontEnd	myFrontEnd;
 
-	public InterpreterCLI(HobbesFrontEnd frontEnd) {
+	public InterpreterCLI(IHobbesFrontEnd frontEnd) {
 		myFrontEnd = frontEnd;
 	}
 
 	public IIntegerETIR interpret(IIntegerETIR[] args)
 			throws RecognitionException {
-		return new HobbesInterpreter(args).interpret(myFrontEnd
-				.process(myFrontEnd.process()));
+		return new HobbesInterpreter(args).interpret(myFrontEnd.process());
 	}
 
 	public static void main(String[] args) throws IOException,
 			RecognitionException {
+		IIntegerETIR[] integerArgs = convertArgs(args);
+		InterpreterCLI interpreter = new InterpreterCLI(new HobbesFrontEnd(
+				new File(args[0])));
+		System.out.println(interpreter.interpret(integerArgs));
+	}
+
+	private static IIntegerETIR[] convertArgs(String[] args) {
 		IIntegerETIR integerArgs[] = new IIntegerETIR[args.length];
 		for (int i = 0; i < args.length; i++) {
 			try {
@@ -33,9 +40,7 @@ public class InterpreterCLI {
 				integerArgs[i] = new IntegerETIR(-666);
 			}
 		}
-		InterpreterCLI interpreter = new InterpreterCLI(new HobbesFrontEnd(
-				new File(args[0])));
-		System.out.println(interpreter.interpret(integerArgs));
+		return integerArgs;
 	}
 
 }

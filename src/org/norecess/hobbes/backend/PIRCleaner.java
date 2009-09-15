@@ -1,7 +1,5 @@
 package org.norecess.hobbes.backend;
 
-import org.norecess.hobbes.compiler.Code;
-import org.norecess.hobbes.compiler.ICode;
 
 public class PIRCleaner implements IPIRCleaner {
 

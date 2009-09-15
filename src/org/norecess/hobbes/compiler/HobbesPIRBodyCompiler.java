@@ -1,6 +1,8 @@
 package org.norecess.hobbes.compiler;
 
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.hobbes.backend.Code;
+import org.norecess.hobbes.backend.ICode;
 
 /*
  * A "component compiler" is a compiler that compiles only components of a program.
