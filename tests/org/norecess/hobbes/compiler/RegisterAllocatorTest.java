@@ -9,11 +9,11 @@ public class RegisterAllocatorTest {
 	@Test
 	public void shouldAllocateRegisters() {
 		RegisterAllocator allocator = new RegisterAllocator();
-		assertEquals("$I0", allocator.next());
-		assertEquals("$I1", allocator.next());
-		assertEquals("$I2", allocator.next());
-		assertEquals("$I3", allocator.next());
-		assertEquals("$I4", allocator.next());
+		assertEquals(new Register(0), allocator.next());
+		assertEquals(new Register(1), allocator.next());
+		assertEquals(new Register(2), allocator.next());
+		assertEquals(new Register(3), allocator.next());
+		assertEquals(new Register(4), allocator.next());
 	}
 
 	@Test
@@ -22,7 +22,7 @@ public class RegisterAllocatorTest {
 		for (int i = 0; i < 2000; i++) {
 			allocator.next();
 		}
-		assertEquals("$I2000", allocator.next());
+		assertEquals(new Register(2000), allocator.next());
 	}
 
 }

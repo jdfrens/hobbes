@@ -1,6 +1,5 @@
 package org.norecess.hobbes.compiler;
 
-import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.expressions.BreakETIR;
 import org.norecess.citkit.tir.expressions.IArrayETIR;
 import org.norecess.citkit.tir.expressions.IAssignmentETIR;
@@ -19,90 +18,85 @@ import org.norecess.citkit.tir.expressions.IStringETIR;
 import org.norecess.citkit.tir.expressions.IVariableETIR;
 import org.norecess.citkit.tir.expressions.IWhileETIR;
 import org.norecess.citkit.tir.expressions.NilETIR;
+import org.norecess.citkit.visitors.ExpressionTIRVisitor;
 
-public class HobbesPIRPrologCompiler implements IHobbesPIRPrologCompiler {
+public class HobbesPIRBodyVisitor implements ExpressionTIRVisitor<ICode> {
 
-	public ICode generateProlog(ExpressionTIR expr) {
-		ICode code = new Code();
-		code.add(".sub main");
-		return code.append(expr.accept(this));
+	private final IRegister	myTarget;
+
+	public HobbesPIRBodyVisitor(IRegister target) {
+		myTarget = target;
 	}
 
 	public ICode visitIntegerETIR(IIntegerETIR integer) {
-		return new Code();
+		return new Code(myTarget + " = " + integer.getValue());
 	}
 
-	public ICode visitOperatorETIR(IOperatorETIR expression) {
-		Code code = new Code();
-		code.append(expression.getLeft().accept(this));
-		code.append(expression.getRight().accept(this));
-		return code;
+	public ICode visitArrayETIR(IArrayETIR arg0) {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	public ICode visitAssignmentETIR(IAssignmentETIR arg0) {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	public ICode visitBooleanETIR(IBooleanETIR arg0) {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	public ICode visitBreakETIR(BreakETIR arg0) {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	public ICode visitCallETIR(ICallETIR arg0) {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	public ICode visitFieldAssignmentETIR(IFieldAssignmentTIR arg0) {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	public ICode visitForETIR(IForETIR arg0) {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	public ICode visitIfETIR(IIfETIR arg0) {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	public ICode visitLambdaETIR(ILambdaETIR arg0) {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	public ICode visitLetETIR(ILetETIR arg0) {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	public ICode visitNilETIR(NilETIR arg0) {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	public ICode visitOperatorETIR(IOperatorETIR arg0) {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	public ICode visitRecordETIR(IRecordETIR arg0) {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	public ICode visitSequenceETIR(ISequenceETIR arg0) {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	public ICode visitStringETIR(IStringETIR arg0) {
+		throw new IllegalStateException("unimplemented!");
 	}
 
 	public ICode visitVariableETIR(IVariableETIR arg0) {
-		return new Code(".param pmc argv");
-	}
-
-	//
-	// Unimplemented
-	//
-	public Code visitArrayETIR(IArrayETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 
-	public Code visitAssignmentETIR(IAssignmentETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public Code visitBooleanETIR(IBooleanETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public Code visitBreakETIR(BreakETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public Code visitCallETIR(ICallETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public Code visitFieldAssignmentETIR(IFieldAssignmentTIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public Code visitForETIR(IForETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public Code visitIfETIR(IIfETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public Code visitLambdaETIR(ILambdaETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public Code visitLetETIR(ILetETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public Code visitNilETIR(NilETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public Code visitRecordETIR(IRecordETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public Code visitSequenceETIR(ISequenceETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public Code visitStringETIR(IStringETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public Code visitWhileETIR(IWhileETIR arg0) {
+	public ICode visitWhileETIR(IWhileETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 

@@ -11,7 +11,6 @@ import org.norecess.citkit.tir.expressions.IIntegerETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
-import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
@@ -31,22 +30,18 @@ public class HobbesInterpreterTest {
 	@Test
 	public void shouldInterpretInteger() {
 		assertEquals(new IntegerETIR(5), myInterpreter
-				.interpret(createIntegerTree(5)));
+				.interpret(new IntegerETIR(5)));
 		assertEquals(new IntegerETIR(555), myInterpreter
-				.interpret(createIntegerTree(555)));
-	}
-
-	private IIntegerETIR createIntegerTree(int i) {
-		return new IntegerETIR(i);
+				.interpret(new IntegerETIR(555)));
 	}
 
 	@Test
 	public void shouldInterpretCommandLineArguments() {
-		myArgv[8] = createIntegerTree(7);
-		assertEquals(createIntegerTree(7), myInterpreter
+		myArgv[8] = new IntegerETIR(7);
+		assertEquals(new IntegerETIR(7), myInterpreter
 				.interpret(createArgvTree(8)));
-		myArgv[3] = createIntegerTree(55);
-		assertEquals(createIntegerTree(55), myInterpreter
+		myArgv[3] = new IntegerETIR(55);
+		assertEquals(new IntegerETIR(55), myInterpreter
 				.interpret(createArgvTree(3)));
 	}
 
@@ -69,14 +64,9 @@ public class HobbesInterpreterTest {
 		EasyMock.expect(rightResult.getValue()).andReturn(8);
 
 		control.replay();
-		assertEquals(new IntegerETIR(13), myInterpreter.interpret(createOpTree(
-				Operator.ADD, left, right)));
+		assertEquals(new IntegerETIR(13), myInterpreter
+				.interpret(new OperatorETIR(left, Operator.ADD, right)));
 		control.verify();
-	}
-
-	private ExpressionTIR createOpTree(IOperator operator, ExpressionTIR left,
-			ExpressionTIR right) {
-		return new OperatorETIR(left, operator, right);
 	}
 
 	@Test

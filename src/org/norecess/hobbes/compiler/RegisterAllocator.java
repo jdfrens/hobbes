@@ -8,8 +8,7 @@ public class RegisterAllocator implements IRegisterAllocator {
 		myCounter = 0;
 	}
 
-	public String next() {
-		return "$I" + myCounter++;
+	public IRegister next() {
+		return new Register(myCounter++);
 	}
-
 }

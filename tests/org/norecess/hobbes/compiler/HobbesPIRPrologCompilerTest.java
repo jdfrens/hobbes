@@ -29,8 +29,8 @@ public class HobbesPIRPrologCompilerTest {
 	@Test
 	public void shouldGenerateProlog() {
 		myMockControl.replay();
-		assertEquals(new Code(".sub main"), myPrologCompiler.generateProlog(
-				new Code(), new IntegerETIR(5)));
+		assertEquals(new Code(".sub main"), myPrologCompiler
+				.generateProlog(new IntegerETIR(5)));
 		myMockControl.verify();
 	}
 
@@ -40,7 +40,7 @@ public class HobbesPIRPrologCompilerTest {
 
 		myMockControl.replay();
 		assertEquals(new Code(".sub main", ".param pmc argv"), myPrologCompiler
-				.generateProlog(new Code(), new VariableETIR(lvalue)));
+				.generateProlog(new VariableETIR(lvalue)));
 		myMockControl.verify();
 	}
 
@@ -50,13 +50,15 @@ public class HobbesPIRPrologCompilerTest {
 		ExpressionTIR left = myMockControl.createMock(ExpressionTIR.class);
 		ExpressionTIR right = myMockControl.createMock(ExpressionTIR.class);
 
-		EasyMock.expect(left.accept(myPrologCompiler)).andReturn(null);
-		EasyMock.expect(right.accept(myPrologCompiler)).andReturn(null);
+		EasyMock.expect(left.accept(myPrologCompiler)).andReturn(
+				new Code("left prolog"));
+		EasyMock.expect(right.accept(myPrologCompiler)).andReturn(
+				new Code("right prolog"));
 
 		myMockControl.replay();
-		assertEquals(new Code(".sub main"), myPrologCompiler.generateProlog(
-				new Code(), new OperatorETIR(left, operator, right)));
+		assertEquals(new Code(".sub main", "left prolog", "right prolog"),
+				myPrologCompiler.generateProlog(new OperatorETIR(left,
+						operator, right)));
 		myMockControl.verify();
 	}
-
 }

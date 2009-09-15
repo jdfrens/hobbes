@@ -1,12 +1,11 @@
 package org.norecess.hobbes.compiler;
 
 import static org.easymock.EasyMock.expect;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 
 import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.tree.Tree;
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.Before;
@@ -18,7 +17,7 @@ public class HobbesPIRCompilerTest {
 	private IMocksControl				myControl;
 
 	private IHobbesPIRPrologCompiler	myPrologCompiler;
-	private IHobbesPIRBodyCompiler	myComponentCompiler;
+	private IHobbesPIRBodyCompiler		myBodyCompiler;
 
 	private HobbesPIRCompiler			myCompiler;
 
@@ -27,25 +26,21 @@ public class HobbesPIRCompilerTest {
 		myControl = EasyMock.createControl();
 
 		myPrologCompiler = myControl.createMock(IHobbesPIRPrologCompiler.class);
-		myComponentCompiler = myControl
-				.createMock(IHobbesPIRBodyCompiler.class);
+		myBodyCompiler = myControl.createMock(IHobbesPIRBodyCompiler.class);
 
-		myCompiler = new HobbesPIRCompiler(myPrologCompiler,
-				myComponentCompiler);
+		myCompiler = new HobbesPIRCompiler(myPrologCompiler, myBodyCompiler);
 	}
 
 	@Test
 	public void shouldCompile() throws RecognitionException, IOException {
 		ExpressionTIR tir = myControl.createMock(ExpressionTIR.class);
-		Tree tree = myControl.createMock(Tree.class);
-		ICode code = myControl.createMock(ICode.class);
 
-		expect(myPrologCompiler.generateProlog(code, tir)).andReturn(code);
-		expect(myComponentCompiler.generate(code, tree)).andReturn(code);
-		expect(myComponentCompiler.generateEpilog(code)).andReturn(code);
+		expect(myPrologCompiler.generateProlog(tir)).andReturn(
+				new Code("prolog"));
+		expect(myBodyCompiler.generate(tir)).andReturn(new Code("body"));
 
 		myControl.replay();
-		assertSame(code, myCompiler.compile(tir, tree, code));
+		assertEquals(new Code("prolog", "body"), myCompiler.compile(tir));
 		myControl.verify();
 	}
 

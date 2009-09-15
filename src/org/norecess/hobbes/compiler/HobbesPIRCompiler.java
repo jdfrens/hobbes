@@ -3,7 +3,6 @@ package org.norecess.hobbes.compiler;
 import java.io.IOException;
 
 import org.antlr.runtime.RecognitionException;
-import org.antlr.runtime.tree.Tree;
 import org.norecess.citkit.tir.ExpressionTIR;
 
 /*
@@ -12,7 +11,7 @@ import org.norecess.citkit.tir.ExpressionTIR;
 public class HobbesPIRCompiler {
 
 	private final IHobbesPIRBodyCompiler	myComponentCompiler;
-	private final IHobbesPIRPrologCompiler		myPrologCompiler;
+	private final IHobbesPIRPrologCompiler	myPrologCompiler;
 
 	// public HobbesPIRCompiler() {
 	// this(new HobbesPIRComponentCompiler(new RegisterAllocator()));
@@ -24,11 +23,11 @@ public class HobbesPIRCompiler {
 		myComponentCompiler = componentCompiler;
 	}
 
-	public ICode compile(ExpressionTIR tir, Tree tree, ICode code)
-			throws IOException, RecognitionException {
-		myPrologCompiler.generateProlog(code, tir);
-		myComponentCompiler.generate(code, tree);
-		myComponentCompiler.generateEpilog(code);
+	public ICode compile(ExpressionTIR tir) throws IOException,
+			RecognitionException {
+		ICode code = new Code();
+		code.append(myPrologCompiler.generateProlog(tir));
+		code.append(myComponentCompiler.generate(tir));
 		return code;
 	}
 

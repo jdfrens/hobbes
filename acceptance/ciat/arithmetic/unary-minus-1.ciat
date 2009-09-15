@@ -3,8 +3,7 @@ Unary minus
 -1024
 ==== compilation
 .sub main
-	$I0 = 1024
-	$I0 *= -1
+	$I0 = -1024
 	print $I0
 	print "\n"
 .end

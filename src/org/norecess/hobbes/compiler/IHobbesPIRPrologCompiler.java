@@ -5,6 +5,6 @@ import org.norecess.citkit.visitors.ExpressionTIRVisitor;
 
 public interface IHobbesPIRPrologCompiler extends ExpressionTIRVisitor<ICode> {
 
-	ICode generateProlog(ICode code, ExpressionTIR expr);
+	ICode generateProlog(ExpressionTIR expr);
 
 }

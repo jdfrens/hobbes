@@ -3,8 +3,7 @@ Unary minus
 -88
 ==== compilation
 .sub main
-	$I0 = 88
-	$I0 *= -1
+	$I0 = -88
 	print $I0
 	print "\n"
 .end

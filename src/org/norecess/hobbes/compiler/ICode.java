@@ -5,6 +5,8 @@ package org.norecess.hobbes.compiler;
  */
 public interface ICode extends Iterable<String> {
 
-    ICode add(String command);
+	ICode add(String command);
+
+	ICode append(ICode code);
 
 }

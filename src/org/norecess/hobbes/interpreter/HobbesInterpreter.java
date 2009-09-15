@@ -71,26 +71,6 @@ public class HobbesInterpreter implements ExpressionTIRVisitor<IIntegerETIR>,
 		return subscript.getIndex().accept(this);
 	}
 
-	// private Object something(Tree ast) {
-	// switch (ast.getType()) {
-	// case HobbesParser.MINUS:
-	// int child = Integer.parseInt(interpret(ast.getChild(0)));
-	// return String.valueOf(-child);
-	// case HobbesParser.PLUS:
-	// case HobbesParser.MULTIPLY:
-	// int left = Integer.parseInt(interpret(ast.getChild(0)));
-	// int right = Integer.parseInt(interpret(ast.getChild(1)));
-	// switch (ast.getType()) {
-	// case HobbesParser.PLUS:
-	// return String.valueOf(left + right);
-	// case HobbesParser.MULTIPLY:
-	// return String.valueOf(left * right);
-	// }
-	// default:
-	// throw new IllegalArgumentException(ast + " cannot be interpreted");
-	// }
-	// }
-
 	public IntegerETIR visitArrayETIR(IArrayETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
