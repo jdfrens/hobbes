@@ -22,7 +22,7 @@ import org.norecess.citkit.tir.expressions.NilETIR;
 import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.backend.ICode;
 
-public class HobbesPIRPrologCompiler implements IHobbesPIRPrologCompiler {
+public class PIRPrologCompiler implements IPIRPrologCompiler {
 
 	public ICode generateProlog(ExpressionTIR expr) {
 		ICode code = new Code();

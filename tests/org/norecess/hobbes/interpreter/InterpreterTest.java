@@ -15,16 +15,16 @@ import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
 
-public class HobbesInterpreterTest {
+public class InterpreterTest {
 
-	private IIntegerETIR[]		myArgv;
+	private IIntegerETIR[]	myArgv;
 
-	private HobbesInterpreter	myInterpreter;
+	private Interpreter		myInterpreter;
 
 	@Before
 	public void setUp() {
 		myArgv = new IIntegerETIR[10];
-		myInterpreter = new HobbesInterpreter(myArgv);
+		myInterpreter = new Interpreter(myArgv);
 	}
 
 	@Test

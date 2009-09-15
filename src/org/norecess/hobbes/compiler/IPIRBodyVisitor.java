@@ -5,7 +5,7 @@ import org.norecess.citkit.visitors.ExpressionTIRVisitor;
 import org.norecess.citkit.visitors.LValueTIRVisitor;
 import org.norecess.hobbes.backend.ICode;
 
-public interface IHobbesPIRBodyVisitor extends ExpressionTIRVisitor<ICode>,
+public interface IPIRBodyVisitor extends ExpressionTIRVisitor<ICode>,
 		LValueTIRVisitor<ICode> {
 
 	ICode recurse(ExpressionTIR expression, IRegister target);

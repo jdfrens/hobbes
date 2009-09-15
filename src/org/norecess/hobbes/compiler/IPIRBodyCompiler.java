@@ -4,10 +4,10 @@ import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.hobbes.backend.ICode;
 
 /**
- * @see HobbesPIRBodyCompiler
+ * @see PIRBodyCompiler
  * 
  */
-public interface IHobbesPIRBodyCompiler {
+public interface IPIRBodyCompiler {
 
 	public ICode generate(ExpressionTIR tir);
 

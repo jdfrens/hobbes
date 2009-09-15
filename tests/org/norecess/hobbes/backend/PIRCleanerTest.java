@@ -7,37 +7,37 @@ import org.junit.Test;
 
 public class PIRCleanerTest {
 
-    private PIRCleaner myCleaner;
+	private PIRCleaner	myCleaner;
 
-    @Before
-    public void setup() {
-        myCleaner = new PIRCleaner();
-    }
+	@Before
+	public void setup() {
+		myCleaner = new PIRCleaner();
+	}
 
-    @Test
-    public void shouldAddTab() {
-        assertEquals("\t$I0 += $I1", myCleaner.process("$I0 += $I1"));
-        assertEquals("\t.param pmc argv", myCleaner.process(".param pmc argv"));
-        assertEquals("\tfoobar", myCleaner.process("foobar"));
-    }
+	@Test
+	public void shouldAddTab() {
+		assertEquals("\t$I0 += $I1", myCleaner.process("$I0 += $I1"));
+		assertEquals("\t.param pmc argv", myCleaner.process(".param pmc argv"));
+		assertEquals("\tfoobar", myCleaner.process("foobar"));
+	}
 
-    @Test
-    public void shouldNotAddTab() {
-        assertEquals(".sub something", myCleaner.process(".sub something"));
-        assertEquals(".end", myCleaner.process(".end"));
-    }
+	@Test
+	public void shouldNotAddTab() {
+		assertEquals(".sub something", myCleaner.process(".sub something"));
+		assertEquals(".end", myCleaner.process(".end"));
+	}
 
-    @Test
-    public void shouldProcessCode() {
-        assertEquals(new Code(".sub me", "\tprint 5", ".end"), myCleaner
-                .process(new Code(".sub me", "print 5", ".end")));
-    }
+	@Test
+	public void shouldProcessCode() {
+		assertEquals(new Code(".sub me", "\tprint 5", ".end"), myCleaner
+				.process(new Code(".sub me", "print 5", ".end")));
+	}
 
-    @Test
-    public void shouldRemoveDuplicateParamDirectives() {
-        assertEquals(new Code("\t.param pmc argv"), myCleaner.process(new Code(
-                ".param pmc argv")));
-        assertEquals(new Code("\t.param pmc argv"), myCleaner.process(new Code(
-                ".param pmc argv", ".param pmc argv")));
-    }
+	@Test
+	public void shouldRemoveDuplicateParamDirectives() {
+		assertEquals(new Code("\t.param pmc argv"), myCleaner.process(new Code(
+				".param pmc argv")));
+		assertEquals(new Code("\t.param pmc argv"), myCleaner.process(new Code(
+				".param pmc argv", ".param pmc argv")));
+	}
 }

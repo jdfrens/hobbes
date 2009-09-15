@@ -11,43 +11,43 @@ import org.junit.Test;
 
 public class CodeWriterTest {
 
-    private IMocksControl myControl;
-    private Appendable    myAppendable;
-    private CodeWriter    myWriter;
+	private IMocksControl	myControl;
+	private Appendable		myAppendable;
+	private CodeWriter		myWriter;
 
-    @Before
-    public void setUp() {
-        myControl = EasyMock.createControl();
-        myAppendable = myControl.createMock(Appendable.class);
-        myWriter = new CodeWriter(myAppendable);
-    }
+	@Before
+	public void setUp() {
+		myControl = EasyMock.createControl();
+		myAppendable = myControl.createMock(Appendable.class);
+		myWriter = new CodeWriter(myAppendable);
+	}
 
-    @Test
-    public void shouldWriteNoCode() throws IOException {
-        myControl.replay();
-        myWriter.writeCode(new Code());
-        myControl.verify();
-    }
+	@Test
+	public void shouldWriteNoCode() throws IOException {
+		myControl.replay();
+		myWriter.writeCode(new Code());
+		myControl.verify();
+	}
 
-    @Test
-    public void shouldWriteCode() throws IOException {
-        ICode code = new Code("instruction 1", "instruction 2", "instruction 3");
+	@Test
+	public void shouldWriteCode() throws IOException {
+		ICode code = new Code("instruction 1", "instruction 2", "instruction 3");
 
-        EasyMock.resetToStrict(myAppendable);
-        expectAppended("instruction 1");
-        expectAppended("\n");
-        expectAppended("instruction 2");
-        expectAppended("\n");
-        expectAppended("instruction 3");
-        expectAppended("\n");
+		EasyMock.resetToStrict(myAppendable);
+		expectAppended("instruction 1");
+		expectAppended("\n");
+		expectAppended("instruction 2");
+		expectAppended("\n");
+		expectAppended("instruction 3");
+		expectAppended("\n");
 
-        myControl.replay();
-        myWriter.writeCode(code);
-        myControl.verify();
-    }
+		myControl.replay();
+		myWriter.writeCode(code);
+		myControl.verify();
+	}
 
-    private void expectAppended(String string) throws IOException {
-        expect(myAppendable.append(string)).andReturn(myAppendable);
-    }
+	private void expectAppended(String string) throws IOException {
+		expect(myAppendable.append(string)).andReturn(myAppendable);
+	}
 
 }

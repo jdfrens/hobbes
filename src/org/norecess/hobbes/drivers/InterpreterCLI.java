@@ -8,7 +8,7 @@ import org.norecess.citkit.tir.expressions.IIntegerETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.hobbes.frontend.HobbesFrontEnd;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
-import org.norecess.hobbes.interpreter.HobbesInterpreter;
+import org.norecess.hobbes.interpreter.Interpreter;
 
 public class InterpreterCLI {
 
@@ -20,7 +20,7 @@ public class InterpreterCLI {
 
 	public IIntegerETIR interpret(IIntegerETIR[] args)
 			throws RecognitionException {
-		return new HobbesInterpreter(args).interpret(myFrontEnd.process());
+		return new Interpreter(args).interpret(myFrontEnd.process());
 	}
 
 	public static void main(String[] args) throws IOException,

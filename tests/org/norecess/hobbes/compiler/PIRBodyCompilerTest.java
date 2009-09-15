@@ -2,7 +2,6 @@ package org.norecess.hobbes.compiler;
 
 import static org.junit.Assert.assertEquals;
 
-import org.antlr.runtime.CommonToken;
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.Before;
@@ -10,24 +9,13 @@ import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.visitors.ExpressionTIRVisitor;
 import org.norecess.hobbes.backend.Code;
-import org.norecess.hobbes.frontend.HobbesLexer;
 
-public class HobbesPIRBodyCompilerTest {
+public class PIRBodyCompilerTest {
 
-	public static final CommonToken	PLUS_TOKEN		= new CommonToken(
-															HobbesLexer.PLUS,
-															"+");
-	public static final CommonToken	MINUS_TOKEN		= new CommonToken(
-															HobbesLexer.MINUS,
-															"-");
-	public static final CommonToken	MULTIPLY_TOKEN	= new CommonToken(
-															HobbesLexer.MULTIPLY,
-															"*");
+	private IMocksControl		myMockControl;
 
-	private IMocksControl			myMockControl;
-
-	private IRegisterAllocator		myRegisterAllocator;
-	private HobbesPIRBodyCompiler	myCompiler;
+	private IRegisterAllocator	myRegisterAllocator;
+	private PIRBodyCompiler		myCompiler;
 
 	@Before
 	public void setUp() {
@@ -35,7 +23,7 @@ public class HobbesPIRBodyCompilerTest {
 
 		myRegisterAllocator = myMockControl
 				.createMock(IRegisterAllocator.class);
-		myCompiler = new HobbesPIRBodyCompiler(myRegisterAllocator);
+		myCompiler = new PIRBodyCompiler(myRegisterAllocator);
 	}
 
 	@SuppressWarnings("unchecked")

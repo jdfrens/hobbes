@@ -13,23 +13,23 @@ import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.hobbes.backend.Code;
 
-public class HobbesPIRCompilerTest {
+public class PIRCompilerTest {
 
-	private IMocksControl				myControl;
+	private IMocksControl		myControl;
 
-	private IHobbesPIRPrologCompiler	myPrologCompiler;
-	private IHobbesPIRBodyCompiler		myBodyCompiler;
+	private IPIRPrologCompiler	myPrologCompiler;
+	private IPIRBodyCompiler	myBodyCompiler;
 
-	private HobbesPIRCompiler			myCompiler;
+	private PIRCompiler			myCompiler;
 
 	@Before
 	public void setUp() {
 		myControl = EasyMock.createControl();
 
-		myPrologCompiler = myControl.createMock(IHobbesPIRPrologCompiler.class);
-		myBodyCompiler = myControl.createMock(IHobbesPIRBodyCompiler.class);
+		myPrologCompiler = myControl.createMock(IPIRPrologCompiler.class);
+		myBodyCompiler = myControl.createMock(IPIRBodyCompiler.class);
 
-		myCompiler = new HobbesPIRCompiler(myPrologCompiler, myBodyCompiler);
+		myCompiler = new PIRCompiler(myPrologCompiler, myBodyCompiler);
 	}
 
 	@Test

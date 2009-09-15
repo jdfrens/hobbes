@@ -15,24 +15,24 @@ import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
 import org.norecess.hobbes.backend.Code;
 
-public class HobbesPIRBodyVisitorTest {
+public class PIRBodyVisitorTest {
 
-	private IMocksControl			myMocksControl;
+	private IMocksControl		myMocksControl;
 
-	private IHobbesPIRBodyVisitor	myRecurser;
-	private IRegisterAllocator		myRegisterAllocator;
+	private IPIRBodyVisitor		myRecurser;
+	private IRegisterAllocator	myRegisterAllocator;
 
-	private HobbesPIRBodyVisitor	myVisitor;
+	private PIRBodyVisitor		myVisitor;
 
 	@Before
 	public void setUp() {
 		myMocksControl = EasyMock.createControl();
 
-		myRecurser = myMocksControl.createMock(IHobbesPIRBodyVisitor.class);
+		myRecurser = myMocksControl.createMock(IPIRBodyVisitor.class);
 		myRegisterAllocator = myMocksControl
 				.createMock(IRegisterAllocator.class);
 
-		myVisitor = new HobbesPIRBodyVisitor(myRecurser, myRegisterAllocator,
+		myVisitor = new PIRBodyVisitor(myRecurser, myRegisterAllocator,
 				new Register(3));
 	}
 

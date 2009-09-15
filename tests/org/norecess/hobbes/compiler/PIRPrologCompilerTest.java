@@ -14,17 +14,17 @@ import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.hobbes.backend.Code;
 
-public class HobbesPIRPrologCompilerTest {
+public class PIRPrologCompilerTest {
 
-	private IMocksControl			myMockControl;
+	private IMocksControl		myMockControl;
 
-	private HobbesPIRPrologCompiler	myPrologCompiler;
+	private PIRPrologCompiler	myPrologCompiler;
 
 	@Before
 	public void setUp() {
 		myMockControl = EasyMock.createControl();
 
-		myPrologCompiler = new HobbesPIRPrologCompiler();
+		myPrologCompiler = new PIRPrologCompiler();
 	}
 
 	@Test

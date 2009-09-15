@@ -28,12 +28,12 @@ import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
 import org.norecess.citkit.visitors.ExpressionTIRVisitor;
 import org.norecess.citkit.visitors.LValueTIRVisitor;
 
-public class HobbesInterpreter implements ExpressionTIRVisitor<IIntegerETIR>,
+public class Interpreter implements ExpressionTIRVisitor<IIntegerETIR>,
 		LValueTIRVisitor<IIntegerETIR> {
 
 	private final IIntegerETIR[]	myArgv;
 
-	public HobbesInterpreter(IIntegerETIR[] argv) {
+	public Interpreter(IIntegerETIR[] argv) {
 		myArgv = argv;
 	}
 

@@ -25,20 +25,19 @@ import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
 import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.backend.ICode;
 
-public class HobbesPIRBodyVisitor implements IHobbesPIRBodyVisitor {
+public class PIRBodyVisitor implements IPIRBodyVisitor {
 
-	private final IHobbesPIRBodyVisitor	myRecurser;
+	private final IPIRBodyVisitor		myRecurser;
 	private final IRegisterAllocator	myRegisterAllocator;
 	private final IRegister				myTarget;
 
-	public HobbesPIRBodyVisitor(IRegisterAllocator registerAllocator,
-			IRegister target) {
+	public PIRBodyVisitor(IRegisterAllocator registerAllocator, IRegister target) {
 		myRecurser = this;
 		myRegisterAllocator = registerAllocator;
 		myTarget = target;
 	}
 
-	public HobbesPIRBodyVisitor(IHobbesPIRBodyVisitor recurser,
+	public PIRBodyVisitor(IPIRBodyVisitor recurser,
 			IRegisterAllocator registerAllocator, IRegister target) {
 		myRecurser = recurser;
 		myRegisterAllocator = registerAllocator;
@@ -46,8 +45,8 @@ public class HobbesPIRBodyVisitor implements IHobbesPIRBodyVisitor {
 	}
 
 	public ICode recurse(ExpressionTIR expression, IRegister target) {
-		return expression.accept(new HobbesPIRBodyVisitor(myRegisterAllocator,
-				target));
+		return expression
+				.accept(new PIRBodyVisitor(myRegisterAllocator, target));
 	}
 
 	public ICode visitIntegerETIR(IIntegerETIR integer) {

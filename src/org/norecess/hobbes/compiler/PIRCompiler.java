@@ -10,13 +10,13 @@ import org.norecess.hobbes.backend.ICode;
 /*
  * This is the top-level compiler.  The component compiler does the hard work.
  */
-public class HobbesPIRCompiler {
+public class PIRCompiler {
 
-	private final IHobbesPIRBodyCompiler	myComponentCompiler;
-	private final IHobbesPIRPrologCompiler	myPrologCompiler;
+	private final IPIRBodyCompiler		myComponentCompiler;
+	private final IPIRPrologCompiler	myPrologCompiler;
 
-	public HobbesPIRCompiler(IHobbesPIRPrologCompiler prologCompiler,
-			IHobbesPIRBodyCompiler componentCompiler) {
+	public PIRCompiler(IPIRPrologCompiler prologCompiler,
+			IPIRBodyCompiler componentCompiler) {
 		myPrologCompiler = prologCompiler;
 		myComponentCompiler = componentCompiler;
 	}

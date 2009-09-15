@@ -18,15 +18,19 @@ public class Register implements IRegister {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		Register other = (Register) obj;
-		if (myI != other.myI)
+		if (myI != other.myI) {
 			return false;
+		}
 		return true;
 	}
 
