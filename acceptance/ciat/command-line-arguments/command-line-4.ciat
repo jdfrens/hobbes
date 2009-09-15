@@ -5,7 +5,8 @@ Adds 23 and argv[2]
 .sub main
 	.param pmc argv
 	$I0 = 23
-	$I1 = argv[2]
+	$I1 = 2
+	$I1 = argv[$I1]
 	$I0 += $I1
 	print $I0
 	print "\n"

@@ -4,7 +4,8 @@ ARGV[5]
 ==== compilation
 .sub main
 	.param pmc argv
-	$I0 = argv[5]
+	$I0 = 5
+	$I0 = argv[$I0]
 	print $I0
 	print "\n"
 .end

@@ -17,7 +17,8 @@ public class HobbesPIRBodyCompiler implements IHobbesPIRBodyCompiler {
 	public ICode generate(ExpressionTIR tir) {
 		IRegister target = myRegisterAllocator.next();
 		ICode code = new Code();
-		code.append(tir.accept(new HobbesPIRBodyVisitor(target)));
+		code.append(tir.accept(new HobbesPIRBodyVisitor(myRegisterAllocator,
+				target)));
 		code.add("print " + target);
 		code.add("print \"\\n\"");
 		code.add(".end");

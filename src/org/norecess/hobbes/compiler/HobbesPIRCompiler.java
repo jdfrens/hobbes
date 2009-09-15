@@ -13,10 +13,6 @@ public class HobbesPIRCompiler {
 	private final IHobbesPIRBodyCompiler	myComponentCompiler;
 	private final IHobbesPIRPrologCompiler	myPrologCompiler;
 
-	// public HobbesPIRCompiler() {
-	// this(new HobbesPIRComponentCompiler(new RegisterAllocator()));
-	// }
-
 	public HobbesPIRCompiler(IHobbesPIRPrologCompiler prologCompiler,
 			IHobbesPIRBodyCompiler componentCompiler) {
 		myPrologCompiler = prologCompiler;
