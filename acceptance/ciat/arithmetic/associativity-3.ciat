@@ -1,0 +1,15 @@
+Modulus left to right.
+==== source
+100 % 67 % 5
+==== compilation
+.sub main
+	$I0 = 100
+	$I1 = 67
+	$I0 %= $I1
+	$I2 = 5
+	$I0 %= $I2
+	print $I0
+	print "\n"
+.end
+==== execution
+3

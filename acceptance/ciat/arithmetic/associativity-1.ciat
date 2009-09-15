@@ -1,0 +1,15 @@
+Subtract left to right.
+==== source
+10 - 5 - 2
+==== compilation
+.sub main
+	$I0 = 10
+	$I1 = 5
+	$I0 -= $I1
+	$I2 = 2
+	$I0 -= $I2
+	print $I0
+	print "\n"
+.end
+==== execution
+3
