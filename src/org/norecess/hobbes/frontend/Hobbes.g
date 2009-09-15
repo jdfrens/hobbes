@@ -30,11 +30,14 @@ additive_expression
 	;
 	
 multiplicative_expression
-  : simple_expression (MULTIPLY^ simple_expression)*
+  : simple_expression (multiplicative_op^ simple_expression)*
   ;
   
 additive_op
   : PLUS | MINUS
+  ;
+multiplicative_op
+  : MULTIPLY | DIVIDE | MODULUS
   ;
 	
 simple_expression
@@ -52,6 +55,8 @@ INTEGER
 PLUS  : '+' ;
 MINUS : '-' ;
 MULTIPLY : '*' ;
+DIVIDE : '/' ;
+MODULUS : '%' ;
 
 WS
   :	(' ' | '\t' | '\n')+

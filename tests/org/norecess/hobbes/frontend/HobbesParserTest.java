@@ -52,13 +52,33 @@ public class HobbesParserTest {
 	}
 
 	@Test
-	public void shouldParseAMultiplication() {
+	public void shouldParseMultiplication() {
 		assertTree(HobbesParser.MULTIPLY, "(*(1)(2))", myTester
 				.scanInput("1*2").parseAs("program"));
 		assertTree(HobbesParser.MULTIPLY, "(*(1055)(222))", myTester.scanInput(
 				"1055*222").parseAs("program"));
 		assertTree(HobbesParser.MULTIPLY, "(*(888)(32))", myTester.scanInput(
 				"888*32").parseAs("program"));
+	}
+
+	@Test
+	public void shouldParseDivision() {
+		assertTree(HobbesParser.DIVIDE, "(/(1)(2))", myTester.scanInput("1/2")
+				.parseAs("program"));
+		assertTree(HobbesParser.DIVIDE, "(/(1055)(222))", myTester.scanInput(
+				"1055/222").parseAs("program"));
+		assertTree(HobbesParser.DIVIDE, "(/(888)(32))", myTester.scanInput(
+				"888/32").parseAs("program"));
+	}
+
+	@Test
+	public void shouldParseModulus() {
+		assertTree(HobbesParser.MODULUS, "(%(1)(2))", myTester.scanInput("1%2")
+				.parseAs("program"));
+		assertTree(HobbesParser.MODULUS, "(%(1055)(222))", myTester.scanInput(
+				"1055%222").parseAs("program"));
+		assertTree(HobbesParser.MODULUS, "(%(888)(32))", myTester.scanInput(
+				"888%32").parseAs("program"));
 	}
 
 	@Test

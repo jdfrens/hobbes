@@ -1,0 +1,13 @@
+Should be able to modulus large integers.
+==== source
+15700 % 3427
+==== compilation
+.sub main
+	$I0 = 15700
+	$I1 = 3427
+	$I0 %= $I1
+	print $I0
+	print "\n"
+.end
+==== execution
+1992

@@ -45,11 +45,6 @@ public class InterpreterTest {
 				.interpret(createArgvTree(3)));
 	}
 
-	private ExpressionTIR createArgvTree(int i) {
-		return new VariableETIR(new SubscriptLValueTIR(new SimpleLValueTIR(
-				"ARGV"), new IntegerETIR(i)));
-	}
-
 	@Test
 	public void shouldInterpretOperatorExpression() {
 		IMocksControl control = EasyMock.createControl();
@@ -83,6 +78,27 @@ public class InterpreterTest {
 				Operator.SUBTRACT, 2, 8));
 		assertEquals(new IntegerETIR(5), myInterpreter.apply(Operator.SUBTRACT,
 				15, 10));
+	}
+
+	@Test
+	public void shouldInterpretDivision() {
+		assertEquals(new IntegerETIR(4), myInterpreter.apply(Operator.DIVIDE,
+				8, 2));
+		assertEquals(new IntegerETIR(2), myInterpreter.apply(Operator.DIVIDE,
+				15, 6));
+	}
+
+	@Test
+	public void shouldInterpretModulus() {
+		assertEquals(new IntegerETIR(0), myInterpreter.apply(Operator.MODULUS,
+				8, 2));
+		assertEquals(new IntegerETIR(3), myInterpreter.apply(Operator.MODULUS,
+				15, 4));
+	}
+
+	private ExpressionTIR createArgvTree(int i) {
+		return new VariableETIR(new SubscriptLValueTIR(new SimpleLValueTIR(
+				"ARGV"), new IntegerETIR(i)));
 	}
 
 }

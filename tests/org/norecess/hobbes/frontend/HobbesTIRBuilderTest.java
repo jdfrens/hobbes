@@ -58,7 +58,7 @@ public class HobbesTIRBuilderTest {
 	}
 
 	@Test
-	public void shouldBuildAMultiplication() {
+	public void shouldBuildMultiplication() {
 		assertEquals(new OperatorETIR(new IntegerETIR(1), Operator.MULTIPLY,
 				new IntegerETIR(2)), myTester.scanInput("1*2").parseAs(
 				"program").treeParseAs("program"));
@@ -68,7 +68,27 @@ public class HobbesTIRBuilderTest {
 	}
 
 	@Test
-	public void shouldBuildACommandLineArgumentRequest() {
+	public void shouldBuildDivision() {
+		assertEquals(new OperatorETIR(new IntegerETIR(1), Operator.DIVIDE,
+				new IntegerETIR(2)), myTester.scanInput("1/2").parseAs(
+				"program").treeParseAs("program"));
+		assertEquals(new OperatorETIR(new IntegerETIR(1055), Operator.DIVIDE,
+				new IntegerETIR(222)), myTester.scanInput("1055/222").parseAs(
+				"program").treeParseAs("program"));
+	}
+
+	@Test
+	public void shouldBuildModulus() {
+		assertEquals(new OperatorETIR(new IntegerETIR(1), Operator.MODULUS,
+				new IntegerETIR(2)), myTester.scanInput("1%2").parseAs(
+				"program").treeParseAs("program"));
+		assertEquals(new OperatorETIR(new IntegerETIR(1055), Operator.MODULUS,
+				new IntegerETIR(222)), myTester.scanInput("1055%222").parseAs(
+				"program").treeParseAs("program"));
+	}
+
+	@Test
+	public void shouldBuildCommandLineArgumentRequest() {
 		assertEquals(new VariableETIR(new SubscriptLValueTIR(
 				new SimpleLValueTIR("ARGV"), new IntegerETIR(1))), //
 				myTester.scanInput("ARGV[1]").parseAs("program").treeParseAs(

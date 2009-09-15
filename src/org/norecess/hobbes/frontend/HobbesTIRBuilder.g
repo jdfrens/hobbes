@@ -30,6 +30,6 @@ expression returns [ExpressionTIR tir]
   ;
 
 operator returns [Operator o]
-  : op=( PLUS | MINUS | MULTIPLY)
+  : op=( PLUS | MINUS | MULTIPLY | DIVIDE | MODULUS )
     { o = Operator.convertPunctuation(op.getText()); }
   ;

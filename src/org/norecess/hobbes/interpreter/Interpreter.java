@@ -58,6 +58,10 @@ public class Interpreter implements ExpressionTIRVisitor<IIntegerETIR>,
 			return new IntegerETIR(left - right);
 		} else if (operator == Operator.MULTIPLY) {
 			return new IntegerETIR(left * right);
+		} else if (operator == Operator.DIVIDE) {
+			return new IntegerETIR(left / right);
+		} else if (operator == Operator.MODULUS) {
+			return new IntegerETIR(left % right);
 		} else {
 			throw new IllegalArgumentException(operator + " is not supported.");
 		}
