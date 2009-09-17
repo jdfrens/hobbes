@@ -33,9 +33,12 @@ end
 CIAT::RakeTask.new(:compiler_tests) do |task|
   task.processors << compiler
   task.processors << executor
+  task.report_title = "Hobbes Compiler"
+  task.output_folder = "compiler"
 end
 
 CIAT::RakeTask.new(:interpreter_tests) do |task|
   task.processors << interpreter
-  task.report_filename = "interpreter.html"
+  task.report_title = "Hobbes Interpreter"
+  task.output_folder = "interpreter"
 end
