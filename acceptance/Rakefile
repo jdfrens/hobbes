@@ -26,8 +26,14 @@ def executor
 end
 
 task :ciat do
-  Rake::Task['interpreter_tests'].invoke
+  ex = nil
+  begin
+    Rake::Task['interpreter_tests'].invoke
+  rescue Exception => e
+    ex = e
+  end
   Rake::Task['compiler_tests'].invoke
+  fail e if e
 end
 
 CIAT::RakeTask.new(:compiler_tests) do |task|

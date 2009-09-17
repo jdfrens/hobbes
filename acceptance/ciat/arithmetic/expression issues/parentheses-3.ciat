@@ -1,0 +1,17 @@
+Parentheses override normal precedence.
+==== source
+(8+2)*(23-20)
+==== compilation
+.sub main
+	$I0 = 8
+	$I1 = 2
+	$I0 += $I1
+	$I2 = 23
+	$I3 = 20
+	$I2 -= $I3
+	$I0 *= $I2
+	print $I0
+	print "\n"
+.end
+==== execution
+30

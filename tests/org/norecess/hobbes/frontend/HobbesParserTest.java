@@ -98,6 +98,14 @@ public class HobbesParserTest {
 	}
 
 	@Test
+	public void shouldParseParentheses() {
+		assertTree(HobbesParser.MULTIPLY, "(*(+(8)(12))(32))", myTester
+				.scanInput("(8+12)*32").parseAs("program"));
+		assertTree(HobbesParser.MULTIPLY, "(*(8)(+(12)(32)))", myTester
+				.scanInput("8*(12+32)").parseAs("program"));
+	}
+
+	@Test
 	public void shouldParseACommandLineArgumentRequest() {
 		assertTree(HobbesParser.ARGV, "(ARGV(1))", myTester
 				.scanInput("ARGV[1]").parseAs("program"));

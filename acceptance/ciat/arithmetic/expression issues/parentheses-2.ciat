@@ -1,0 +1,15 @@
+Parentheses override normal precedence.
+==== source
+(1+2)*3
+==== compilation
+.sub main
+	$I0 = 1
+	$I1 = 2
+	$I0 += $I1
+	$I2 = 3
+	$I0 *= $I2
+	print $I0
+	print "\n"
+.end
+==== execution
+9

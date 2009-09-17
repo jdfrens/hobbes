@@ -33,7 +33,10 @@ public class HobbesLexerTest {
 	@Test
 	public void shouldRecognizeOperators() {
 		assertToken(HobbesLexer.PLUS, "+", myTester.scanInput("+"));
+		assertToken(HobbesLexer.MINUS, "-", myTester.scanInput("-"));
 		assertToken(HobbesLexer.MULTIPLY, "*", myTester.scanInput("*"));
+		assertToken(HobbesLexer.DIVIDE, "/", myTester.scanInput("/"));
+		assertToken(HobbesLexer.MODULUS, "%", myTester.scanInput("%"));
 	}
 
 	@Test

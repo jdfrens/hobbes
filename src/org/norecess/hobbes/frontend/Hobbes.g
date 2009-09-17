@@ -42,6 +42,7 @@ multiplicative_op
 	
 simple_expression
   : INTEGER
+  | '('! expression ')'!
   | MINUS INTEGER
     -> ^(MINUS INTEGER)
   | 'ARGV[' INTEGER ']'
