@@ -41,7 +41,7 @@ multiplicative_op
   ;
 	
 simple_expression
-  : INTEGER
+  : INTEGER | BOOLEAN
   | '('! expression ')'!
   | MINUS INTEGER
     -> ^(MINUS INTEGER)
@@ -52,6 +52,10 @@ simple_expression
 INTEGER
   : ('0'..'9')+
 	;
+	
+BOOLEAN
+  : '#f' | '#t'
+  ;
 
 PLUS  : '+' ;
 MINUS : '-' ;

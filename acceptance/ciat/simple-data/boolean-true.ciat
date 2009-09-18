@@ -1,11 +1,11 @@
-Simple, small integer.
+Boolean literal for "true".
 ==== source
-5
+#t
 ==== compilation
 .sub main
-	$I0 = 5
+	$I0 = 1
 	print $I0
 	print "\n"
 .end
 ==== execution
-5
+1

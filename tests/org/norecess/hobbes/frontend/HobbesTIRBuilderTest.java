@@ -22,10 +22,18 @@ public class HobbesTIRBuilderTest {
 	}
 
 	@Test
-	public void shouldBuildAnInteger() {
+	public void shouldBuildIntegers() {
 		assertEquals(new IntegerETIR(23), myTester.scanInput("23").parseAs(
 				"program").treeParseAs("program"));
 		assertEquals(new IntegerETIR(1234), myTester.scanInput("1234").parseAs(
+				"program").treeParseAs("program"));
+	}
+
+	@Test
+	public void shouldBuildBooleans() {
+		assertEquals(new IntegerETIR(1), myTester.scanInput("#t").parseAs(
+				"program").treeParseAs("program"));
+		assertEquals(new IntegerETIR(0), myTester.scanInput("#f").parseAs(
 				"program").treeParseAs("program"));
 	}
 

@@ -31,6 +31,19 @@ public class HobbesLexerTest {
 	}
 
 	@Test
+	public void shouldRecognizeBooleans() {
+		assertToken(HobbesLexer.BOOLEAN, "#f", myTester.scanInput("#f"));
+		assertToken(HobbesLexer.BOOLEAN, "#t", myTester.scanInput("#t"));
+	}
+
+	@Test
+	public void shouldNotRecognizeAsBooleans() {
+		refuteToken(HobbesLexer.BOOLEAN, myTester.scanInput("#a"));
+		refuteToken(HobbesLexer.BOOLEAN, myTester.scanInput("#true"));
+		refuteToken(HobbesLexer.BOOLEAN, myTester.scanInput("#false"));
+	}
+
+	@Test
 	public void shouldRecognizeOperators() {
 		assertToken(HobbesLexer.PLUS, "+", myTester.scanInput("+"));
 		assertToken(HobbesLexer.MINUS, "-", myTester.scanInput("-"));

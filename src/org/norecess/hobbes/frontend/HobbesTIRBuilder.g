@@ -21,6 +21,8 @@ program returns [ExpressionTIR tir]
 expression returns [ExpressionTIR tir]
   : i=INTEGER
     { tir = new IntegerETIR(i.getText()); }
+  | b=BOOLEAN
+    { tir = new IntegerETIR("#t".equals(b.getText()) ? 1 : 0); }
   | ^(ARGV e=expression)
     { tir = new VariableETIR(new SubscriptLValueTIR(new SimpleLValueTIR("ARGV"), e)); }
   | ^(MINUS i=INTEGER)

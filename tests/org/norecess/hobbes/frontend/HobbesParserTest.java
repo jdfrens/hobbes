@@ -24,6 +24,14 @@ public class HobbesParserTest {
 	}
 
 	@Test
+	public void shouldParseBooleans() {
+		assertTree(HobbesParser.BOOLEAN, "(#t)", myTester.scanInput("#t")
+				.parseAs("program"));
+		assertTree(HobbesParser.BOOLEAN, "(#f)", myTester.scanInput("#f")
+				.parseAs("program"));
+	}
+
+	@Test
 	public void shouldParseAddition() {
 		assertTree(HobbesParser.PLUS, "(+(1)(2))", myTester.scanInput("1+2")
 				.parseAs("program"));
