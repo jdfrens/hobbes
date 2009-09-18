@@ -128,4 +128,13 @@ public class HobbesParserTest {
 		assertTree(HobbesParser.PLUS, "(+(ARGV(1))(ARGV(8)))", myTester
 				.scanInput("ARGV[1] + ARGV[8]").parseAs("program"));
 	}
+
+	@Test
+	public void shouldParseIfExpressions() {
+		assertTree(HobbesParser.IF, "(IF(#t)(2)(3))", myTester.scanInput(
+				"if #t then 2 else 3 end").parseAs("program"));
+		assertTree(HobbesParser.IF, "(IF(#f)(+(1)(2))(*(3)(4)))", myTester
+				.scanInput("if #f then 1 + 2 else 3 * 4 end")
+				.parseAs("program"));
+	}
 }

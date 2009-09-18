@@ -29,6 +29,8 @@ expression returns [ExpressionTIR tir]
     { tir = new IntegerETIR("-" + i.getText()); }
   | ^(op=operator left=expression right=expression)
     { tir = new OperatorETIR(left, op, right); }
+  | ^(IF test=expression consequence=expression otherwise=expression)
+    { tir = new IfETIR(test, consequence, otherwise); }
   ;
 
 operator returns [Operator o]

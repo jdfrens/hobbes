@@ -7,6 +7,7 @@ options {
 }
 tokens {
   ARGV;
+  IF;
 }
 
 @header {
@@ -23,6 +24,8 @@ program
 
 expression
   : additive_expression
+  | 'if' BOOLEAN 'then' expression 'else' expression 'end'
+    -> ^(IF BOOLEAN expression+)
   ;
   
 additive_expression

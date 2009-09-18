@@ -1,0 +1,20 @@
+Trigger then clause of if expression.
+==== source
+if #t then
+  44
+else
+  55
+end
+==== compilation
+.sub main
+	$I0 = 1
+	if $I1 goto label_1
+    $I0 = 55
+    goto label_2
+label_1:
+    $I0 = 44
+	print $I0
+	print "\n"
+.end
+==== execution
+44

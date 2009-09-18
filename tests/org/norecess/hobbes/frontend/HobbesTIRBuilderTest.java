@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 import org.norecess.antlr.ANTLRTester;
+import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
@@ -118,5 +119,19 @@ public class HobbesTIRBuilderTest {
 						"ARGV"), new IntegerETIR(8)))), //
 				myTester.scanInput("ARGV[1] + ARGV[8]").parseAs("program")
 						.treeParseAs("program"));
+	}
+
+	@Test
+	public void shouldBuildIfExpressions() {
+		assertEquals(new IfETIR(new IntegerETIR(1), new IntegerETIR(2),
+				new IntegerETIR(3)), myTester.scanInput(
+				"if #t then 2 else 3 end").parseAs("program").treeParseAs(
+				"program"));
+		assertEquals(new IfETIR(new IntegerETIR(0), new OperatorETIR(
+				new IntegerETIR(2), Operator.ADD, new IntegerETIR(8)),
+				new OperatorETIR(new IntegerETIR(3), Operator.MULTIPLY,
+						new IntegerETIR(4))), myTester.scanInput(
+				"if #f then 2+8 else 3*4 end").parseAs("program").treeParseAs(
+				"program"));
 	}
 }
