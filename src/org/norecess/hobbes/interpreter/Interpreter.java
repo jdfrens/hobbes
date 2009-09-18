@@ -27,6 +27,7 @@ import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
 import org.norecess.citkit.visitors.ExpressionTIRVisitor;
 import org.norecess.citkit.visitors.LValueTIRVisitor;
+import org.norecess.hobbes.HobbesConstants;
 
 public class Interpreter implements ExpressionTIRVisitor<IIntegerETIR>,
 		LValueTIRVisitor<IIntegerETIR> {
@@ -75,63 +76,70 @@ public class Interpreter implements ExpressionTIRVisitor<IIntegerETIR>,
 		return subscript.getIndex().accept(this);
 	}
 
-	public IntegerETIR visitArrayETIR(IArrayETIR arg0) {
+	public IIntegerETIR visitIfETIR(IIfETIR ife) {
+		if (HobbesConstants.TRUE == ife.getTest().accept(this)) {
+			return ife.getThenClause().accept(this);
+		} else {
+			return ife.getElseClause().accept(this);
+		}
+	}
+
+	//
+	// Unimplemented features
+	//
+	public IIntegerETIR visitArrayETIR(IArrayETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 
-	public IntegerETIR visitAssignmentETIR(IAssignmentETIR arg0) {
+	public IIntegerETIR visitAssignmentETIR(IAssignmentETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 
-	public IntegerETIR visitBooleanETIR(IBooleanETIR arg0) {
+	public IIntegerETIR visitBooleanETIR(IBooleanETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 
-	public IntegerETIR visitBreakETIR(BreakETIR arg0) {
+	public IIntegerETIR visitBreakETIR(BreakETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 
-	public IntegerETIR visitCallETIR(ICallETIR arg0) {
+	public IIntegerETIR visitCallETIR(ICallETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 
-	public IntegerETIR visitFieldAssignmentETIR(IFieldAssignmentTIR arg0) {
+	public IIntegerETIR visitFieldAssignmentETIR(IFieldAssignmentTIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 
-	public IntegerETIR visitForETIR(IForETIR arg0) {
+	public IIntegerETIR visitForETIR(IForETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 
-	public IntegerETIR visitIfETIR(IIfETIR arg0) {
+	public IIntegerETIR visitLambdaETIR(ILambdaETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 
-	public IntegerETIR visitLambdaETIR(ILambdaETIR arg0) {
+	public IIntegerETIR visitLetETIR(ILetETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 
-	public IntegerETIR visitLetETIR(ILetETIR arg0) {
+	public IIntegerETIR visitNilETIR(NilETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 
-	public IntegerETIR visitNilETIR(NilETIR arg0) {
+	public IIntegerETIR visitRecordETIR(IRecordETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 
-	public IntegerETIR visitRecordETIR(IRecordETIR arg0) {
+	public IIntegerETIR visitSequenceETIR(ISequenceETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 
-	public IntegerETIR visitSequenceETIR(ISequenceETIR arg0) {
+	public IIntegerETIR visitStringETIR(IStringETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 
-	public IntegerETIR visitStringETIR(IStringETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public IntegerETIR visitWhileETIR(IWhileETIR arg0) {
+	public IIntegerETIR visitWhileETIR(IWhileETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 

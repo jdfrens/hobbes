@@ -1,6 +1,7 @@
 package org.norecess.hobbes.frontend;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,6 +13,7 @@ import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
+import org.norecess.hobbes.HobbesConstants;
 
 public class HobbesTIRBuilderTest {
 
@@ -31,8 +33,8 @@ public class HobbesTIRBuilderTest {
 
 	@Test
 	public void shouldBuildBooleans() {
-		assertEquals(new IntegerETIR(1), myTester.treeParseInput("#t"));
-		assertEquals(new IntegerETIR(0), myTester.treeParseInput("#f"));
+		assertSame(HobbesConstants.TRUE, myTester.treeParseInput("#t"));
+		assertSame(HobbesConstants.FALSE, myTester.treeParseInput("#f"));
 	}
 
 	@Test

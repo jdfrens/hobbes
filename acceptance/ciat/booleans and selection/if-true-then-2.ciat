@@ -1,6 +1,6 @@
 Trigger another then clause of if expression.
 ==== source
-if #f then
+if #t then
   1 + 2
 else
   8 * 4
@@ -21,4 +21,4 @@ label_1:
 	print "\n"
 .end
 ==== execution
-32
+3

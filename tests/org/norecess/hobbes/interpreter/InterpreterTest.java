@@ -1,6 +1,7 @@
 package org.norecess.hobbes.interpreter;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
@@ -8,14 +9,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.expressions.IIntegerETIR;
+import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
+import org.norecess.hobbes.HobbesConstants;
 
 public class InterpreterTest {
+
+	private IMocksControl	myMocksControl;
 
 	private IIntegerETIR[]	myArgv;
 
@@ -23,6 +28,7 @@ public class InterpreterTest {
 
 	@Before
 	public void setUp() {
+		myMocksControl = EasyMock.createControl();
 		myArgv = new IIntegerETIR[10];
 		myInterpreter = new Interpreter(myArgv);
 	}
@@ -47,21 +53,21 @@ public class InterpreterTest {
 
 	@Test
 	public void shouldInterpretOperatorExpression() {
-		IMocksControl control = EasyMock.createControl();
-		ExpressionTIR left = control.createMock(ExpressionTIR.class);
-		ExpressionTIR right = control.createMock(ExpressionTIR.class);
-		IIntegerETIR leftResult = control.createMock(IIntegerETIR.class);
-		IIntegerETIR rightResult = control.createMock(IIntegerETIR.class);
+		ExpressionTIR left = myMocksControl.createMock(ExpressionTIR.class);
+		ExpressionTIR right = myMocksControl.createMock(ExpressionTIR.class);
+		IIntegerETIR leftResult = myMocksControl.createMock(IIntegerETIR.class);
+		IIntegerETIR rightResult = myMocksControl
+				.createMock(IIntegerETIR.class);
 
 		EasyMock.expect(left.accept(myInterpreter)).andReturn(leftResult);
 		EasyMock.expect(right.accept(myInterpreter)).andReturn(rightResult);
 		EasyMock.expect(leftResult.getValue()).andReturn(5);
 		EasyMock.expect(rightResult.getValue()).andReturn(8);
 
-		control.replay();
+		myMocksControl.replay();
 		assertEquals(new IntegerETIR(13), myInterpreter
 				.interpret(new OperatorETIR(left, Operator.ADD, right)));
-		control.verify();
+		myMocksControl.verify();
 	}
 
 	@Test
@@ -96,6 +102,47 @@ public class InterpreterTest {
 				15, 4));
 	}
 
+	@Test
+	public void shouldInterpretIfTrueThen() {
+		ExpressionTIR test = myMocksControl.createMock(ExpressionTIR.class);
+		ExpressionTIR consequence = myMocksControl
+				.createMock(ExpressionTIR.class);
+		ExpressionTIR otherwise = myMocksControl
+				.createMock(ExpressionTIR.class);
+		IIntegerETIR result = myMocksControl.createMock(IIntegerETIR.class);
+
+		EasyMock.expect(test.accept(myInterpreter)).andReturn(
+				HobbesConstants.TRUE);
+		EasyMock.expect(consequence.accept(myInterpreter)).andReturn(result);
+
+		myMocksControl.replay();
+		assertSame(result, myInterpreter.visitIfETIR(new IfETIR(test,
+				consequence, otherwise)));
+		myMocksControl.verify();
+	}
+
+	@Test
+	public void shouldInterpretIfFalseElse() {
+		ExpressionTIR test = myMocksControl.createMock(ExpressionTIR.class);
+		ExpressionTIR consequence = myMocksControl
+				.createMock(ExpressionTIR.class);
+		ExpressionTIR otherwise = myMocksControl
+				.createMock(ExpressionTIR.class);
+		IIntegerETIR result = myMocksControl.createMock(IIntegerETIR.class);
+
+		EasyMock.expect(test.accept(myInterpreter)).andReturn(
+				HobbesConstants.FALSE);
+		EasyMock.expect(otherwise.accept(myInterpreter)).andReturn(result);
+
+		myMocksControl.replay();
+		assertSame(result, myInterpreter.visitIfETIR(new IfETIR(test,
+				consequence, otherwise)));
+		myMocksControl.verify();
+	}
+
+	//
+	// Helpers
+	//
 	private ExpressionTIR createArgvTree(int i) {
 		return new VariableETIR(new SubscriptLValueTIR(new SimpleLValueTIR(
 				"ARGV"), new IntegerETIR(i)));

@@ -7,6 +7,8 @@ options {
 
 @header {
   package org.norecess.hobbes.frontend;
+
+  import org.norecess.hobbes.*;
   import org.norecess.citkit.tir.*;
   import org.norecess.citkit.tir.expressions.*;
   import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
@@ -22,7 +24,7 @@ expression returns [ExpressionTIR tir]
   : i=INTEGER
     { tir = new IntegerETIR(i.getText()); }
   | b=BOOLEAN
-    { tir = new IntegerETIR("#t".equals(b.getText()) ? 1 : 0); }
+    { tir = "#t".equals(b.getText()) ? HobbesConstants.TRUE : HobbesConstants.FALSE; }
   | ^(ARGV e=expression)
     { tir = new VariableETIR(new SubscriptLValueTIR(new SimpleLValueTIR("ARGV"), e)); }
   | ^(MINUS i=INTEGER)
