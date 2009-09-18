@@ -19,93 +19,76 @@ public class HobbesTIRBuilderTest {
 
 	@Before
 	public void setUp() {
-		myTester = new ANTLRTester(new HobbesFrontEndFactory());
+		myTester = new ANTLRTester(new HobbesFrontEndFactory(), "program",
+				"program");
 	}
 
 	@Test
 	public void shouldBuildIntegers() {
-		assertEquals(new IntegerETIR(23), myTester.scanInput("23").parseAs(
-				"program").treeParseAs("program"));
-		assertEquals(new IntegerETIR(1234), myTester.scanInput("1234").parseAs(
-				"program").treeParseAs("program"));
+		assertEquals(new IntegerETIR(23), myTester.treeParseInput("23"));
+		assertEquals(new IntegerETIR(1234), myTester.treeParseInput("1234"));
 	}
 
 	@Test
 	public void shouldBuildBooleans() {
-		assertEquals(new IntegerETIR(1), myTester.scanInput("#t").parseAs(
-				"program").treeParseAs("program"));
-		assertEquals(new IntegerETIR(0), myTester.scanInput("#f").parseAs(
-				"program").treeParseAs("program"));
+		assertEquals(new IntegerETIR(1), myTester.treeParseInput("#t"));
+		assertEquals(new IntegerETIR(0), myTester.treeParseInput("#f"));
 	}
 
 	@Test
 	public void shouldBuildAddition() {
 		assertEquals(new OperatorETIR(new IntegerETIR(1), Operator.ADD,
-				new IntegerETIR(2)), myTester.scanInput("1+2").parseAs(
-				"program").treeParseAs("program"));
+				new IntegerETIR(2)), myTester.treeParseInput("1+2"));
 		assertEquals(new OperatorETIR(new IntegerETIR(1055), Operator.ADD,
-				new IntegerETIR(222)), myTester.scanInput("1055+222").parseAs(
-				"program").treeParseAs("program"));
+				new IntegerETIR(222)), myTester.treeParseInput("1055+222"));
 	}
 
 	@Test
 	public void shouldBuildSubtraction() {
 		assertEquals(new OperatorETIR(new IntegerETIR(1), Operator.SUBTRACT,
-				new IntegerETIR(2)), myTester.scanInput("1-2").parseAs(
-				"program").treeParseAs("program"));
+				new IntegerETIR(2)), myTester.treeParseInput("1-2"));
 		assertEquals(new OperatorETIR(new IntegerETIR(1055), Operator.SUBTRACT,
-				new IntegerETIR(222)), myTester.scanInput("1055-222").parseAs(
-				"program").treeParseAs("program"));
+				new IntegerETIR(222)), myTester.treeParseInput("1055-222"));
 	}
 
 	@Test
 	public void shouldBuildUnaryMinus() {
-		assertEquals(new IntegerETIR(-5), myTester.scanInput("-5").parseAs(
-				"program").treeParseAs("program"));
-		assertEquals(new IntegerETIR(-1223), myTester.scanInput("-1223")
-				.parseAs("program").treeParseAs("program"));
+		assertEquals(new IntegerETIR(-5), myTester.treeParseInput("-5"));
+		assertEquals(new IntegerETIR(-1223), myTester.treeParseInput("-1223"));
 	}
 
 	@Test
 	public void shouldBuildMultiplication() {
 		assertEquals(new OperatorETIR(new IntegerETIR(1), Operator.MULTIPLY,
-				new IntegerETIR(2)), myTester.scanInput("1*2").parseAs(
-				"program").treeParseAs("program"));
+				new IntegerETIR(2)), myTester.treeParseInput("1*2"));
 		assertEquals(new OperatorETIR(new IntegerETIR(1055), Operator.MULTIPLY,
-				new IntegerETIR(222)), myTester.scanInput("1055*222").parseAs(
-				"program").treeParseAs("program"));
+				new IntegerETIR(222)), myTester.treeParseInput("1055*222"));
 	}
 
 	@Test
 	public void shouldBuildDivision() {
 		assertEquals(new OperatorETIR(new IntegerETIR(1), Operator.DIVIDE,
-				new IntegerETIR(2)), myTester.scanInput("1/2").parseAs(
-				"program").treeParseAs("program"));
+				new IntegerETIR(2)), myTester.treeParseInput("1/2"));
 		assertEquals(new OperatorETIR(new IntegerETIR(1055), Operator.DIVIDE,
-				new IntegerETIR(222)), myTester.scanInput("1055/222").parseAs(
-				"program").treeParseAs("program"));
+				new IntegerETIR(222)), myTester.treeParseInput("1055/222"));
 	}
 
 	@Test
 	public void shouldBuildModulus() {
 		assertEquals(new OperatorETIR(new IntegerETIR(1), Operator.MODULUS,
-				new IntegerETIR(2)), myTester.scanInput("1%2").parseAs(
-				"program").treeParseAs("program"));
+				new IntegerETIR(2)), myTester.treeParseInput("1%2"));
 		assertEquals(new OperatorETIR(new IntegerETIR(1055), Operator.MODULUS,
-				new IntegerETIR(222)), myTester.scanInput("1055%222").parseAs(
-				"program").treeParseAs("program"));
+				new IntegerETIR(222)), myTester.treeParseInput("1055%222"));
 	}
 
 	@Test
 	public void shouldBuildCommandLineArgumentRequest() {
 		assertEquals(new VariableETIR(new SubscriptLValueTIR(
 				new SimpleLValueTIR("ARGV"), new IntegerETIR(1))), //
-				myTester.scanInput("ARGV[1]").parseAs("program").treeParseAs(
-						"program"));
+				myTester.treeParseInput("ARGV[1]"));
 		assertEquals(new VariableETIR(new SubscriptLValueTIR(
 				new SimpleLValueTIR("ARGV"), new IntegerETIR(8))), //
-				myTester.scanInput("ARGV[8]").parseAs("program").treeParseAs(
-						"program"));
+				myTester.treeParseInput("ARGV[8]"));
 	}
 
 	@Test
@@ -117,21 +100,18 @@ public class HobbesTIRBuilderTest {
 				Operator.ADD,//
 				new VariableETIR(new SubscriptLValueTIR(new SimpleLValueTIR(
 						"ARGV"), new IntegerETIR(8)))), //
-				myTester.scanInput("ARGV[1] + ARGV[8]").parseAs("program")
-						.treeParseAs("program"));
+				myTester.treeParseInput("ARGV[1] + ARGV[8]"));
 	}
 
 	@Test
 	public void shouldBuildIfExpressions() {
 		assertEquals(new IfETIR(new IntegerETIR(1), new IntegerETIR(2),
-				new IntegerETIR(3)), myTester.scanInput(
-				"if #t then 2 else 3 end").parseAs("program").treeParseAs(
-				"program"));
+				new IntegerETIR(3)), myTester
+				.treeParseInput("if #t then 2 else 3 end"));
 		assertEquals(new IfETIR(new IntegerETIR(0), new OperatorETIR(
 				new IntegerETIR(2), Operator.ADD, new IntegerETIR(8)),
 				new OperatorETIR(new IntegerETIR(3), Operator.MULTIPLY,
-						new IntegerETIR(4))), myTester.scanInput(
-				"if #f then 2+8 else 3*4 end").parseAs("program").treeParseAs(
-				"program"));
+						new IntegerETIR(4))), myTester
+				.treeParseInput("if #f then 2+8 else 3*4 end"));
 	}
 }
