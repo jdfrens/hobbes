@@ -1,6 +1,5 @@
 package org.norecess.hobbes.compiler.resources;
 
-
 public class Register implements IRegister {
 
 	private final int	myI;
@@ -38,10 +37,6 @@ public class Register implements IRegister {
 	@Override
 	public String toString() {
 		return "$I" + myI;
-	}
-
-	public String asString() {
-		return toString();
 	}
 
 }

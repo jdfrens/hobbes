@@ -20,7 +20,8 @@ public class PIRCleaner implements IPIRCleaner {
 
 	private boolean requiresTab(String instruction) {
 		return !instruction.startsWith(".sub")
-				&& !instruction.startsWith(".end");
+				&& !instruction.startsWith(".end")
+				&& !instruction.endsWith(":");
 	}
 
 	private boolean isUnnecessaryRepeat(String previous, String instruction) {

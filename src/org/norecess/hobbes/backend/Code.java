@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.norecess.hobbes.compiler.resources.ILabel;
+
 /*
  * Mostly just a fancy name for "a list of instructions".  At least for now.
  */
@@ -22,6 +24,18 @@ public class Code implements ICode {
 
 	public ICode add(String command) {
 		myInstructions.add(command);
+		return this;
+	}
+
+	public ICode add(ILabel nextLabel) {
+		myInstructions.add(nextLabel.toString() + ":");
+		return this;
+	}
+
+	public ICode append(ICode code) {
+		for (String command : code) {
+			add(command);
+		}
 		return this;
 	}
 
@@ -63,13 +77,6 @@ public class Code implements ICode {
 
 	public Iterator<String> iterator() {
 		return myInstructions.iterator();
-	}
-
-	public ICode append(ICode code) {
-		for (String command : code) {
-			add(command);
-		}
-		return this;
 	}
 
 }

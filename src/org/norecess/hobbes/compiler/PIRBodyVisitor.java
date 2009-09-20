@@ -22,7 +22,6 @@ import org.norecess.citkit.tir.expressions.NilETIR;
 import org.norecess.citkit.tir.lvalues.IFieldValueTIR;
 import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
-import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.backend.ICode;
 import org.norecess.hobbes.compiler.resources.IRegister;
 import org.norecess.hobbes.compiler.resources.IResourceAllocator;
@@ -30,29 +29,30 @@ import org.norecess.hobbes.compiler.resources.IResourceAllocator;
 public class PIRBodyVisitor implements IPIRBodyVisitor {
 
 	private final IPIRBodyVisitor		myRecurser;
-	private final IResourceAllocator	myRegisterAllocator;
+	private final IResourceAllocator	myResourceAllocator;
 	private final IRegister				myTarget;
 
 	public PIRBodyVisitor(IResourceAllocator registerAllocator, IRegister target) {
 		myRecurser = this;
-		myRegisterAllocator = registerAllocator;
+		myResourceAllocator = registerAllocator;
 		myTarget = target;
 	}
 
 	public PIRBodyVisitor(IPIRBodyVisitor recurser,
 			IResourceAllocator registerAllocator, IRegister target) {
 		myRecurser = recurser;
-		myRegisterAllocator = registerAllocator;
+		myResourceAllocator = registerAllocator;
 		myTarget = target;
 	}
 
 	public ICode recurse(ExpressionTIR expression, IRegister target) {
 		return expression
-				.accept(new PIRBodyVisitor(myRegisterAllocator, target));
+				.accept(new PIRBodyVisitor(myResourceAllocator, target));
 	}
 
 	public ICode visitIntegerETIR(IIntegerETIR integer) {
-		return new Code(myTarget.asString() + " = " + integer.getValue());
+		return myResourceAllocator.createCode().add(
+				myTarget + " = " + integer.getValue());
 	}
 
 	public ICode visitVariableETIR(IVariableETIR variable) {
@@ -60,28 +60,29 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 	}
 
 	public ICode visitSubscriptLValue(ISubscriptLValueTIR lValue) {
-		ICode code = new Code();
-		code.append(lValue.getIndex().accept(this));
-		code.add(myTarget.asString() + " = argv[" + myTarget.asString() + "]");
+		ICode code = myResourceAllocator.createCode();
+		code.append(myRecurser.recurse(lValue.getIndex(), myTarget));
+		code.add(myTarget + " = argv[" + myTarget + "]");
 		return code;
 	}
 
 	public ICode visitOperatorETIR(IOperatorETIR expression) {
-		ICode code = new Code();
+		ICode code = myResourceAllocator.createCode();
 		code.append(expression.getLeft().accept(this));
-		IRegister next = myRegisterAllocator.nextRegister();
+		IRegister next = myResourceAllocator.nextRegister();
 		code.append(myRecurser.recurse(expression.getRight(), next));
-		code.add(myTarget.asString() + " "
-				+ expression.getOperator().getPunctuation() + "= "
-				+ next.asString());
+		code.add(myTarget + " " + expression.getOperator().getPunctuation()
+				+ "= " + next);
 		return code;
 	}
 
 	public ICode visitIfETIR(IIfETIR ife) {
-		ICode code = new Code();
+		ICode code = myResourceAllocator.createCode();
 		code.append(myRecurser.recurse(ife.getTest(), myTarget));
 		code.append(myRecurser.recurse(ife.getElseClause(), myTarget));
+		code.add(myResourceAllocator.nextLabel());
 		code.append(myRecurser.recurse(ife.getThenClause(), myTarget));
+		code.add(myResourceAllocator.nextLabel());
 		return code;
 	}
 

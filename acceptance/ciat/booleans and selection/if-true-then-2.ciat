@@ -17,6 +17,7 @@ label_1:
     $I0 = 1
     $I2 = 2
     $I0 += $I2
+label_2:
 	print $I0
 	print "\n"
 .end

@@ -28,6 +28,12 @@ public class PIRCleanerTest {
 	}
 
 	@Test
+	public void shouldNotAddTabToLabelDeclarations() {
+		assertEquals("label:", myCleaner.process("label:"));
+		assertEquals("foo:", myCleaner.process("foo:"));
+	}
+
+	@Test
 	public void shouldProcessCode() {
 		assertEquals(new Code(".sub me", "\tprint 5", ".end"), myCleaner
 				.process(new Code(".sub me", "print 5", ".end")));

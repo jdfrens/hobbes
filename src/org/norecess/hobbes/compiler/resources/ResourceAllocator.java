@@ -10,7 +10,7 @@ public class ResourceAllocator implements IResourceAllocator {
 
 	public ResourceAllocator() {
 		myRegisterCounter = 0;
-		myLabelCounter = 0;
+		myLabelCounter = 1;
 	}
 
 	public IRegister nextRegister() {
@@ -21,7 +21,7 @@ public class ResourceAllocator implements IResourceAllocator {
 		return new Label(myLabelCounter++);
 	}
 
-	public ICode code() {
+	public ICode createCode() {
 		return new Code();
 	}
 }

@@ -13,6 +13,7 @@ end
     goto label_2
 label_1:
     $I0 = 44
+label_2:
 	print $I0
 	print "\n"
 .end

@@ -4,7 +4,7 @@ import org.norecess.hobbes.backend.ICode;
 
 public interface IResourceAllocator {
 
-	ICode code();
+	ICode createCode();
 
 	IRegister nextRegister();
 
