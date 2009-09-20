@@ -8,21 +8,21 @@ public class RegisterAllocatorTest {
 
 	@Test
 	public void shouldAllocateRegisters() {
-		RegisterAllocator allocator = new RegisterAllocator();
-		assertEquals(new Register(0), allocator.next());
-		assertEquals(new Register(1), allocator.next());
-		assertEquals(new Register(2), allocator.next());
-		assertEquals(new Register(3), allocator.next());
-		assertEquals(new Register(4), allocator.next());
+		ResourceAllocator allocator = new ResourceAllocator();
+		assertEquals(new Register(0), allocator.nextRegister());
+		assertEquals(new Register(1), allocator.nextRegister());
+		assertEquals(new Register(2), allocator.nextRegister());
+		assertEquals(new Register(3), allocator.nextRegister());
+		assertEquals(new Register(4), allocator.nextRegister());
 	}
 
 	@Test
 	public void shouldAllocateLotsOfRegisters() {
-		RegisterAllocator allocator = new RegisterAllocator();
+		ResourceAllocator allocator = new ResourceAllocator();
 		for (int i = 0; i < 2000; i++) {
-			allocator.next();
+			allocator.nextRegister();
 		}
-		assertEquals(new Register(2000), allocator.next());
+		assertEquals(new Register(2000), allocator.nextRegister());
 	}
 
 }

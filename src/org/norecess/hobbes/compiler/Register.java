@@ -39,4 +39,8 @@ public class Register implements IRegister {
 		return "$I" + myI;
 	}
 
+	public String asString() {
+		return toString();
+	}
+
 }

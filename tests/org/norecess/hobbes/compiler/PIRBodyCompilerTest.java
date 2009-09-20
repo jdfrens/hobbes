@@ -14,7 +14,7 @@ public class PIRBodyCompilerTest {
 
 	private IMocksControl		myMockControl;
 
-	private IRegisterAllocator	myRegisterAllocator;
+	private IResourceAllocator	myRegisterAllocator;
 	private PIRBodyCompiler		myCompiler;
 
 	@Before
@@ -22,7 +22,7 @@ public class PIRBodyCompilerTest {
 		myMockControl = EasyMock.createControl();
 
 		myRegisterAllocator = myMockControl
-				.createMock(IRegisterAllocator.class);
+				.createMock(IResourceAllocator.class);
 		myCompiler = new PIRBodyCompiler(myRegisterAllocator);
 	}
 
@@ -32,7 +32,7 @@ public class PIRBodyCompilerTest {
 		ExpressionTIR expression = myMockControl
 				.createMock(ExpressionTIR.class);
 
-		EasyMock.expect(myRegisterAllocator.next()).andReturn(new Register(4));
+		EasyMock.expect(myRegisterAllocator.nextRegister()).andReturn(new Register(4));
 		EasyMock.expect(
 				expression.accept(EasyMock.isA(ExpressionTIRVisitor.class)))
 				.andReturn(new Code("body code"));

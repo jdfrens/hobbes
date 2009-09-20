@@ -7,6 +7,7 @@ import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
@@ -20,7 +21,8 @@ public class PIRBodyVisitorTest {
 	private IMocksControl		myMocksControl;
 
 	private IPIRBodyVisitor		myRecurser;
-	private IRegisterAllocator	myRegisterAllocator;
+	private IResourceAllocator	myResourceAllocator;
+	private IRegister			myTarget;
 
 	private PIRBodyVisitor		myVisitor;
 
@@ -29,11 +31,13 @@ public class PIRBodyVisitorTest {
 		myMocksControl = EasyMock.createControl();
 
 		myRecurser = myMocksControl.createMock(IPIRBodyVisitor.class);
-		myRegisterAllocator = myMocksControl
-				.createMock(IRegisterAllocator.class);
+		myResourceAllocator = myMocksControl
+				.createMock(IResourceAllocator.class);
+		myTarget = myMocksControl.createMock(IRegister.class);
+		EasyMock.expect(myTarget.asString()).andReturn("$I3").anyTimes();
 
-		myVisitor = new PIRBodyVisitor(myRecurser, myRegisterAllocator,
-				new Register(3));
+		myVisitor = new PIRBodyVisitor(myRecurser, myResourceAllocator,
+				myTarget);
 	}
 
 	@Test
@@ -46,16 +50,19 @@ public class PIRBodyVisitorTest {
 	}
 
 	@Test
-	public void shouldCompilePlus() {
+	public void shouldCompileOperator() {
 		IOperator operator = myMocksControl.createMock(IOperator.class);
 		ExpressionTIR left = myMocksControl.createMock(ExpressionTIR.class);
 		ExpressionTIR right = myMocksControl.createMock(ExpressionTIR.class);
+		IRegister subTarget = myMocksControl.createMock(IRegister.class);
 
-		EasyMock.expect(myRegisterAllocator.next()).andReturn(new Register(8));
+		EasyMock.expect(myResourceAllocator.nextRegister())
+				.andReturn(subTarget);
 		EasyMock.expect(left.accept(myVisitor))
 				.andReturn(new Code("left code"));
-		EasyMock.expect(myRecurser.recurse(right, new Register(8))).andReturn(
+		EasyMock.expect(myRecurser.recurse(right, subTarget)).andReturn(
 				new Code("right code"));
+		EasyMock.expect(subTarget.asString()).andReturn("$I8");
 		EasyMock.expect(operator.getPunctuation()).andReturn("P");
 
 		myMocksControl.replay();
@@ -69,11 +76,33 @@ public class PIRBodyVisitorTest {
 	}
 
 	@Test
+	public void shouldCompileIf() {
+		ExpressionTIR test = myMocksControl.createMock(ExpressionTIR.class);
+		ExpressionTIR consequence = myMocksControl
+				.createMock(ExpressionTIR.class);
+		ExpressionTIR otherwise = myMocksControl
+				.createMock(ExpressionTIR.class);
+
+		EasyMock.expect(myRecurser.recurse(test, myTarget)).andReturn(
+				new Code("compute test"));
+		EasyMock.expect(myRecurser.recurse(consequence, myTarget)).andReturn(
+				new Code("compute then"));
+		EasyMock.expect(myRecurser.recurse(otherwise, myTarget)).andReturn(
+				new Code("compute else"));
+
+		myMocksControl.replay();
+		assertEquals(new Code("compute test", "compute else", "compute then"), //
+				myVisitor.visitIfETIR(new IfETIR(test, consequence, otherwise)));
+		myMocksControl.verify();
+	}
+
+	@Test
 	public void shouldCompileArgvReference() {
 		myMocksControl.replay();
-		assertEquals(new Code("$I3 = 88", "$I3 = argv[$I3]"), myVisitor
-				.visitVariableETIR(new VariableETIR(new SubscriptLValueTIR(
-						new SimpleLValueTIR("ARGV"), new IntegerETIR(88)))));
+		assertEquals(new Code("$I3 = 88", "$I3 = argv[$I3]"), //
+				myVisitor.visitVariableETIR(new VariableETIR(
+						new SubscriptLValueTIR(new SimpleLValueTIR("ARGV"),
+								new IntegerETIR(88)))));
 		myMocksControl.verify();
 	}
 

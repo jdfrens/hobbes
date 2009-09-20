@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.LValueTIR;
+import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
@@ -16,50 +17,73 @@ import org.norecess.hobbes.backend.Code;
 
 public class PIRPrologCompilerTest {
 
-	private IMocksControl		myMockControl;
+	private IMocksControl		myMocksControl;
 
 	private PIRPrologCompiler	myPrologCompiler;
 
 	@Before
 	public void setUp() {
-		myMockControl = EasyMock.createControl();
+		myMocksControl = EasyMock.createControl();
 
 		myPrologCompiler = new PIRPrologCompiler();
 	}
 
 	@Test
 	public void shouldGenerateProlog() {
-		myMockControl.replay();
+		myMocksControl.replay();
 		assertEquals(new Code(".sub main"), myPrologCompiler
 				.generateProlog(new IntegerETIR(5)));
-		myMockControl.verify();
+		myMocksControl.verify();
 	}
 
 	@Test
 	public void shouldGeneratePrologForArgv() {
-		LValueTIR lvalue = myMockControl.createMock(LValueTIR.class);
+		LValueTIR lvalue = myMocksControl.createMock(LValueTIR.class);
 
-		myMockControl.replay();
+		myMocksControl.replay();
 		assertEquals(new Code(".sub main", ".param pmc argv"), myPrologCompiler
 				.generateProlog(new VariableETIR(lvalue)));
-		myMockControl.verify();
+		myMocksControl.verify();
 	}
 
 	@Test
 	public void shouldGeneratePrologForOp() {
-		IOperator operator = myMockControl.createMock(IOperator.class);
-		ExpressionTIR left = myMockControl.createMock(ExpressionTIR.class);
-		ExpressionTIR right = myMockControl.createMock(ExpressionTIR.class);
+		IOperator operator = myMocksControl.createMock(IOperator.class);
+		ExpressionTIR left = myMocksControl.createMock(ExpressionTIR.class);
+		ExpressionTIR right = myMocksControl.createMock(ExpressionTIR.class);
 
 		EasyMock.expect(left.accept(myPrologCompiler)).andReturn(
 				new Code("left prolog"));
 		EasyMock.expect(right.accept(myPrologCompiler)).andReturn(
 				new Code("right prolog"));
 
-		myMockControl.replay();
+		myMocksControl.replay();
 		assertEquals(new Code(".sub main", "left prolog", "right prolog"),
 				myPrologCompiler.generateProlog(new OperatorETIR(left,
 						operator, right)));
-		myMockControl.verify();
+		myMocksControl.verify();
+	}
+
+	@Test
+	public void shouldGeneratePrologForIf() {
+		ExpressionTIR test = myMocksControl.createMock(ExpressionTIR.class);
+		ExpressionTIR consequence = myMocksControl
+				.createMock(ExpressionTIR.class);
+		ExpressionTIR otherwise = myMocksControl
+				.createMock(ExpressionTIR.class);
+
+		EasyMock.expect(test.accept(myPrologCompiler)).andReturn(
+				new Code("test prolog"));
+		EasyMock.expect(consequence.accept(myPrologCompiler)).andReturn(
+				new Code("then prolog"));
+		EasyMock.expect(otherwise.accept(myPrologCompiler)).andReturn(
+				new Code("else prolog"));
+
+		myMocksControl.replay();
+		assertEquals(new Code(".sub main", "test prolog", "then prolog",
+				"else prolog"), //
+				myPrologCompiler.generateProlog(new IfETIR(test, consequence,
+						otherwise)));
+		myMocksControl.verify();
 	}
 }

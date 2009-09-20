@@ -28,17 +28,17 @@ import org.norecess.hobbes.backend.ICode;
 public class PIRBodyVisitor implements IPIRBodyVisitor {
 
 	private final IPIRBodyVisitor		myRecurser;
-	private final IRegisterAllocator	myRegisterAllocator;
+	private final IResourceAllocator	myRegisterAllocator;
 	private final IRegister				myTarget;
 
-	public PIRBodyVisitor(IRegisterAllocator registerAllocator, IRegister target) {
+	public PIRBodyVisitor(IResourceAllocator registerAllocator, IRegister target) {
 		myRecurser = this;
 		myRegisterAllocator = registerAllocator;
 		myTarget = target;
 	}
 
 	public PIRBodyVisitor(IPIRBodyVisitor recurser,
-			IRegisterAllocator registerAllocator, IRegister target) {
+			IResourceAllocator registerAllocator, IRegister target) {
 		myRecurser = recurser;
 		myRegisterAllocator = registerAllocator;
 		myTarget = target;
@@ -50,7 +50,7 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 	}
 
 	public ICode visitIntegerETIR(IIntegerETIR integer) {
-		return new Code(myTarget + " = " + integer.getValue());
+		return new Code(myTarget.asString() + " = " + integer.getValue());
 	}
 
 	public ICode visitVariableETIR(IVariableETIR variable) {
@@ -60,17 +60,26 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 	public ICode visitSubscriptLValue(ISubscriptLValueTIR lValue) {
 		ICode code = new Code();
 		code.append(lValue.getIndex().accept(this));
-		code.add(myTarget + " = argv[" + myTarget + "]");
+		code.add(myTarget.asString() + " = argv[" + myTarget.asString() + "]");
 		return code;
 	}
 
 	public ICode visitOperatorETIR(IOperatorETIR expression) {
 		ICode code = new Code();
 		code.append(expression.getLeft().accept(this));
-		IRegister next = myRegisterAllocator.next();
+		IRegister next = myRegisterAllocator.nextRegister();
 		code.append(myRecurser.recurse(expression.getRight(), next));
-		code.add(myTarget + " " + expression.getOperator().getPunctuation()
-				+ "= " + next);
+		code.add(myTarget.asString() + " "
+				+ expression.getOperator().getPunctuation() + "= "
+				+ next.asString());
+		return code;
+	}
+
+	public ICode visitIfETIR(IIfETIR ife) {
+		ICode code = new Code();
+		code.append(myRecurser.recurse(ife.getTest(), myTarget));
+		code.append(myRecurser.recurse(ife.getElseClause(), myTarget));
+		code.append(myRecurser.recurse(ife.getThenClause(), myTarget));
 		return code;
 	}
 
@@ -102,10 +111,6 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 	}
 
 	public ICode visitForETIR(IForETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public ICode visitIfETIR(IIfETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 

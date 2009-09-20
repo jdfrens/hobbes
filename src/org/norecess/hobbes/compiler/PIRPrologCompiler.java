@@ -45,6 +45,14 @@ public class PIRPrologCompiler implements IPIRPrologCompiler {
 		return new Code(".param pmc argv");
 	}
 
+	public Code visitIfETIR(IIfETIR ife) {
+		Code code = new Code();
+		code.append(ife.getTest().accept(this));
+		code.append(ife.getThenClause().accept(this));
+		code.append(ife.getElseClause().accept(this));
+		return code;
+	}
+
 	//
 	// Unimplemented
 	//
@@ -73,10 +81,6 @@ public class PIRPrologCompiler implements IPIRPrologCompiler {
 	}
 
 	public Code visitForETIR(IForETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public Code visitIfETIR(IIfETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 

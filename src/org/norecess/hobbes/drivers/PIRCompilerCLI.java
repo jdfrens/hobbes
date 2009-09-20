@@ -11,7 +11,7 @@ import org.norecess.hobbes.backend.PIRCleaner;
 import org.norecess.hobbes.compiler.PIRBodyCompiler;
 import org.norecess.hobbes.compiler.PIRCompiler;
 import org.norecess.hobbes.compiler.PIRPrologCompiler;
-import org.norecess.hobbes.compiler.RegisterAllocator;
+import org.norecess.hobbes.compiler.ResourceAllocator;
 import org.norecess.hobbes.frontend.HobbesFrontEnd;
 
 /**
@@ -37,7 +37,7 @@ public class PIRCompilerCLI {
 	public void generateCode() throws IOException, RecognitionException {
 		new CodeWriter(myWriter).writeCode(new PIRCleaner()
 				.process(new PIRCompiler(new PIRPrologCompiler(),
-						new PIRBodyCompiler(new RegisterAllocator()))
+						new PIRBodyCompiler(new ResourceAllocator()))
 						.compile(myFrontEnd.process())));
 	}
 

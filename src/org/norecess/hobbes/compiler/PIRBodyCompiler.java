@@ -10,14 +10,14 @@ import org.norecess.hobbes.backend.ICode;
  */
 public class PIRBodyCompiler implements IPIRBodyCompiler {
 
-	private final IRegisterAllocator	myRegisterAllocator;
+	private final IResourceAllocator	myRegisterAllocator;
 
-	public PIRBodyCompiler(IRegisterAllocator registerAllocator) {
+	public PIRBodyCompiler(IResourceAllocator registerAllocator) {
 		myRegisterAllocator = registerAllocator;
 	}
 
 	public ICode generate(ExpressionTIR tir) {
-		IRegister target = myRegisterAllocator.next();
+		IRegister target = myRegisterAllocator.nextRegister();
 		ICode code = new Code();
 		code
 				.append(tir.accept(new PIRBodyVisitor(myRegisterAllocator,
