@@ -11,7 +11,7 @@ import org.norecess.hobbes.backend.PIRCleaner;
 import org.norecess.hobbes.compiler.PIRBodyCompiler;
 import org.norecess.hobbes.compiler.PIRCompiler;
 import org.norecess.hobbes.compiler.PIRPrologCompiler;
-import org.norecess.hobbes.compiler.ResourceAllocator;
+import org.norecess.hobbes.compiler.resources.ResourceAllocator;
 import org.norecess.hobbes.frontend.HobbesFrontEnd;
 
 /**

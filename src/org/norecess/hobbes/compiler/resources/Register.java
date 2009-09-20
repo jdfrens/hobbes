@@ -1,4 +1,5 @@
-package org.norecess.hobbes.compiler;
+package org.norecess.hobbes.compiler.resources;
+
 
 public class Register implements IRegister {
 

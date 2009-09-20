@@ -9,6 +9,8 @@ import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.visitors.ExpressionTIRVisitor;
 import org.norecess.hobbes.backend.Code;
+import org.norecess.hobbes.compiler.resources.IResourceAllocator;
+import org.norecess.hobbes.compiler.resources.Register;
 
 public class PIRBodyCompilerTest {
 

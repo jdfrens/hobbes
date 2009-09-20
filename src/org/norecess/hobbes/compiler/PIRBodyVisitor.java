@@ -24,6 +24,8 @@ import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
 import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.backend.ICode;
+import org.norecess.hobbes.compiler.resources.IRegister;
+import org.norecess.hobbes.compiler.resources.IResourceAllocator;
 
 public class PIRBodyVisitor implements IPIRBodyVisitor {
 

@@ -1,8 +1,10 @@
-package org.norecess.hobbes.compiler;
+package org.norecess.hobbes.compiler.resources;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.norecess.hobbes.compiler.resources.Register;
+import org.norecess.hobbes.compiler.resources.ResourceAllocator;
 
 public class RegisterAllocatorTest {
 
