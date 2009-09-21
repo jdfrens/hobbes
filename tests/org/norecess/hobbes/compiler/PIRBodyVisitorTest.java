@@ -18,7 +18,6 @@ import org.norecess.hobbes.backend.ICode;
 import org.norecess.hobbes.compiler.resources.ILabel;
 import org.norecess.hobbes.compiler.resources.IRegister;
 import org.norecess.hobbes.compiler.resources.IResourceAllocator;
-import org.norecess.hobbes.compiler.resources.Register;
 
 public class PIRBodyVisitorTest {
 
@@ -37,7 +36,7 @@ public class PIRBodyVisitorTest {
 		myRecurser = myMocksControl.createMock(IPIRBodyVisitor.class);
 		myResourceAllocator = myMocksControl
 				.createMock(IResourceAllocator.class);
-		myTarget = new Register(3);
+		myTarget = myMocksControl.createMock(IRegister.class);
 
 		myVisitor = new PIRBodyVisitor(myRecurser, myResourceAllocator,
 				myTarget);
@@ -47,7 +46,7 @@ public class PIRBodyVisitorTest {
 	public void shouldCompileInteger() {
 		ICode code = expectNewCode();
 
-		EasyMock.expect(code.add("$I3 = 8")).andReturn(code);
+		EasyMock.expect(code.add(myTarget, " = 8")).andReturn(code);
 
 		myMocksControl.replay();
 		assertSame(code, myVisitor.visitIntegerETIR(new IntegerETIR(8)));
@@ -55,7 +54,7 @@ public class PIRBodyVisitorTest {
 	}
 
 	private ICode expectNewCode() {
-		ICode code = myMocksControl.createMock(ICode.class);
+		ICode code = myMocksControl.createMock("theCode", ICode.class);
 		EasyMock.expect(myResourceAllocator.createCode()).andReturn(code);
 		return code;
 	}
@@ -68,7 +67,7 @@ public class PIRBodyVisitorTest {
 		IOperator operator = myMocksControl.createMock(IOperator.class);
 		ExpressionTIR left = myMocksControl.createMock(ExpressionTIR.class);
 		ExpressionTIR right = myMocksControl.createMock(ExpressionTIR.class);
-		IRegister subTarget = new Register(8);
+		IRegister subTarget = myMocksControl.createMock(IRegister.class);
 
 		EasyMock.expect(left.accept(myVisitor)).andReturn(leftCode);
 		EasyMock.expect(code.append(leftCode)).andReturn(code);
@@ -78,7 +77,7 @@ public class PIRBodyVisitorTest {
 				rightCode);
 		EasyMock.expect(code.append(rightCode)).andReturn(code);
 		EasyMock.expect(operator.getPunctuation()).andReturn("P");
-		EasyMock.expect(code.add("$I3 P= $I8")).andReturn(code);
+		EasyMock.expect(code.add(myTarget, " P= ", subTarget)).andReturn(code);
 
 		myMocksControl.replay();
 		assertSame(code, myVisitor.visitOperatorETIR(new OperatorETIR(left,
@@ -97,20 +96,23 @@ public class PIRBodyVisitorTest {
 		ICode testCode = myMocksControl.createMock(ICode.class);
 		ICode consequenceCode = myMocksControl.createMock(ICode.class);
 		ICode otherwiseCode = myMocksControl.createMock(ICode.class);
-		ILabel elseLabel = myMocksControl.createMock("thenLabel", ILabel.class);
+		ILabel elseLabel = myMocksControl.createMock("elseLabel", ILabel.class);
 		ILabel endLabel = myMocksControl.createMock("endLabel", ILabel.class);
+		EasyMock.expect(myResourceAllocator.nextLabel()).andReturn(elseLabel);
+		EasyMock.expect(myResourceAllocator.nextLabel()).andReturn(endLabel);
 
 		EasyMock.expect(myRecurser.recurse(test, myTarget)).andReturn(testCode);
 		EasyMock.expect(code.append(testCode)).andReturn(code);
+		EasyMock.expect(code.add("if ", myTarget, " goto ", elseLabel))
+				.andReturn(code);
 		EasyMock.expect(myRecurser.recurse(otherwise, myTarget)).andReturn(
 				otherwiseCode);
 		EasyMock.expect(code.append(otherwiseCode)).andReturn(code);
-		EasyMock.expect(myResourceAllocator.nextLabel()).andReturn(elseLabel);
+		EasyMock.expect(code.add("goto ", endLabel)).andReturn(code);
 		EasyMock.expect(code.add(elseLabel)).andReturn(code);
 		EasyMock.expect(myRecurser.recurse(consequence, myTarget)).andReturn(
 				consequenceCode);
 		EasyMock.expect(code.append(consequenceCode)).andReturn(code);
-		EasyMock.expect(myResourceAllocator.nextLabel()).andReturn(endLabel);
 		EasyMock.expect(code.add(endLabel)).andReturn(code);
 
 		myMocksControl.replay();
@@ -141,7 +143,8 @@ public class PIRBodyVisitorTest {
 				myRecurser.recurse(EasyMock.eq(new IntegerETIR(88)), EasyMock
 						.same(myTarget))).andReturn(indexcode);
 		EasyMock.expect(code.append(indexcode)).andReturn(code);
-		EasyMock.expect(code.add("$I3 = argv[$I3]")).andReturn(code);
+		EasyMock.expect(code.add(myTarget, " = argv[", myTarget, "]"))
+				.andReturn(code);
 
 		myMocksControl.replay();
 		assertSame(code, myVisitor.visitSubscriptLValue(new SubscriptLValueTIR(

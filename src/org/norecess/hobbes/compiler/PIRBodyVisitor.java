@@ -23,6 +23,7 @@ import org.norecess.citkit.tir.lvalues.IFieldValueTIR;
 import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
 import org.norecess.hobbes.backend.ICode;
+import org.norecess.hobbes.compiler.resources.ILabel;
 import org.norecess.hobbes.compiler.resources.IRegister;
 import org.norecess.hobbes.compiler.resources.IResourceAllocator;
 
@@ -51,8 +52,8 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 	}
 
 	public ICode visitIntegerETIR(IIntegerETIR integer) {
-		return myResourceAllocator.createCode().add(
-				myTarget + " = " + integer.getValue());
+		return myResourceAllocator.createCode().add(myTarget,
+				" = " + integer.getValue());
 	}
 
 	public ICode visitVariableETIR(IVariableETIR variable) {
@@ -62,7 +63,7 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 	public ICode visitSubscriptLValue(ISubscriptLValueTIR lValue) {
 		ICode code = myResourceAllocator.createCode();
 		code.append(myRecurser.recurse(lValue.getIndex(), myTarget));
-		code.add(myTarget + " = argv[" + myTarget + "]");
+		code.add(myTarget, " = argv[", myTarget, "]");
 		return code;
 	}
 
@@ -71,18 +72,22 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 		code.append(expression.getLeft().accept(this));
 		IRegister next = myResourceAllocator.nextRegister();
 		code.append(myRecurser.recurse(expression.getRight(), next));
-		code.add(myTarget + " " + expression.getOperator().getPunctuation()
-				+ "= " + next);
+		code.add(myTarget, " " + expression.getOperator().getPunctuation()
+				+ "= ", next);
 		return code;
 	}
 
 	public ICode visitIfETIR(IIfETIR ife) {
 		ICode code = myResourceAllocator.createCode();
+		ILabel thenLabel = myResourceAllocator.nextLabel();
+		ILabel endLabel = myResourceAllocator.nextLabel();
 		code.append(myRecurser.recurse(ife.getTest(), myTarget));
+		code.add("if ", myTarget, " goto ", thenLabel);
 		code.append(myRecurser.recurse(ife.getElseClause(), myTarget));
-		code.add(myResourceAllocator.nextLabel());
+		code.add("goto ", endLabel);
+		code.add(thenLabel);
 		code.append(myRecurser.recurse(ife.getThenClause(), myTarget));
-		code.add(myResourceAllocator.nextLabel());
+		code.add(endLabel);
 		return code;
 	}
 

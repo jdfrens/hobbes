@@ -7,10 +7,10 @@ import org.norecess.hobbes.compiler.resources.ILabel;
  */
 public interface ICode extends Iterable<String> {
 
-	ICode add(String command);
+	ICode add(Object... values);
+
+	ICode add(ILabel label);
 
 	ICode append(ICode code);
-
-	ICode add(ILabel nextLabel);
 
 }

@@ -22,13 +22,17 @@ public class Code implements ICode {
 		myInstructions = Arrays.asList(instructions);
 	}
 
-	public ICode add(String command) {
-		myInstructions.add(command);
+	public ICode add(ILabel label) {
+		myInstructions.add(label.toString() + ":");
 		return this;
 	}
 
-	public ICode add(ILabel nextLabel) {
-		myInstructions.add(nextLabel.toString() + ":");
+	public ICode add(Object... values) {
+		String acc = "";
+		for (Object object : values) {
+			acc += object;
+		}
+		myInstructions.add(acc);
 		return this;
 	}
 

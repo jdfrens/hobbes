@@ -7,16 +7,16 @@ else
 end
 ==== compilation
 .sub main
-	$I0 = 1
-	if $I1 goto label_1
-    $I0 = 8
-    $I1 = 4
-    $I0 *= $I1
-    goto label_2
+	$I0 = 0
+	if $I0 goto label_1
+	$I0 = 8
+	$I1 = 4
+	$I0 *= $I1
+	goto label_2
 label_1:
-    $I0 = 1
-    $I2 = 2
-    $I0 += $I2
+	$I0 = 1
+	$I2 = 2
+	$I0 += $I2
 label_2:
 	print $I0
 	print "\n"

@@ -8,11 +8,11 @@ end
 ==== compilation
 .sub main
 	$I0 = 0
-	if $I1 goto label_1
-    $I0 = 55
-    goto label_2
+	if $I0 goto label_1
+	$I0 = 55
+	goto label_2
 label_1:
-    $I0 = 44
+	$I0 = 44
 label_2:
 	print $I0
 	print "\n"
