@@ -27,7 +27,7 @@ import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
 import org.norecess.citkit.visitors.ExpressionTIRVisitor;
 import org.norecess.citkit.visitors.LValueTIRVisitor;
-import org.norecess.hobbes.HobbesConstants;
+import org.norecess.hobbes.HobbesBoolean;
 
 public class Interpreter implements ExpressionTIRVisitor<IIntegerETIR>,
 		LValueTIRVisitor<IIntegerETIR> {
@@ -77,7 +77,7 @@ public class Interpreter implements ExpressionTIRVisitor<IIntegerETIR>,
 	}
 
 	public IIntegerETIR visitIfETIR(IIfETIR ife) {
-		if (HobbesConstants.TRUE == ife.getTest().accept(this)) {
+		if (HobbesBoolean.TRUE.equals(ife.getTest().accept(this))) {
 			return ife.getThenClause().accept(this);
 		} else {
 			return ife.getElseClause().accept(this);

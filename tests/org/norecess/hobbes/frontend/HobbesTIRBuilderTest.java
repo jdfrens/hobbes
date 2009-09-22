@@ -13,7 +13,7 @@ import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
-import org.norecess.hobbes.HobbesConstants;
+import org.norecess.hobbes.HobbesBoolean;
 
 public class HobbesTIRBuilderTest {
 
@@ -33,8 +33,8 @@ public class HobbesTIRBuilderTest {
 
 	@Test
 	public void shouldBuildBooleans() {
-		assertSame(HobbesConstants.TRUE, myTester.treeParseInput("#t"));
-		assertSame(HobbesConstants.FALSE, myTester.treeParseInput("#f"));
+		assertSame(HobbesBoolean.TRUE, myTester.treeParseInput("#t"));
+		assertSame(HobbesBoolean.FALSE, myTester.treeParseInput("#f"));
 	}
 
 	@Test

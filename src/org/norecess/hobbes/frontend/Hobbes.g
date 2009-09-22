@@ -24,8 +24,8 @@ program
 
 expression
   : additive_expression
-  | 'if' BOOLEAN 'then' expression 'else' expression 'end'
-    -> ^(IF BOOLEAN expression+)
+  | 'if' expression 'then' expression 'else' expression 'end'
+    -> ^(IF expression*)
   ;
   
 additive_expression

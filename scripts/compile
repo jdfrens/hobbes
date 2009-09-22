@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cp=./bin/:./lib/antlr-runtime-3.1.jar:./lib/citkit.jar
+source=$1
+shift
+java -cp $cp org.norecess.hobbes.drivers.PIRCompilerCLI "$source" > temp/something.pir && parrot temp/something.pir $@

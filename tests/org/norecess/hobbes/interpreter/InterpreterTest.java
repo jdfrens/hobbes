@@ -16,7 +16,7 @@ import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
-import org.norecess.hobbes.HobbesConstants;
+import org.norecess.hobbes.HobbesBoolean;
 
 public class InterpreterTest {
 
@@ -112,7 +112,7 @@ public class InterpreterTest {
 		IIntegerETIR result = myMocksControl.createMock(IIntegerETIR.class);
 
 		EasyMock.expect(test.accept(myInterpreter)).andReturn(
-				HobbesConstants.TRUE);
+				HobbesBoolean.TRUE);
 		EasyMock.expect(consequence.accept(myInterpreter)).andReturn(result);
 
 		myMocksControl.replay();
@@ -131,7 +131,7 @@ public class InterpreterTest {
 		IIntegerETIR result = myMocksControl.createMock(IIntegerETIR.class);
 
 		EasyMock.expect(test.accept(myInterpreter)).andReturn(
-				HobbesConstants.FALSE);
+				HobbesBoolean.FALSE);
 		EasyMock.expect(otherwise.accept(myInterpreter)).andReturn(result);
 
 		myMocksControl.replay();

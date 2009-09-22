@@ -125,5 +125,7 @@ public class HobbesParserTest {
 				.parseInput("if #t then 2 else 3 end"));
 		assertTree(HobbesParser.IF, "(IF(#f)(+(1)(2))(*(3)(4)))", myTester
 				.parseInput("if #f then 1 + 2 else 3 * 4 end"));
+		assertTree(HobbesParser.IF, "(IF(ARGV(1))(+(1)(2))(*(3)(4)))", myTester
+				.parseInput("if ARGV[1] then 1 + 2 else 3 * 4 end"));
 	}
 }

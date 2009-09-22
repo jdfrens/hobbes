@@ -1,0 +1,13 @@
+if ARGV[0] then
+  if ARGV[1] then
+    1
+  else
+    2
+  end
+else
+  if ARGV[1] then
+    3
+  else
+    4
+  end
+end
