@@ -1,5 +1,7 @@
 package org.norecess.hobbes.interpreter;
 
+import java.util.Map;
+
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.expressions.BreakETIR;
 import org.norecess.citkit.tir.expressions.IArrayETIR;
@@ -18,9 +20,7 @@ import org.norecess.citkit.tir.expressions.ISequenceETIR;
 import org.norecess.citkit.tir.expressions.IStringETIR;
 import org.norecess.citkit.tir.expressions.IVariableETIR;
 import org.norecess.citkit.tir.expressions.IWhileETIR;
-import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.NilETIR;
-import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.tir.lvalues.IFieldValueTIR;
 import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
@@ -28,14 +28,18 @@ import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
 import org.norecess.citkit.visitors.ExpressionTIRVisitor;
 import org.norecess.citkit.visitors.LValueTIRVisitor;
 import org.norecess.hobbes.HobbesBoolean;
+import org.norecess.hobbes.interpreter.operators.ApplyingOperator;
 
 public class Interpreter implements ExpressionTIRVisitor<IIntegerETIR>,
 		LValueTIRVisitor<IIntegerETIR> {
 
-	private final IIntegerETIR[]	myArgv;
+	private final IIntegerETIR[]					myArgv;
+	private final Map<Operator, ApplyingOperator>	myOperatorInterpreter;
 
-	public Interpreter(IIntegerETIR[] argv) {
+	public Interpreter(IIntegerETIR[] argv,
+			Map<Operator, ApplyingOperator> operatorInterpreters) {
 		myArgv = argv;
+		myOperatorInterpreter = operatorInterpreters;
 	}
 
 	public IIntegerETIR interpret(ExpressionTIR expression) {
@@ -46,26 +50,10 @@ public class Interpreter implements ExpressionTIRVisitor<IIntegerETIR>,
 		return integer;
 	}
 
-	public IntegerETIR visitOperatorETIR(IOperatorETIR expression) {
-		return apply(expression.getOperator(), //
-				expression.getLeft().accept(this).getValue(), //
-				expression.getRight().accept(this).getValue());
-	}
-
-	public IntegerETIR apply(IOperator operator, int left, int right) {
-		if (operator == Operator.ADD) {
-			return new IntegerETIR(left + right);
-		} else if (operator == Operator.SUBTRACT) {
-			return new IntegerETIR(left - right);
-		} else if (operator == Operator.MULTIPLY) {
-			return new IntegerETIR(left * right);
-		} else if (operator == Operator.DIVIDE) {
-			return new IntegerETIR(left / right);
-		} else if (operator == Operator.MODULUS) {
-			return new IntegerETIR(left % right);
-		} else {
-			throw new IllegalArgumentException(operator + " is not supported.");
-		}
+	public IIntegerETIR visitOperatorETIR(IOperatorETIR expression) {
+		return myOperatorInterpreter.get(expression.getOperator()).apply(
+				expression.getLeft().accept(this),
+				expression.getRight().accept(this));
 	}
 
 	public IIntegerETIR visitVariableETIR(IVariableETIR variable) {

@@ -2,13 +2,21 @@ package org.norecess.hobbes.drivers;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.antlr.runtime.RecognitionException;
 import org.norecess.citkit.tir.expressions.IIntegerETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
+import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.hobbes.frontend.HobbesFrontEnd;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
 import org.norecess.hobbes.interpreter.Interpreter;
+import org.norecess.hobbes.interpreter.operators.AdditionOperator;
+import org.norecess.hobbes.interpreter.operators.ApplyingOperator;
+import org.norecess.hobbes.interpreter.operators.DivisionOperator;
+import org.norecess.hobbes.interpreter.operators.ModulusOperator;
+import org.norecess.hobbes.interpreter.operators.MultiplicationOperator;
+import org.norecess.hobbes.interpreter.operators.SubtractionOperator;
 
 public class InterpreterCLI {
 
@@ -20,7 +28,19 @@ public class InterpreterCLI {
 
 	public IIntegerETIR interpret(IIntegerETIR[] args)
 			throws RecognitionException {
-		return new Interpreter(args).interpret(myFrontEnd.process());
+		return new Interpreter(args, createOperatorInterpreters())
+				.interpret(myFrontEnd.process());
+	}
+
+	private HashMap<Operator, ApplyingOperator> createOperatorInterpreters() {
+		HashMap<Operator, ApplyingOperator> operatorInterpreters = new HashMap<Operator, ApplyingOperator>();
+		operatorInterpreters.put(Operator.ADD, new AdditionOperator());
+		operatorInterpreters.put(Operator.SUBTRACT, new SubtractionOperator());
+		operatorInterpreters.put(Operator.MULTIPLY,
+				new MultiplicationOperator());
+		operatorInterpreters.put(Operator.DIVIDE, new DivisionOperator());
+		operatorInterpreters.put(Operator.MODULUS, new ModulusOperator());
+		return operatorInterpreters;
 	}
 
 	public static void main(String[] args) throws IOException,
