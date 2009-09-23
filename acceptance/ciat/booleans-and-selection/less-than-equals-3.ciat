@@ -1,0 +1,23 @@
+Less than equals is true.
+==== source
+if 347 <= 347 then
+  1
+else
+  2
+end
+==== compilation
+.sub main
+	$I0 = 347
+	$I1 = 347
+	$I0 = $I0 <= $I1
+	if $I0 goto label_1
+	$I0 = 1
+	goto label_2
+label_1:
+	$I0 = 2
+label_2:
+	print $I0
+	print "\n"
+.end
+==== execution
+1

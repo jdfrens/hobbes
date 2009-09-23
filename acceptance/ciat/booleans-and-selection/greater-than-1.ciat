@@ -1,0 +1,23 @@
+Greater than is false.
+==== source
+if 34 > 244 then
+  1
+else
+  2
+end
+==== compilation
+.sub main
+	$I0 = 34
+	$I1 = 244
+	$I0 = $I0 > $I1
+	if $I0 goto label_1
+	$I0 = 1
+	goto label_2
+label_1:
+	$I0 = 2
+label_2:
+	print $I0
+	print "\n"
+.end
+==== execution
+2
