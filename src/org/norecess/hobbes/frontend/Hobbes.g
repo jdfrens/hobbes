@@ -66,6 +66,13 @@ MULTIPLY : '*' ;
 DIVIDE : '/' ;
 MODULUS : '%' ;
 
+LT : '<' ;
+LTE : '<=' ;
+EQ : '==' ;
+NEQ : '!=' ;
+GTE : '>=' ;
+GT : '>' ;
+
 WS
   :	(' ' | '\t' | '\n')+
 		{ skip(); }

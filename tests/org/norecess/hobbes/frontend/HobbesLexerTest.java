@@ -44,12 +44,22 @@ public class HobbesLexerTest {
 	}
 
 	@Test
-	public void shouldRecognizeOperators() {
+	public void shouldRecognizeArithmeticOperators() {
 		assertToken(HobbesLexer.PLUS, "+", myTester.scanInput("+"));
 		assertToken(HobbesLexer.MINUS, "-", myTester.scanInput("-"));
 		assertToken(HobbesLexer.MULTIPLY, "*", myTester.scanInput("*"));
 		assertToken(HobbesLexer.DIVIDE, "/", myTester.scanInput("/"));
 		assertToken(HobbesLexer.MODULUS, "%", myTester.scanInput("%"));
+	}
+
+	@Test
+	public void shouldRecognizeComparisonOperators() {
+		assertToken(HobbesLexer.LT, "<", myTester.scanInput("<"));
+		assertToken(HobbesLexer.LTE, "<=", myTester.scanInput("<="));
+		assertToken(HobbesLexer.EQ, "==", myTester.scanInput("=="));
+		assertToken(HobbesLexer.NEQ, "!=", myTester.scanInput("!="));
+		assertToken(HobbesLexer.GTE, ">=", myTester.scanInput(">="));
+		assertToken(HobbesLexer.GT, ">", myTester.scanInput(">"));
 	}
 
 	@Test

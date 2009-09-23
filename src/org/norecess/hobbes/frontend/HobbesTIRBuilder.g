@@ -24,7 +24,7 @@ expression returns [ExpressionTIR tir]
   : i=INTEGER
     { tir = new IntegerETIR(i.getText()); }
   | b=BOOLEAN
-    { tir = "#t".equals(b.getText()) ? HobbesConstants.TRUE : HobbesConstants.FALSE; }
+    { tir = HobbesBoolean.parse(b.getText()); }
   | ^(ARGV e=expression)
     { tir = new VariableETIR(new SubscriptLValueTIR(new SimpleLValueTIR("ARGV"), e)); }
   | ^(MINUS i=INTEGER)
