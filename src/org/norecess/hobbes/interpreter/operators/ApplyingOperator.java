@@ -1,9 +1,15 @@
 package org.norecess.hobbes.interpreter.operators;
 
-import org.norecess.citkit.tir.expressions.IIntegerETIR;
+import org.norecess.citkit.tir.data.DatumTIR;
 
+import ovm.polyd.policy.MultiDisp;
+import ovm.polyd.tags.DispatchingPolicy;
+import ovm.polyd.tags.PolyD;
+
+@PolyD
+@DispatchingPolicy(MultiDisp.class)
 public interface ApplyingOperator {
 
-	IIntegerETIR apply(IIntegerETIR i, IIntegerETIR j);
+	DatumTIR apply(DatumTIR i, DatumTIR j);
 
 }

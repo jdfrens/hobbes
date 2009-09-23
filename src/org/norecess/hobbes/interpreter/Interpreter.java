@@ -3,6 +3,7 @@ package org.norecess.hobbes.interpreter;
 import java.util.Map;
 
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.tir.data.DatumTIR;
 import org.norecess.citkit.tir.expressions.BreakETIR;
 import org.norecess.citkit.tir.expressions.IArrayETIR;
 import org.norecess.citkit.tir.expressions.IAssignmentETIR;
@@ -30,8 +31,8 @@ import org.norecess.citkit.visitors.LValueTIRVisitor;
 import org.norecess.hobbes.HobbesBoolean;
 import org.norecess.hobbes.interpreter.operators.ApplyingOperator;
 
-public class Interpreter implements ExpressionTIRVisitor<IIntegerETIR>,
-		LValueTIRVisitor<IIntegerETIR> {
+public class Interpreter implements ExpressionTIRVisitor<DatumTIR>,
+		LValueTIRVisitor<DatumTIR> {
 
 	private final IIntegerETIR[]					myArgv;
 	private final Map<Operator, ApplyingOperator>	myOperatorInterpreter;
@@ -42,7 +43,7 @@ public class Interpreter implements ExpressionTIRVisitor<IIntegerETIR>,
 		myOperatorInterpreter = operatorInterpreters;
 	}
 
-	public IIntegerETIR interpret(ExpressionTIR expression) {
+	public DatumTIR interpret(ExpressionTIR expression) {
 		return expression.accept(this);
 	}
 
@@ -50,21 +51,22 @@ public class Interpreter implements ExpressionTIRVisitor<IIntegerETIR>,
 		return integer;
 	}
 
-	public IIntegerETIR visitOperatorETIR(IOperatorETIR expression) {
+	public DatumTIR visitOperatorETIR(IOperatorETIR expression) {
 		return myOperatorInterpreter.get(expression.getOperator()).apply(
 				expression.getLeft().accept(this),
 				expression.getRight().accept(this));
 	}
 
 	public IIntegerETIR visitVariableETIR(IVariableETIR variable) {
-		return myArgv[variable.getLValue().accept(this).getValue()];
+		return myArgv[((IIntegerETIR) variable.getLValue().accept(this))
+				.getValue()];
 	}
 
-	public IIntegerETIR visitSubscriptLValue(ISubscriptLValueTIR subscript) {
+	public DatumTIR visitSubscriptLValue(ISubscriptLValueTIR subscript) {
 		return subscript.getIndex().accept(this);
 	}
 
-	public IIntegerETIR visitIfETIR(IIfETIR ife) {
+	public DatumTIR visitIfETIR(IIfETIR ife) {
 		if (HobbesBoolean.TRUE.equals(ife.getTest().accept(this))) {
 			return ife.getThenClause().accept(this);
 		} else {

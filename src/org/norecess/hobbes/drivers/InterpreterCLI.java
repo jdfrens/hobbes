@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 import org.antlr.runtime.RecognitionException;
+import org.norecess.citkit.tir.data.DatumTIR;
 import org.norecess.citkit.tir.expressions.IIntegerETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
@@ -18,6 +19,8 @@ import org.norecess.hobbes.interpreter.operators.ModulusOperator;
 import org.norecess.hobbes.interpreter.operators.MultiplicationOperator;
 import org.norecess.hobbes.interpreter.operators.SubtractionOperator;
 
+import ovm.polyd.PolyD;
+
 public class InterpreterCLI {
 
 	private final IHobbesFrontEnd	myFrontEnd;
@@ -26,20 +29,23 @@ public class InterpreterCLI {
 		myFrontEnd = frontEnd;
 	}
 
-	public IIntegerETIR interpret(IIntegerETIR[] args)
-			throws RecognitionException {
+	public DatumTIR interpret(IIntegerETIR[] args) throws RecognitionException {
 		return new Interpreter(args, createOperatorInterpreters())
 				.interpret(myFrontEnd.process());
 	}
 
 	private HashMap<Operator, ApplyingOperator> createOperatorInterpreters() {
 		HashMap<Operator, ApplyingOperator> operatorInterpreters = new HashMap<Operator, ApplyingOperator>();
-		operatorInterpreters.put(Operator.ADD, new AdditionOperator());
-		operatorInterpreters.put(Operator.SUBTRACT, new SubtractionOperator());
-		operatorInterpreters.put(Operator.MULTIPLY,
-				new MultiplicationOperator());
-		operatorInterpreters.put(Operator.DIVIDE, new DivisionOperator());
-		operatorInterpreters.put(Operator.MODULUS, new ModulusOperator());
+		operatorInterpreters.put(Operator.ADD, PolyD.build(
+				ApplyingOperator.class, new AdditionOperator()));
+		operatorInterpreters.put(Operator.SUBTRACT, PolyD.build(
+				ApplyingOperator.class, new SubtractionOperator()));
+		operatorInterpreters.put(Operator.MULTIPLY, PolyD.build(
+				ApplyingOperator.class, new MultiplicationOperator()));
+		operatorInterpreters.put(Operator.DIVIDE, PolyD.build(
+				ApplyingOperator.class, new DivisionOperator()));
+		operatorInterpreters.put(Operator.MODULUS, PolyD.build(
+				ApplyingOperator.class, new ModulusOperator()));
 		return operatorInterpreters;
 	}
 
