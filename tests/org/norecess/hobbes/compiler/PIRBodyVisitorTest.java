@@ -2,6 +2,8 @@ package org.norecess.hobbes.compiler;
 
 import static org.junit.Assert.assertSame;
 
+import java.util.Map;
+
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.Before;
@@ -13,6 +15,7 @@ import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
+import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
 import org.norecess.hobbes.backend.ICode;
 import org.norecess.hobbes.compiler.resources.ILabel;
@@ -21,14 +24,16 @@ import org.norecess.hobbes.compiler.resources.IResourceAllocator;
 
 public class PIRBodyVisitorTest {
 
-	private IMocksControl		myMocksControl;
+	private IMocksControl						myMocksControl;
 
-	private IPIRBodyVisitor		myRecurser;
-	private IResourceAllocator	myResourceAllocator;
-	private IRegister			myTarget;
+	private IPIRBodyVisitor						myRecurser;
+	private IResourceAllocator					myResourceAllocator;
+	private Map<Operator, OperatorInstruction>	myOperatorInstructions;
+	private IRegister							myTarget;
 
-	private PIRBodyVisitor		myVisitor;
+	private PIRBodyVisitor						myVisitor;
 
+	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() {
 		myMocksControl = EasyMock.createStrictControl();
@@ -36,10 +41,11 @@ public class PIRBodyVisitorTest {
 		myRecurser = myMocksControl.createMock(IPIRBodyVisitor.class);
 		myResourceAllocator = myMocksControl
 				.createMock(IResourceAllocator.class);
+		myOperatorInstructions = myMocksControl.createMock(Map.class);
 		myTarget = myMocksControl.createMock(IRegister.class);
 
 		myVisitor = new PIRBodyVisitor(myRecurser, myResourceAllocator,
-				myTarget);
+				myOperatorInstructions, myTarget);
 	}
 
 	@Test
@@ -67,7 +73,10 @@ public class PIRBodyVisitorTest {
 		IOperator operator = myMocksControl.createMock(IOperator.class);
 		ExpressionTIR left = myMocksControl.createMock(ExpressionTIR.class);
 		ExpressionTIR right = myMocksControl.createMock(ExpressionTIR.class);
+		OperatorInstruction operatorInstruction = myMocksControl
+				.createMock(OperatorInstruction.class);
 		IRegister subTarget = myMocksControl.createMock(IRegister.class);
+		ICode operatorCode = myMocksControl.createMock(ICode.class);
 
 		EasyMock.expect(left.accept(myVisitor)).andReturn(leftCode);
 		EasyMock.expect(code.append(leftCode)).andReturn(code);
@@ -76,8 +85,11 @@ public class PIRBodyVisitorTest {
 		EasyMock.expect(myRecurser.recurse(right, subTarget)).andReturn(
 				rightCode);
 		EasyMock.expect(code.append(rightCode)).andReturn(code);
-		EasyMock.expect(operator.getPunctuation()).andReturn("P");
-		EasyMock.expect(code.add(myTarget, " P= ", subTarget)).andReturn(code);
+		EasyMock.expect(myOperatorInstructions.get(operator)).andReturn(
+				operatorInstruction);
+		EasyMock.expect(operatorInstruction.compile(myTarget, subTarget))
+				.andReturn(operatorCode);
+		EasyMock.expect(code.append(operatorCode)).andReturn(code);
 
 		myMocksControl.replay();
 		assertSame(code, myVisitor.visitOperatorETIR(new OperatorETIR(left,

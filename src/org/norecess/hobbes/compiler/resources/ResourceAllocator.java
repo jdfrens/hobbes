@@ -24,4 +24,5 @@ public class ResourceAllocator implements IResourceAllocator {
 	public ICode createCode() {
 		return new Code();
 	}
+
 }

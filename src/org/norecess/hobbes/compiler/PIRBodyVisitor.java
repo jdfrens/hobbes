@@ -1,5 +1,7 @@
 package org.norecess.hobbes.compiler;
 
+import java.util.Map;
+
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.expressions.BreakETIR;
 import org.norecess.citkit.tir.expressions.IArrayETIR;
@@ -19,6 +21,7 @@ import org.norecess.citkit.tir.expressions.IStringETIR;
 import org.norecess.citkit.tir.expressions.IVariableETIR;
 import org.norecess.citkit.tir.expressions.IWhileETIR;
 import org.norecess.citkit.tir.expressions.NilETIR;
+import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.tir.lvalues.IFieldValueTIR;
 import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
@@ -29,26 +32,33 @@ import org.norecess.hobbes.compiler.resources.IResourceAllocator;
 
 public class PIRBodyVisitor implements IPIRBodyVisitor {
 
-	private final IPIRBodyVisitor		myRecurser;
-	private final IResourceAllocator	myResourceAllocator;
-	private final IRegister				myTarget;
+	private final IPIRBodyVisitor						myRecurser;
+	private final IResourceAllocator					myResourceAllocator;
+	private final Map<Operator, OperatorInstruction>	myOperatorInstructions;
+	private final IRegister								myTarget;
 
-	public PIRBodyVisitor(IResourceAllocator registerAllocator, IRegister target) {
+	public PIRBodyVisitor(IResourceAllocator resourceAllocator,
+			Map<Operator, OperatorInstruction> operatorInstructions,
+			IRegister target) {
+		myOperatorInstructions = operatorInstructions;
 		myRecurser = this;
-		myResourceAllocator = registerAllocator;
+		myResourceAllocator = resourceAllocator;
 		myTarget = target;
 	}
 
 	public PIRBodyVisitor(IPIRBodyVisitor recurser,
-			IResourceAllocator registerAllocator, IRegister target) {
+			IResourceAllocator resourceAllocator,
+			Map<Operator, OperatorInstruction> operatorInstructions,
+			IRegister target) {
 		myRecurser = recurser;
-		myResourceAllocator = registerAllocator;
+		myResourceAllocator = resourceAllocator;
+		myOperatorInstructions = operatorInstructions;
 		myTarget = target;
 	}
 
 	public ICode recurse(ExpressionTIR expression, IRegister target) {
-		return expression
-				.accept(new PIRBodyVisitor(myResourceAllocator, target));
+		return expression.accept(new PIRBodyVisitor(myResourceAllocator,
+				myOperatorInstructions, target));
 	}
 
 	public ICode visitIntegerETIR(IIntegerETIR integer) {
@@ -72,8 +82,8 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 		code.append(expression.getLeft().accept(this));
 		IRegister next = myResourceAllocator.nextRegister();
 		code.append(myRecurser.recurse(expression.getRight(), next));
-		code.add(myTarget, " " + expression.getOperator().getPunctuation()
-				+ "= ", next);
+		code.append(myOperatorInstructions.get(expression.getOperator())
+				.compile(myTarget, next));
 		return code;
 	}
 

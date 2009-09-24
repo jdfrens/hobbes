@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.norecess.hobbes.compiler.resources.Register;
 import org.norecess.hobbes.compiler.resources.ResourceAllocator;
 
-public class RegisterAllocatorTest {
+public class ResourceAllocatorTest {
 
 	@Test
 	public void shouldAllocateRegisters() {

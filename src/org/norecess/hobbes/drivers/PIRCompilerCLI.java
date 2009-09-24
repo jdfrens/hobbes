@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import org.antlr.runtime.RecognitionException;
 import org.norecess.hobbes.backend.CodeWriter;
 import org.norecess.hobbes.backend.PIRCleaner;
+import org.norecess.hobbes.compiler.OperatorInstructionsFactory;
 import org.norecess.hobbes.compiler.PIRBodyCompiler;
 import org.norecess.hobbes.compiler.PIRCompiler;
 import org.norecess.hobbes.compiler.PIRPrologCompiler;
@@ -37,7 +38,9 @@ public class PIRCompilerCLI {
 	public void generateCode() throws IOException, RecognitionException {
 		new CodeWriter(myWriter).writeCode(new PIRCleaner()
 				.process(new PIRCompiler(new PIRPrologCompiler(),
-						new PIRBodyCompiler(new ResourceAllocator()))
+						new PIRBodyCompiler(new ResourceAllocator(),
+								new OperatorInstructionsFactory(
+										new ResourceAllocator()).create()))
 						.compile(myFrontEnd.process())));
 	}
 
