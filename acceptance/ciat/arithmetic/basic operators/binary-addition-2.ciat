@@ -3,6 +3,7 @@ Should be able to add two multi-digit integers together.
 1024+36
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = 1024
 	$I1 = 36
 	$I0 += $I1

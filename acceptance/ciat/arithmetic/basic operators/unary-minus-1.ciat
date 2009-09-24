@@ -3,6 +3,7 @@ Unary minus
 -1024
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = -1024
 	print $I0
 	print "\n"

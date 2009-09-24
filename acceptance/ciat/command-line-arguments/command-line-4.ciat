@@ -4,6 +4,7 @@ Adds 23 and argv[2]
 ==== compilation
 .sub main
 	.param pmc argv
+	load_bytecode "print.pbc"
 	$I0 = 23
 	$I1 = 2
 	$I1 = argv[$I1]

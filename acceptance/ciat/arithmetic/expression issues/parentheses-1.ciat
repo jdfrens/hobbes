@@ -3,6 +3,7 @@ Parentheses override left associativity.
 10 - (5 - 2)
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = 10
 	$I1 = 5
 	$I2 = 2

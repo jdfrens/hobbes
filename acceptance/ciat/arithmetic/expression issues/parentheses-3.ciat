@@ -3,6 +3,7 @@ Parentheses override normal precedence.
 (8+2)*(23-20)
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = 8
 	$I1 = 2
 	$I0 += $I1

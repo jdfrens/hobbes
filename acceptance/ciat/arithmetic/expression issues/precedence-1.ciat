@@ -3,6 +3,7 @@ Multiply before add.
 1+2*3
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = 1
 	$I1 = 2
 	$I2 = 3

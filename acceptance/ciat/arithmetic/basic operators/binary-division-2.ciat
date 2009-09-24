@@ -3,6 +3,7 @@ Should be able to divide large integers.
 15700 / 3427
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = 15700
 	$I1 = 3427
 	$I0 /= $I1

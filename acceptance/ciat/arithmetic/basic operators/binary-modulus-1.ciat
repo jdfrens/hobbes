@@ -3,6 +3,7 @@ Should be able to take the modulus.
 13 % 3
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = 13
 	$I1 = 3
 	$I0 %= $I1

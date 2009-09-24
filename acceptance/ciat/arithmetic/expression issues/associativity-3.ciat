@@ -3,6 +3,7 @@ Modulus left to right.
 100 % 67 % 5
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = 100
 	$I1 = 67
 	$I0 %= $I1

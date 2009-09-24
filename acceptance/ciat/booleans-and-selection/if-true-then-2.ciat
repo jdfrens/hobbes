@@ -7,6 +7,7 @@ else
 end
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = 1
 	if $I0 goto label_1
 	$I0 = 8

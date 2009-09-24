@@ -3,6 +3,7 @@ Compiles a simple, larger integer.
 665
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = 665
 	print $I0
 	print "\n"

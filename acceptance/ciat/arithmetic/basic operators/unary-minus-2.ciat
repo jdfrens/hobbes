@@ -3,6 +3,7 @@ Unary minus
 -88
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = -88
 	print $I0
 	print "\n"

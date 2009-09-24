@@ -4,6 +4,7 @@ ARGV[5] + 8
 ==== compilation
 .sub main
 	.param pmc argv
+	load_bytecode "print.pbc"
 	$I0 = 5
 	$I0 = argv[$I0]
 	$I1 = 8

@@ -3,6 +3,7 @@ Should be able to multiply three integers together.
 2*3*4
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = 2
 	$I1 = 3
 	$I0 *= $I1

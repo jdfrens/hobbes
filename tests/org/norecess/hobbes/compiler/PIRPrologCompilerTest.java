@@ -31,8 +31,8 @@ public class PIRPrologCompilerTest {
 	@Test
 	public void shouldGenerateProlog() {
 		myMocksControl.replay();
-		assertEquals(new Code(".sub main"), myPrologCompiler
-				.generateProlog(new IntegerETIR(5)));
+		assertEquals(new Code(".sub main", "load_bytecode \"print.pbc\""),
+				myPrologCompiler.generateProlog(new IntegerETIR(5)));
 		myMocksControl.verify();
 	}
 
@@ -41,7 +41,8 @@ public class PIRPrologCompilerTest {
 		LValueTIR lvalue = myMocksControl.createMock(LValueTIR.class);
 
 		myMocksControl.replay();
-		assertEquals(new Code(".sub main", ".param pmc argv"), myPrologCompiler
+		assertEquals(new Code(".sub main", ".param pmc argv",
+				"load_bytecode \"print.pbc\""), myPrologCompiler
 				.generateProlog(new VariableETIR(lvalue)));
 		myMocksControl.verify();
 	}
@@ -58,9 +59,9 @@ public class PIRPrologCompilerTest {
 				new Code("right prolog"));
 
 		myMocksControl.replay();
-		assertEquals(new Code(".sub main", "left prolog", "right prolog"),
-				myPrologCompiler.generateProlog(new OperatorETIR(left,
-						operator, right)));
+		assertEquals(new Code(".sub main", "left prolog", "right prolog",
+				"load_bytecode \"print.pbc\""), myPrologCompiler
+				.generateProlog(new OperatorETIR(left, operator, right)));
 		myMocksControl.verify();
 	}
 
@@ -81,7 +82,7 @@ public class PIRPrologCompilerTest {
 
 		myMocksControl.replay();
 		assertEquals(new Code(".sub main", "test prolog", "then prolog",
-				"else prolog"), //
+				"else prolog", "load_bytecode \"print.pbc\""), //
 				myPrologCompiler.generateProlog(new IfETIR(test, consequence,
 						otherwise)));
 		myMocksControl.verify();

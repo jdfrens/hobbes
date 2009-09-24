@@ -22,7 +22,9 @@ def interpreter
 end
 
 def executor
-  CIAT::Executors::Parrot.new(:description => 'PIR VM', :processor_kind => CIAT::Processors::CompilationInterpreter.new)
+  CIAT::Executors::Parrot.new(:description => 'PIR VM',
+    :processor_kind => CIAT::Processors::CompilationInterpreter.new,
+    :libraries => ["../pirlib"])
 end
 
 task :ciat do

@@ -3,6 +3,7 @@ Should be able to add two integers together.
 2+3
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = 2
 	$I1 = 3
 	$I0 += $I1

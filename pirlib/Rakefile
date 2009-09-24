@@ -1,0 +1,8 @@
+SRC = FileList['*.pir']
+PBC = SRC.map { |pir| File.basename(pir, '.*') + ".pbc" }
+
+rule '.pbc' => '.pir' do |t|
+  sh "parrot -o #{t.name} #{t.source}"
+end
+
+task :default => PBC

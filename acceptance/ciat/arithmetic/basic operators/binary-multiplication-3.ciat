@@ -3,6 +3,7 @@ Should be able to multiply two integers together, one of them negative.
 100*-36
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = 100
 	$I1 = -36
 	$I0 *= $I1

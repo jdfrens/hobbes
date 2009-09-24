@@ -1,23 +1,14 @@
 Less than is false.
 ==== source
-if 347 < 44 then
-  1
-else
-  2
-end
+347 < 44
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = 347
 	$I1 = 44
 	$I0 = $I0 < $I1
-	if $I0 goto label_1
-	$I0 = 2
-	goto label_2
-label_1:
-	$I0 = 1
-label_2:
-	print $I0
+	print_bool($I0)
 	print "\n"
 .end
 ==== execution
-2
+#f

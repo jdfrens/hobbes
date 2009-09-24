@@ -3,6 +3,7 @@ Should be able to multiply two multi-digit integers together.
 1024*4
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = 1024
 	$I1 = 4
 	$I0 *= $I1

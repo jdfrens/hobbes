@@ -27,7 +27,9 @@ public class PIRPrologCompiler implements IPIRPrologCompiler {
 	public ICode generateProlog(ExpressionTIR expr) {
 		ICode code = new Code();
 		code.add(".sub main");
-		return code.append(expr.accept(this));
+		code.append(expr.accept(this));
+		code.add("load_bytecode \"print.pbc\"");
+		return code;
 	}
 
 	public ICode visitIntegerETIR(IIntegerETIR integer) {

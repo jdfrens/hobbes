@@ -3,6 +3,7 @@ Simple, small integer.
 5
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = 5
 	print $I0
 	print "\n"

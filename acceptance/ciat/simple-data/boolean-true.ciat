@@ -3,9 +3,10 @@ Boolean literal for "true".
 #t
 ==== compilation
 .sub main
+	load_bytecode "print.pbc"
 	$I0 = 1
-	print $I0
+	print_bool($I0)
 	print "\n"
 .end
 ==== execution
-1
+#t
