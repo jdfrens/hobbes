@@ -125,10 +125,10 @@ public class HobbesTIRBuilderTest {
 
 	@Test
 	public void shouldBuildIfExpressions() {
-		assertEquals(new IfETIR(new IntegerETIR(1), new IntegerETIR(2),
+		assertEquals(new IfETIR(HobbesBoolean.TRUE, new IntegerETIR(2),
 				new IntegerETIR(3)), myTester
 				.treeParseInput("if #t then 2 else 3 end"));
-		assertEquals(new IfETIR(new IntegerETIR(0), new OperatorETIR(
+		assertEquals(new IfETIR(HobbesBoolean.FALSE, new OperatorETIR(
 				new IntegerETIR(2), Operator.ADD, new IntegerETIR(8)),
 				new OperatorETIR(new IntegerETIR(3), Operator.MULTIPLY,
 						new IntegerETIR(4))), myTester

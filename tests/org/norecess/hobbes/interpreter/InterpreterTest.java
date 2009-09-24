@@ -10,6 +10,7 @@ import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.tir.expressions.BooleanETIR;
 import org.norecess.citkit.tir.expressions.IIntegerETIR;
 import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
@@ -48,6 +49,14 @@ public class InterpreterTest {
 				.interpret(new IntegerETIR(5)));
 		assertEquals(new IntegerETIR(555), myInterpreter
 				.interpret(new IntegerETIR(555)));
+	}
+
+	@Test
+	public void shouldInterpretBooleans() {
+		assertEquals(BooleanETIR.TRUE, myInterpreter
+				.interpret(BooleanETIR.TRUE));
+		assertEquals(BooleanETIR.FALSE, myInterpreter
+				.interpret(BooleanETIR.FALSE));
 	}
 
 	@Test

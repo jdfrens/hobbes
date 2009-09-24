@@ -9,6 +9,7 @@ import org.norecess.citkit.tir.data.DatumTIR;
 import org.norecess.citkit.tir.expressions.IIntegerETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
+import org.norecess.hobbes.HobbesBoolean;
 import org.norecess.hobbes.frontend.HobbesFrontEnd;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
 import org.norecess.hobbes.interpreter.Interpreter;
@@ -34,8 +35,18 @@ public class InterpreterCLI {
 		IIntegerETIR[] integerArgs = convertArgs(args);
 		InterpreterCLI interpreter = new InterpreterCLI(new HobbesFrontEnd(
 				new File(args[0])));
-		System.out.println(interpreter.interpret(integerArgs,
-				new AppliableFactory().createAppliables()));
+		System.out.println(toHobbesString(interpreter.interpret(integerArgs,
+				new AppliableFactory().createAppliables())));
+	}
+
+	private static String toHobbesString(DatumTIR datum) {
+		if (datum == HobbesBoolean.TRUE) {
+			return "#t";
+		} else if (datum == HobbesBoolean.FALSE) {
+			return "#f";
+		} else {
+			return datum.toString();
+		}
 	}
 
 	private static IIntegerETIR[] convertArgs(String[] args) {

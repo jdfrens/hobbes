@@ -1,15 +1,14 @@
 package org.norecess.hobbes;
 
 import org.norecess.citkit.tir.data.DatumTIR;
-import org.norecess.citkit.tir.expressions.IIntegerETIR;
-import org.norecess.citkit.tir.expressions.IntegerETIR;
+import org.norecess.citkit.tir.expressions.BooleanETIR;
 
 public class HobbesBoolean {
 
-	public static IIntegerETIR	TRUE	= new IntegerETIR(1);
-	public static IIntegerETIR	FALSE	= new IntegerETIR(0);
+	public static BooleanETIR	TRUE	= BooleanETIR.TRUE;
+	public static BooleanETIR	FALSE	= BooleanETIR.FALSE;
 
-	public static IIntegerETIR parse(String input) {
+	public static BooleanETIR parse(String input) {
 		if ("#t".equals(input)) {
 			return TRUE;
 		} else if ("#f".equals(input)) {

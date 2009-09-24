@@ -50,6 +50,10 @@ public class Interpreter implements ExpressionTIRVisitor<DatumTIR>,
 		return integer;
 	}
 
+	public IBooleanETIR visitBooleanETIR(IBooleanETIR bool) {
+		return bool;
+	}
+
 	public DatumTIR visitOperatorETIR(IOperatorETIR expression) {
 		if (myAppliables.get(expression.getOperator()) == null) {
 			throw new IllegalStateException("cannot compute "
@@ -85,10 +89,6 @@ public class Interpreter implements ExpressionTIRVisitor<DatumTIR>,
 	}
 
 	public IIntegerETIR visitAssignmentETIR(IAssignmentETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public IIntegerETIR visitBooleanETIR(IBooleanETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 
