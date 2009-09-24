@@ -36,6 +36,10 @@ public class PIRPrologCompiler implements IPIRPrologCompiler {
 		return new Code();
 	}
 
+	public Code visitBooleanETIR(IBooleanETIR arg0) {
+		return new Code();
+	}
+
 	public ICode visitOperatorETIR(IOperatorETIR expression) {
 		Code code = new Code();
 		code.append(expression.getLeft().accept(this));
@@ -63,10 +67,6 @@ public class PIRPrologCompiler implements IPIRPrologCompiler {
 	}
 
 	public Code visitAssignmentETIR(IAssignmentETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public Code visitBooleanETIR(IBooleanETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 

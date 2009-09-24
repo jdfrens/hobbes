@@ -25,6 +25,7 @@ import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.tir.lvalues.IFieldValueTIR;
 import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
+import org.norecess.hobbes.HobbesBoolean;
 import org.norecess.hobbes.backend.ICode;
 import org.norecess.hobbes.compiler.resources.ILabel;
 import org.norecess.hobbes.compiler.resources.IRegister;
@@ -64,6 +65,12 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 	public ICode visitIntegerETIR(IIntegerETIR integer) {
 		return myResourceAllocator.createCode().add(myTarget,
 				" = " + integer.getValue());
+	}
+
+	public ICode visitBooleanETIR(IBooleanETIR b) {
+		ICode code = myResourceAllocator.createCode();
+		code.add(myTarget, " = ", b == HobbesBoolean.TRUE ? "1" : "0");
+		return code;
 	}
 
 	public ICode visitVariableETIR(IVariableETIR variable) {
@@ -109,10 +116,6 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 	}
 
 	public ICode visitAssignmentETIR(IAssignmentETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public ICode visitBooleanETIR(IBooleanETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 

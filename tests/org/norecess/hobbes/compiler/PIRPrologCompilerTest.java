@@ -13,6 +13,7 @@ import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
+import org.norecess.hobbes.HobbesBoolean;
 import org.norecess.hobbes.backend.Code;
 
 public class PIRPrologCompilerTest {
@@ -29,10 +30,18 @@ public class PIRPrologCompilerTest {
 	}
 
 	@Test
-	public void shouldGenerateProlog() {
+	public void shouldGeneratePrologForInteger() {
 		myMocksControl.replay();
 		assertEquals(new Code(".sub main", "load_bytecode \"print.pbc\""),
 				myPrologCompiler.generateProlog(new IntegerETIR(5)));
+		myMocksControl.verify();
+	}
+
+	@Test
+	public void shouldGeneratePrologForBoolean() {
+		myMocksControl.replay();
+		assertEquals(new Code(".sub main", "load_bytecode \"print.pbc\""),
+				myPrologCompiler.generateProlog(HobbesBoolean.TRUE));
 		myMocksControl.verify();
 	}
 

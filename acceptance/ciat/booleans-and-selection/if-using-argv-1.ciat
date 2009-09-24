@@ -11,6 +11,9 @@ end
 	load_bytecode "print.pbc"
 	$I0 = 1
 	$I0 = argv[$I0]
+	$I1 = 2
+	$I1 = argv[$I1]
+	$I0 = $I0 == $I1
 	if $I0 goto label_1
 	$I0 = 2
 	goto label_2

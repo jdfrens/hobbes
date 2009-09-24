@@ -17,6 +17,7 @@ import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
+import org.norecess.hobbes.HobbesBoolean;
 import org.norecess.hobbes.backend.ICode;
 import org.norecess.hobbes.compiler.resources.ILabel;
 import org.norecess.hobbes.compiler.resources.IRegister;
@@ -59,10 +60,26 @@ public class PIRBodyVisitorTest {
 		myMocksControl.verify();
 	}
 
-	private ICode expectNewCode() {
-		ICode code = myMocksControl.createMock("theCode", ICode.class);
-		EasyMock.expect(myResourceAllocator.createCode()).andReturn(code);
-		return code;
+	@Test
+	public void shouldCompileBooleanTrueLiteral() {
+		ICode code = expectNewCode();
+
+		EasyMock.expect(code.add(myTarget, " = ", "1")).andReturn(code);
+
+		myMocksControl.replay();
+		assertSame(code, myVisitor.visitBooleanETIR(HobbesBoolean.TRUE));
+		myMocksControl.verify();
+	}
+
+	@Test
+	public void shouldCompileBooleanFalseLiteral() {
+		ICode code = expectNewCode();
+
+		EasyMock.expect(code.add(myTarget, " = ", "0")).andReturn(code);
+
+		myMocksControl.replay();
+		assertSame(code, myVisitor.visitBooleanETIR(HobbesBoolean.FALSE));
+		myMocksControl.verify();
 	}
 
 	@Test
@@ -162,6 +179,12 @@ public class PIRBodyVisitorTest {
 		assertSame(code, myVisitor.visitSubscriptLValue(new SubscriptLValueTIR(
 				null, new IntegerETIR(88))));
 		myMocksControl.verify();
+	}
+
+	private ICode expectNewCode() {
+		ICode code = myMocksControl.createMock("theCode", ICode.class);
+		EasyMock.expect(myResourceAllocator.createCode()).andReturn(code);
+		return code;
 	}
 
 }
