@@ -20,16 +20,16 @@ import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
 import org.norecess.hobbes.HobbesBoolean;
-import org.norecess.hobbes.interpreter.operators.ApplyingOperator;
+import org.norecess.hobbes.interpreter.operators.Appliable;
 
 public class InterpreterTest {
 
-	private IMocksControl					myMocksControl;
+	private IMocksControl				myMocksControl;
 
-	private IIntegerETIR[]					myArgv;
-	private Map<Operator, ApplyingOperator>	myOperatorInterpreters;
+	private IIntegerETIR[]				myArgv;
+	private Map<Operator, Appliable>	myAppliables;
 
-	private Interpreter						myInterpreter;
+	private Interpreter					myInterpreter;
 
 	@SuppressWarnings("unchecked")
 	@Before
@@ -37,9 +37,9 @@ public class InterpreterTest {
 		myMocksControl = EasyMock.createControl();
 
 		myArgv = new IIntegerETIR[10];
-		myOperatorInterpreters = myMocksControl.createMock(Map.class);
+		myAppliables = myMocksControl.createMock(Map.class);
 
-		myInterpreter = new Interpreter(myArgv, myOperatorInterpreters);
+		myInterpreter = new Interpreter(myArgv, myAppliables);
 	}
 
 	@Test
@@ -65,19 +65,18 @@ public class InterpreterTest {
 		IOperator operator = myMocksControl.createMock(IOperator.class);
 		ExpressionTIR left = myMocksControl.createMock(ExpressionTIR.class);
 		ExpressionTIR right = myMocksControl.createMock(ExpressionTIR.class);
-		ApplyingOperator applyingOperator = myMocksControl
-				.createMock(ApplyingOperator.class);
+		Appliable appliable = myMocksControl.createMock(Appliable.class);
 		IIntegerETIR leftResult = myMocksControl.createMock(IIntegerETIR.class);
 		IIntegerETIR rightResult = myMocksControl
 				.createMock(IIntegerETIR.class);
 		IIntegerETIR result = myMocksControl.createMock(IIntegerETIR.class);
 
-		EasyMock.expect(myOperatorInterpreters.get(operator)).andReturn(
-				applyingOperator).atLeastOnce();
+		EasyMock.expect(myAppliables.get(operator)).andReturn(appliable)
+				.atLeastOnce();
 		EasyMock.expect(left.accept(myInterpreter)).andReturn(leftResult);
 		EasyMock.expect(right.accept(myInterpreter)).andReturn(rightResult);
-		EasyMock.expect(applyingOperator.apply(leftResult, rightResult))
-				.andReturn(result);
+		EasyMock.expect(appliable.apply(leftResult, rightResult)).andReturn(
+				result);
 
 		myMocksControl.replay();
 		assertSame(result, myInterpreter.interpret(new OperatorETIR(left,

@@ -9,11 +9,11 @@ import org.norecess.hobbes.HobbesBoolean;
 
 public class EqualsOperatorTest {
 
-	private EqualsOperator	myOperator;
+	private EqualsAppliable	myOperator;
 
 	@Before
 	public void setUp() {
-		myOperator = new EqualsOperator();
+		myOperator = new EqualsAppliable();
 	}
 
 	@Test

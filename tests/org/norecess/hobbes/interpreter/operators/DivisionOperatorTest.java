@@ -8,11 +8,11 @@ import org.norecess.citkit.tir.expressions.IntegerETIR;
 
 public class DivisionOperatorTest {
 
-	private DivisionOperator	myOperator;
+	private DivisionAppliable	myOperator;
 
 	@Before
 	public void setUp() {
-		myOperator = new DivisionOperator();
+		myOperator = new DivisionAppliable();
 	}
 
 	@Test

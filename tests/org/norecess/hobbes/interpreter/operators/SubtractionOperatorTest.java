@@ -8,11 +8,11 @@ import org.norecess.citkit.tir.expressions.IntegerETIR;
 
 public class SubtractionOperatorTest {
 
-	private SubtractionOperator	myOperator;
+	private SubtractionAppliable	myOperator;
 
 	@Before
 	public void setUp() {
-		myOperator = new SubtractionOperator();
+		myOperator = new SubtractionAppliable();
 	}
 
 	@Test

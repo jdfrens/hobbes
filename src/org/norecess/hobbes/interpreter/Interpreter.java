@@ -29,18 +29,17 @@ import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
 import org.norecess.citkit.visitors.ExpressionTIRVisitor;
 import org.norecess.citkit.visitors.LValueTIRVisitor;
 import org.norecess.hobbes.HobbesBoolean;
-import org.norecess.hobbes.interpreter.operators.ApplyingOperator;
+import org.norecess.hobbes.interpreter.operators.Appliable;
 
 public class Interpreter implements ExpressionTIRVisitor<DatumTIR>,
 		LValueTIRVisitor<DatumTIR> {
 
-	private final IIntegerETIR[]					myArgv;
-	private final Map<Operator, ApplyingOperator>	myOperatorInterpreter;
+	private final IIntegerETIR[]			myArgv;
+	private final Map<Operator, Appliable>	myAppliables;
 
-	public Interpreter(IIntegerETIR[] argv,
-			Map<Operator, ApplyingOperator> operatorInterpreters) {
+	public Interpreter(IIntegerETIR[] argv, Map<Operator, Appliable> appliables) {
 		myArgv = argv;
-		myOperatorInterpreter = operatorInterpreters;
+		myAppliables = appliables;
 	}
 
 	public DatumTIR interpret(ExpressionTIR expression) {
@@ -52,11 +51,11 @@ public class Interpreter implements ExpressionTIRVisitor<DatumTIR>,
 	}
 
 	public DatumTIR visitOperatorETIR(IOperatorETIR expression) {
-		if (myOperatorInterpreter.get(expression.getOperator()) == null) {
+		if (myAppliables.get(expression.getOperator()) == null) {
 			throw new IllegalStateException("cannot compute "
 					+ expression.getOperator());
 		}
-		return myOperatorInterpreter.get(expression.getOperator()).apply(
+		return myAppliables.get(expression.getOperator()).apply(
 				expression.getLeft().accept(this),
 				expression.getRight().accept(this));
 	}

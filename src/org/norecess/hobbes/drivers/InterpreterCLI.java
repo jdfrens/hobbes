@@ -12,8 +12,8 @@ import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.hobbes.frontend.HobbesFrontEnd;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
 import org.norecess.hobbes.interpreter.Interpreter;
-import org.norecess.hobbes.interpreter.operators.ApplyingOperator;
-import org.norecess.hobbes.interpreter.operators.OperatorInterpretersFactory;
+import org.norecess.hobbes.interpreter.operators.Appliable;
+import org.norecess.hobbes.interpreter.operators.AppliableFactory;
 
 public class InterpreterCLI {
 
@@ -24,10 +24,9 @@ public class InterpreterCLI {
 	}
 
 	public DatumTIR interpret(IIntegerETIR[] args,
-			Map<Operator, ApplyingOperator> operatorInterpreters)
-			throws RecognitionException {
-		return new Interpreter(args, operatorInterpreters).interpret(myFrontEnd
-				.process());
+			Map<Operator, Appliable> appliables) throws RecognitionException {
+		return new Interpreter(args, appliables)
+				.interpret(myFrontEnd.process());
 	}
 
 	public static void main(String[] args) throws IOException,
@@ -35,10 +34,8 @@ public class InterpreterCLI {
 		IIntegerETIR[] integerArgs = convertArgs(args);
 		InterpreterCLI interpreter = new InterpreterCLI(new HobbesFrontEnd(
 				new File(args[0])));
-		System.out
-				.println(interpreter.interpret(integerArgs,
-						new OperatorInterpretersFactory()
-								.createOperatorInterpreters()));
+		System.out.println(interpreter.interpret(integerArgs,
+				new AppliableFactory().createAppliables()));
 	}
 
 	private static IIntegerETIR[] convertArgs(String[] args) {

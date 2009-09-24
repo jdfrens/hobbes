@@ -8,11 +8,11 @@ import org.norecess.citkit.tir.expressions.IntegerETIR;
 
 public class ModulusOperatorTest {
 
-	private ModulusOperator	myOperator;
+	private ModulusAppliable	myOperator;
 
 	@Before
 	public void setUp() {
-		myOperator = new ModulusOperator();
+		myOperator = new ModulusAppliable();
 	}
 
 	@Test

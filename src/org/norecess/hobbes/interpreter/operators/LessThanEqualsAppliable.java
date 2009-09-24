@@ -4,14 +4,14 @@ import org.norecess.citkit.tir.data.DatumTIR;
 import org.norecess.citkit.tir.expressions.IIntegerETIR;
 import org.norecess.hobbes.HobbesBoolean;
 
-public class NotEqualsOperator implements ApplyingOperator {
+public class LessThanEqualsAppliable implements Appliable {
 
 	public DatumTIR apply(DatumTIR i, DatumTIR j) {
 		throw new IllegalStateException("unimplemented!");
 	}
 
 	public DatumTIR apply(IIntegerETIR i, IIntegerETIR j) {
-		return HobbesBoolean.convert(i.getValue() != j.getValue());
+		return HobbesBoolean.convert(i.getValue() <= j.getValue());
 	}
 
 }

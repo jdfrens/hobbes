@@ -9,11 +9,11 @@ import org.norecess.hobbes.HobbesBoolean;
 
 public class GreaterThanOperatorTest {
 
-	private GreaterThanOperator	myOperator;
+	private GreaterThanAppliable	myOperator;
 
 	@Before
 	public void setUp() {
-		myOperator = new GreaterThanOperator();
+		myOperator = new GreaterThanAppliable();
 	}
 
 	@Test

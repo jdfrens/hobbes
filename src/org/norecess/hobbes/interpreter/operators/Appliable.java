@@ -8,7 +8,7 @@ import ovm.polyd.tags.PolyD;
 
 @PolyD
 @DispatchingPolicy(MultiDisp.class)
-public interface ApplyingOperator {
+public interface Appliable {
 
 	DatumTIR apply(DatumTIR i, DatumTIR j);
 

@@ -9,11 +9,11 @@ import org.norecess.hobbes.HobbesBoolean;
 
 public class LessThanOperatorTest {
 
-	private LessThanOperator	myOperator;
+	private LessThanAppliable	myOperator;
 
 	@Before
 	public void setUp() {
-		myOperator = new LessThanOperator();
+		myOperator = new LessThanAppliable();
 	}
 
 	@Test
