@@ -23,9 +23,13 @@ program
 	;
 
 expression
-  : additive_expression
+  : comparitive_expression
   | 'if' expression 'then' expression 'else' expression 'end'
     -> ^(IF expression*)
+  ;
+  
+comparitive_expression
+  : additive_expression (comparitive_op^ additive_expression)*
   ;
   
 additive_expression
@@ -36,6 +40,9 @@ multiplicative_expression
   : simple_expression (multiplicative_op^ simple_expression)*
   ;
   
+comparitive_op
+  : LT | LTE | EQ | NEQ | GT | GTE
+  ;
 additive_op
   : PLUS | MINUS
   ;

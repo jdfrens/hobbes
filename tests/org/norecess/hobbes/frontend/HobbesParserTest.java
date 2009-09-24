@@ -80,11 +80,58 @@ public class HobbesParserTest {
 	}
 
 	@Test
+	public void shouldParseLessThan() {
+		assertTree(HobbesParser.LT, "(<(1)(2))", myTester.parseInput("1 < 2"));
+		assertTree(HobbesParser.LT, "(<(66)(22))", myTester
+				.parseInput("66 < 22"));
+	}
+
+	@Test
+	public void shouldParseLessThanEquals() {
+		assertTree(HobbesParser.LTE, "(<=(1)(2))", myTester
+				.parseInput("1 <= 2"));
+		assertTree(HobbesParser.LTE, "(<=(66)(22))", myTester
+				.parseInput("66 <= 22"));
+	}
+
+	@Test
+	public void shouldParseEquals() {
+		assertTree(HobbesParser.EQ, "(==(1)(2))", myTester.parseInput("1 == 2"));
+		assertTree(HobbesParser.EQ, "(==(66)(22))", myTester
+				.parseInput("66 == 22"));
+	}
+
+	@Test
+	public void shouldParseNotEquals() {
+		assertTree(HobbesParser.NEQ, "(!=(1)(2))", myTester
+				.parseInput("1 != 2"));
+		assertTree(HobbesParser.NEQ, "(!=(66)(22))", myTester
+				.parseInput("66 != 22"));
+	}
+
+	@Test
+	public void shouldParseGreaterThan() {
+		assertTree(HobbesParser.GT, "(>(1)(2))", myTester.parseInput("1 > 2"));
+		assertTree(HobbesParser.GT, "(>(66)(22))", myTester
+				.parseInput("66 > 22"));
+	}
+
+	@Test
+	public void shouldParseGreaterThanEquals() {
+		assertTree(HobbesParser.GTE, "(>=(1)(2))", myTester
+				.parseInput("1 >= 2"));
+		assertTree(HobbesParser.GTE, "(>=(66)(22))", myTester
+				.parseInput("66 >= 22"));
+	}
+
+	@Test
 	public void shouldParseLeftAssociativeExpressions() {
 		assertTree(HobbesParser.PLUS, "(+(+(8)(12))(32))", myTester
 				.parseInput("8+12+32"));
-		assertTree(HobbesParser.PLUS, "(+(+(+(+(1)(5))(8))(12))(32))", myTester
-				.parseInput("1+5+8+12+32"));
+		assertTree(HobbesParser.MULTIPLY, "(*(*(*(*(1)(5))(8))(12))(32))",
+				myTester.parseInput("1*5*8*12*32"));
+		assertTree(HobbesParser.EQ, "(==(==(5)(2))(1))", myTester
+				.parseInput("5 == 2 == 1"));
 	}
 
 	@Test
@@ -93,6 +140,10 @@ public class HobbesParserTest {
 				.parseInput("8+12*32"));
 		assertTree(HobbesParser.PLUS, "(+(*(8)(12))(32))", myTester
 				.parseInput("8*12+32"));
+		assertTree(HobbesParser.GTE, "(>=(+(2)(3))(1))", myTester
+				.parseInput("2 + 3 >= 1"));
+		assertTree(HobbesParser.GTE, "(>=(2)(+(3)(1)))", myTester
+				.parseInput("2 >= 3 + 1"));
 	}
 
 	@Test
