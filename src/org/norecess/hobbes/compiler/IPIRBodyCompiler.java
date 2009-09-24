@@ -11,4 +11,6 @@ public interface IPIRBodyCompiler {
 
 	public ICode generate(ExpressionTIR tir);
 
+	public ICode generatePrint(ExpressionTIR tir);
+
 }

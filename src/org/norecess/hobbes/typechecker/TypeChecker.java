@@ -25,9 +25,8 @@ import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.types.BooleanType;
 import org.norecess.citkit.types.IntegerType;
 import org.norecess.citkit.types.PrimitiveType;
-import org.norecess.citkit.visitors.ExpressionTIRVisitor;
 
-public class TypeChecker implements ExpressionTIRVisitor<PrimitiveType> {
+public class TypeChecker implements ITypeChecker {
 
 	private static final List<Operator>	ARITHMETIC_OPERATORS	= Arrays
 																		.asList(new Operator[] {
@@ -48,6 +47,14 @@ public class TypeChecker implements ExpressionTIRVisitor<PrimitiveType> {
 		} else {
 			return BooleanType.BOOLEAN_TYPE;
 		}
+	}
+
+	public PrimitiveType visitVariableETIR(IVariableETIR arg0) {
+		return IntegerType.INTEGER_TYPE;
+	}
+
+	public PrimitiveType visitIfETIR(IIfETIR ife) {
+		return ife.getThenClause().accept(this);
 	}
 
 	//
@@ -77,10 +84,6 @@ public class TypeChecker implements ExpressionTIRVisitor<PrimitiveType> {
 		throw new IllegalStateException("unimplemented!");
 	}
 
-	public PrimitiveType visitIfETIR(IIfETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
 	public PrimitiveType visitLambdaETIR(ILambdaETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
@@ -102,10 +105,6 @@ public class TypeChecker implements ExpressionTIRVisitor<PrimitiveType> {
 	}
 
 	public PrimitiveType visitStringETIR(IStringETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public PrimitiveType visitVariableETIR(IVariableETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 

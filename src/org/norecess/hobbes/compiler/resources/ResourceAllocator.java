@@ -9,7 +9,7 @@ public class ResourceAllocator implements IResourceAllocator {
 	private int	myLabelCounter;
 
 	public ResourceAllocator() {
-		myRegisterCounter = 0;
+		myRegisterCounter = 1;
 		myLabelCounter = 1;
 	}
 

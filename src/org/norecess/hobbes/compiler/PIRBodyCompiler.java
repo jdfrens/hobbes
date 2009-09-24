@@ -1,13 +1,11 @@
 package org.norecess.hobbes.compiler;
 
-import java.util.Map;
-
 import org.norecess.citkit.tir.ExpressionTIR;
-import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
+import org.norecess.citkit.types.BooleanType;
 import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.backend.ICode;
 import org.norecess.hobbes.compiler.resources.IRegister;
-import org.norecess.hobbes.compiler.resources.IResourceAllocator;
+import org.norecess.hobbes.compiler.resources.Register;
 
 /*
  * A "component compiler" is a compiler that compiles only components of a program.
@@ -15,23 +13,28 @@ import org.norecess.hobbes.compiler.resources.IResourceAllocator;
  */
 public class PIRBodyCompiler implements IPIRBodyCompiler {
 
-	private final IResourceAllocator					myResourceAllocator;
-	private final Map<Operator, OperatorInstruction>	myOperatorInstructions;
+	public final static IRegister	ACC	= new Register(0);
 
-	public PIRBodyCompiler(IResourceAllocator resourceAllocator,
-			Map<Operator, OperatorInstruction> operatorInstructions) {
-		myResourceAllocator = resourceAllocator;
-		myOperatorInstructions = operatorInstructions;
+	private final ICompilerFactory	myBodyVisitorFactory;
+
+	public PIRBodyCompiler(ICompilerFactory factory) {
+		myBodyVisitorFactory = factory;
 	}
 
 	public ICode generate(ExpressionTIR tir) {
-		IRegister target = myResourceAllocator.nextRegister();
 		ICode code = new Code();
-		code.append(tir.accept(new PIRBodyVisitor(myResourceAllocator,
-				myOperatorInstructions, target)));
-		code.add("print " + target);
+		code.append(tir.accept(myBodyVisitorFactory.createBodyVisitor()));
+		return code;
+	}
+
+	public ICode generatePrint(ExpressionTIR tir) {
+		ICode code = new Code();
+		if (tir.accept(myBodyVisitorFactory.createTypeChecker()) == BooleanType.BOOLEAN_TYPE) {
+			code.add("print_bool(", ACC, ")");
+		} else {
+			code.add("print " + ACC);
+		}
 		code.add("print \"\\n\"");
-		code.add(".end");
 		return code;
 	}
 

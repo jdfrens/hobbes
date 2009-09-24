@@ -12,20 +12,25 @@ import org.norecess.hobbes.backend.ICode;
  */
 public class PIRCompiler {
 
-	private final IPIRBodyCompiler		myComponentCompiler;
 	private final IPIRPrologCompiler	myPrologCompiler;
+	private final IPIRBodyCompiler		myBodyCompiler;
+	private final IPIREpilogCompiler	myEpilogCompiler;
 
 	public PIRCompiler(IPIRPrologCompiler prologCompiler,
-			IPIRBodyCompiler componentCompiler) {
+			IPIRBodyCompiler componentCompiler,
+			IPIREpilogCompiler epilogCompiler) {
 		myPrologCompiler = prologCompiler;
-		myComponentCompiler = componentCompiler;
+		myBodyCompiler = componentCompiler;
+		myEpilogCompiler = epilogCompiler;
 	}
 
 	public ICode compile(ExpressionTIR tir) throws IOException,
 			RecognitionException {
 		ICode code = new Code();
 		code.append(myPrologCompiler.generateProlog(tir));
-		code.append(myComponentCompiler.generate(tir));
+		code.append(myBodyCompiler.generate(tir));
+		code.append(myBodyCompiler.generatePrint(tir));
+		code.append(myEpilogCompiler.generate());
 		return code;
 	}
 

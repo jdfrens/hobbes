@@ -1,22 +1,34 @@
 package org.norecess.hobbes.typechecker;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
+import org.easymock.EasyMock;
+import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
+import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.tir.LValueTIR;
+import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
+import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.types.BooleanType;
 import org.norecess.citkit.types.IntegerType;
+import org.norecess.citkit.types.PrimitiveType;
 import org.norecess.hobbes.HobbesBoolean;
 
 public class TypeCheckerTest {
 
-	private TypeChecker	myTypeChecker;
+	private IMocksControl	myMocksControl;
+
+	private TypeChecker		myTypeChecker;
 
 	@Before
 	public void setUp() {
+		myMocksControl = EasyMock.createControl();
+
 		myTypeChecker = new TypeChecker();
 	}
 
@@ -66,6 +78,33 @@ public class TypeCheckerTest {
 						.visitOperatorETIR(comparisonExpression(Operator.GREATER_EQUALS)));
 		assertEquals(BooleanType.BOOLEAN_TYPE, myTypeChecker
 				.visitOperatorETIR(comparisonExpression(Operator.GREATER_THAN)));
+	}
+
+	@Test
+	public void shouldCheckVariables() {
+		LValueTIR lvalue = myMocksControl.createMock(LValueTIR.class);
+
+		myMocksControl.replay();
+		assertEquals(IntegerType.INTEGER_TYPE, myTypeChecker
+				.visitVariableETIR(new VariableETIR(lvalue)));
+		myMocksControl.verify();
+	}
+
+	@Test
+	public void shouldCheckIf() {
+		ExpressionTIR test = myMocksControl.createMock(ExpressionTIR.class);
+		ExpressionTIR consequence = myMocksControl
+				.createMock(ExpressionTIR.class);
+		ExpressionTIR otherwise = myMocksControl
+				.createMock(ExpressionTIR.class);
+		PrimitiveType type = myMocksControl.createMock(PrimitiveType.class);
+
+		EasyMock.expect(consequence.accept(myTypeChecker)).andReturn(type);
+
+		myMocksControl.replay();
+		assertSame(type, myTypeChecker.visitIfETIR(new IfETIR(test,
+				consequence, otherwise)));
+		myMocksControl.verify();
 	}
 
 	private OperatorETIR comparisonExpression(Operator operator) {
