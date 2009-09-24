@@ -11,10 +11,10 @@ end
 	$I1 = 44
 	$I0 = $I0 >= $I1
 	if $I0 goto label_1
-	$I0 = 1
+	$I0 = 2
 	goto label_2
 label_1:
-	$I0 = 2
+	$I0 = 1
 label_2:
 	print $I0
 	print "\n"
