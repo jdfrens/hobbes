@@ -36,6 +36,10 @@ expression returns [ExpressionTIR tir]
   ;
 
 operator returns [Operator o]
-  : op=( PLUS | MINUS | MULTIPLY | DIVIDE | MODULUS )
+  : op=( PLUS | MINUS | MULTIPLY | DIVIDE | MODULUS | LT | LTE | GTE | GT )
     { o = Operator.convertPunctuation(op.getText()); }
+  | eq=( EQ )
+    { o = Operator.EQUALS; }
+  | neq=( NEQ )
+    { o = Operator.NOT_EQUALS; }
   ;

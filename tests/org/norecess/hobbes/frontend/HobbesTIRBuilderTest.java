@@ -84,6 +84,24 @@ public class HobbesTIRBuilderTest {
 	}
 
 	@Test
+	public void shouldBuildComparisons() {
+		assertEquals(new OperatorETIR(new IntegerETIR(1), Operator.LESS_THAN,
+				new IntegerETIR(2)), myTester.treeParseInput("1 < 2"));
+		assertEquals(new OperatorETIR(new IntegerETIR(1), Operator.LESS_EQUALS,
+				new IntegerETIR(2)), myTester.treeParseInput("1 <= 2"));
+		assertEquals(new OperatorETIR(new IntegerETIR(1), Operator.EQUALS,
+				new IntegerETIR(2)), myTester.treeParseInput("1 == 2"));
+		assertEquals(new OperatorETIR(new IntegerETIR(1), Operator.NOT_EQUALS,
+				new IntegerETIR(2)), myTester.treeParseInput("1 != 2"));
+		assertEquals(new OperatorETIR(new IntegerETIR(1),
+				Operator.GREATER_EQUALS, new IntegerETIR(2)), myTester
+				.treeParseInput("1 >= 2"));
+		assertEquals(new OperatorETIR(new IntegerETIR(1),
+				Operator.GREATER_THAN, new IntegerETIR(2)), myTester
+				.treeParseInput("1 > 2"));
+	}
+
+	@Test
 	public void shouldBuildCommandLineArgumentRequest() {
 		assertEquals(new VariableETIR(new SubscriptLValueTIR(
 				new SimpleLValueTIR("ARGV"), new IntegerETIR(1))), //
