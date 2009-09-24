@@ -1,5 +1,6 @@
 package org.norecess.hobbes;
 
+import org.norecess.citkit.tir.data.DatumTIR;
 import org.norecess.citkit.tir.expressions.IIntegerETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 
@@ -17,6 +18,10 @@ public class HobbesBoolean {
 			throw new IllegalArgumentException(input
 					+ " is not a valid boolean");
 		}
+	}
+
+	public static DatumTIR convert(boolean b) {
+		return b ? TRUE : FALSE;
 	}
 
 }

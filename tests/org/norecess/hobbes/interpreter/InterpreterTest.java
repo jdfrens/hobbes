@@ -72,10 +72,10 @@ public class InterpreterTest {
 				.createMock(IIntegerETIR.class);
 		IIntegerETIR result = myMocksControl.createMock(IIntegerETIR.class);
 
+		EasyMock.expect(myOperatorInterpreters.get(operator)).andReturn(
+				applyingOperator).atLeastOnce();
 		EasyMock.expect(left.accept(myInterpreter)).andReturn(leftResult);
 		EasyMock.expect(right.accept(myInterpreter)).andReturn(rightResult);
-		EasyMock.expect(myOperatorInterpreters.get(operator)).andReturn(
-				applyingOperator);
 		EasyMock.expect(applyingOperator.apply(leftResult, rightResult))
 				.andReturn(result);
 

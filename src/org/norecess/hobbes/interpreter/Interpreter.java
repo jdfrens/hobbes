@@ -52,6 +52,10 @@ public class Interpreter implements ExpressionTIRVisitor<DatumTIR>,
 	}
 
 	public DatumTIR visitOperatorETIR(IOperatorETIR expression) {
+		if (myOperatorInterpreter.get(expression.getOperator()) == null) {
+			throw new IllegalStateException("cannot compute "
+					+ expression.getOperator());
+		}
 		return myOperatorInterpreter.get(expression.getOperator()).apply(
 				expression.getLeft().accept(this),
 				expression.getRight().accept(this));

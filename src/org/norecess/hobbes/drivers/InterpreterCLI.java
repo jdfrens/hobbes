@@ -2,7 +2,7 @@ package org.norecess.hobbes.drivers;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.antlr.runtime.RecognitionException;
 import org.norecess.citkit.tir.data.DatumTIR;
@@ -12,14 +12,8 @@ import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.hobbes.frontend.HobbesFrontEnd;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
 import org.norecess.hobbes.interpreter.Interpreter;
-import org.norecess.hobbes.interpreter.operators.AdditionOperator;
 import org.norecess.hobbes.interpreter.operators.ApplyingOperator;
-import org.norecess.hobbes.interpreter.operators.DivisionOperator;
-import org.norecess.hobbes.interpreter.operators.ModulusOperator;
-import org.norecess.hobbes.interpreter.operators.MultiplicationOperator;
-import org.norecess.hobbes.interpreter.operators.SubtractionOperator;
-
-import ovm.polyd.PolyD;
+import org.norecess.hobbes.interpreter.operators.OperatorInterpretersFactory;
 
 public class InterpreterCLI {
 
@@ -29,24 +23,11 @@ public class InterpreterCLI {
 		myFrontEnd = frontEnd;
 	}
 
-	public DatumTIR interpret(IIntegerETIR[] args) throws RecognitionException {
-		return new Interpreter(args, createOperatorInterpreters())
-				.interpret(myFrontEnd.process());
-	}
-
-	private HashMap<Operator, ApplyingOperator> createOperatorInterpreters() {
-		HashMap<Operator, ApplyingOperator> operatorInterpreters = new HashMap<Operator, ApplyingOperator>();
-		operatorInterpreters.put(Operator.ADD, PolyD.build(
-				ApplyingOperator.class, new AdditionOperator()));
-		operatorInterpreters.put(Operator.SUBTRACT, PolyD.build(
-				ApplyingOperator.class, new SubtractionOperator()));
-		operatorInterpreters.put(Operator.MULTIPLY, PolyD.build(
-				ApplyingOperator.class, new MultiplicationOperator()));
-		operatorInterpreters.put(Operator.DIVIDE, PolyD.build(
-				ApplyingOperator.class, new DivisionOperator()));
-		operatorInterpreters.put(Operator.MODULUS, PolyD.build(
-				ApplyingOperator.class, new ModulusOperator()));
-		return operatorInterpreters;
+	public DatumTIR interpret(IIntegerETIR[] args,
+			Map<Operator, ApplyingOperator> operatorInterpreters)
+			throws RecognitionException {
+		return new Interpreter(args, operatorInterpreters).interpret(myFrontEnd
+				.process());
 	}
 
 	public static void main(String[] args) throws IOException,
@@ -54,7 +35,10 @@ public class InterpreterCLI {
 		IIntegerETIR[] integerArgs = convertArgs(args);
 		InterpreterCLI interpreter = new InterpreterCLI(new HobbesFrontEnd(
 				new File(args[0])));
-		System.out.println(interpreter.interpret(integerArgs));
+		System.out
+				.println(interpreter.interpret(integerArgs,
+						new OperatorInterpretersFactory()
+								.createOperatorInterpreters()));
 	}
 
 	private static IIntegerETIR[] convertArgs(String[] args) {
