@@ -15,16 +15,16 @@ public class ComparisonOperatorTest {
 
 	@Before
 	public void setUp() {
-		myAtOperator = new ComparisonOperator(new ResourceAllocator(), "@");
-		myPoundOperator = new ComparisonOperator(new ResourceAllocator(), "#");
+		myAtOperator = new ComparisonOperator("@");
+		myPoundOperator = new ComparisonOperator("#");
 	}
 
 	@Test
 	public void shouldCompileComparisonInstructions() {
 		assertEquals(new Code("$I2 = $I2 @ $I3"), myAtOperator.compile(
-				new Register(2), new Register(3)));
+				new ResourceAllocator(), new Register(2), new Register(3)));
 		assertEquals(new Code("$I89 = $I89 # $I45"), myPoundOperator.compile(
-				new Register(89), new Register(45)));
+				new ResourceAllocator(), new Register(89), new Register(45)));
 	}
 
 }

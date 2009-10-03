@@ -15,17 +15,16 @@ public class ArithmeticOperatorTest {
 
 	@Before
 	public void setUp() {
-		myApersandOperator = new ArithmeticOperator(new ResourceAllocator(),
-				"&");
-		myDollarOperator = new ArithmeticOperator(new ResourceAllocator(), "$");
+		myApersandOperator = new ArithmeticOperator("&");
+		myDollarOperator = new ArithmeticOperator("$");
 	}
 
 	@Test
 	public void shouldCompileInstructions() {
 		assertEquals(new Code("$I5 &= $I12"), myApersandOperator.compile(
-				new Register(5), new Register(12)));
+				new ResourceAllocator(), new Register(5), new Register(12)));
 		assertEquals(new Code("$I23 $= $I9"), myDollarOperator.compile(
-				new Register(23), new Register(9)));
+				new ResourceAllocator(), new Register(23), new Register(9)));
 	}
 
 }

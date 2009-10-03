@@ -43,8 +43,8 @@ public class PIRCompilerCLI {
 				.writeCode(new PIRCleaner().process(new PIRCompiler(
 						new PIRPrologCompiler(), new PIRBodyCompiler(
 								new CompilerFactory(resourceAllocator,
-										new OperatorInstructionsFactory(
-												resourceAllocator).create())),
+										new OperatorInstructionsFactory()
+												.create())),
 						new PIREpilogCompiler()).compile(myFrontEnd.process())));
 	}
 

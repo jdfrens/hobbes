@@ -90,7 +90,7 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 		IRegister next = myResourceAllocator.nextRegister();
 		code.append(myRecurser.recurse(expression.getRight(), next));
 		code.append(myOperatorInstructions.get(expression.getOperator())
-				.compile(myTarget, next));
+				.compile(myResourceAllocator, myTarget, next));
 		return code;
 	}
 

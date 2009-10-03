@@ -6,17 +6,15 @@ import org.norecess.hobbes.compiler.resources.IResourceAllocator;
 
 public class ComparisonOperator implements OperatorInstruction {
 
-	private final IResourceAllocator	myResourceAllocator;
-	private final String				myOperator;
+	private final String	myOperator;
 
-	public ComparisonOperator(IResourceAllocator resourceAllocator,
-			String operator) {
-		myResourceAllocator = resourceAllocator;
+	public ComparisonOperator(String operator) {
 		myOperator = operator;
 	}
 
-	public ICode compile(IRegister target, IRegister temp) {
-		ICode code = myResourceAllocator.createCode();
+	public ICode compile(IResourceAllocator resourceAllocator,
+			IRegister target, IRegister temp) {
+		ICode code = resourceAllocator.createCode();
 		code.add(target, " = ", target, " ", myOperator, " ", temp);
 		return code;
 	}

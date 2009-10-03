@@ -104,8 +104,9 @@ public class PIRBodyVisitorTest {
 		EasyMock.expect(code.append(rightCode)).andReturn(code);
 		EasyMock.expect(myOperatorInstructions.get(operator)).andReturn(
 				operatorInstruction);
-		EasyMock.expect(operatorInstruction.compile(myTarget, subTarget))
-				.andReturn(operatorCode);
+		EasyMock.expect(
+				operatorInstruction.compile(myResourceAllocator, myTarget,
+						subTarget)).andReturn(operatorCode);
 		EasyMock.expect(code.append(operatorCode)).andReturn(code);
 
 		myMocksControl.replay();
