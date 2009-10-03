@@ -22,7 +22,7 @@ import org.norecess.citkit.tir.expressions.IStringETIR;
 import org.norecess.citkit.tir.expressions.IVariableETIR;
 import org.norecess.citkit.tir.expressions.IWhileETIR;
 import org.norecess.citkit.tir.expressions.NilETIR;
-import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
+import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.lvalues.IFieldValueTIR;
 import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
@@ -31,13 +31,16 @@ import org.norecess.citkit.visitors.LValueTIRVisitor;
 import org.norecess.hobbes.HobbesBoolean;
 import org.norecess.hobbes.interpreter.operators.Appliable;
 
+import com.google.inject.Inject;
+
 public class Interpreter implements ExpressionTIRVisitor<DatumTIR>,
 		LValueTIRVisitor<DatumTIR> {
 
 	private final IIntegerETIR[]			myArgv;
-	private final Map<Operator, Appliable>	myAppliables;
+	private final Map<IOperator, Appliable>	myAppliables;
 
-	public Interpreter(IIntegerETIR[] argv, Map<Operator, Appliable> appliables) {
+	@Inject
+	public Interpreter(IIntegerETIR[] argv, Map<IOperator, Appliable> appliables) {
 		myArgv = argv;
 		myAppliables = appliables;
 	}

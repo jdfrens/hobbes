@@ -17,7 +17,6 @@ import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
-import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
 import org.norecess.hobbes.HobbesBoolean;
@@ -28,7 +27,7 @@ public class InterpreterTest {
 	private IMocksControl				myMocksControl;
 
 	private IIntegerETIR[]				myArgv;
-	private Map<Operator, Appliable>	myAppliables;
+	private Map<IOperator, Appliable>	myAppliables;
 
 	private Interpreter					myInterpreter;
 

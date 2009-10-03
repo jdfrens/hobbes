@@ -3,19 +3,20 @@ package org.norecess.hobbes.interpreter.operators;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 
 import ovm.polyd.PolyD;
 
 public class AppliableFactory {
 
-	private final Map<Operator, Appliable>	myAppliables;
+	private final Map<IOperator, Appliable>	myAppliables;
 
 	public AppliableFactory() {
-		myAppliables = new HashMap<Operator, Appliable>();
+		myAppliables = new HashMap<IOperator, Appliable>();
 	}
 
-	public Map<Operator, Appliable> createAppliables() {
+	public Map<IOperator, Appliable> createAppliables() {
 		add(Operator.ADD, new AdditionAppliable());
 		add(Operator.SUBTRACT, new SubtractionAppliable());
 		add(Operator.MULTIPLY, new MultiplicationAppliable());

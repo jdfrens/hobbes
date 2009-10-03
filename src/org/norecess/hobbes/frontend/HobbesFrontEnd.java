@@ -12,6 +12,9 @@ import org.antlr.runtime.tree.CommonTreeNodeStream;
 import org.antlr.runtime.tree.Tree;
 import org.norecess.citkit.tir.ExpressionTIR;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+
 /*
  * Provides an front end for the front-end testers and compilers.
  */
@@ -23,7 +26,8 @@ public class HobbesFrontEnd implements IHobbesFrontEnd {
 		myInputStream = inputStream;
 	}
 
-	public HobbesFrontEnd(File file) throws IOException {
+	@Inject
+	public HobbesFrontEnd(@Named("SourceFile") File file) throws IOException {
 		myInputStream = new ANTLRInputStream(new FileInputStream(file));
 	}
 
