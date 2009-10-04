@@ -7,6 +7,8 @@ import org.norecess.hobbes.backend.ICode;
 import org.norecess.hobbes.compiler.resources.IRegister;
 import org.norecess.hobbes.compiler.resources.Register;
 
+import com.google.inject.Inject;
+
 /*
  * A "component compiler" is a compiler that compiles only components of a program.
  * Like a single integer.
@@ -17,6 +19,7 @@ public class PIRBodyCompiler implements IPIRBodyCompiler {
 
 	private final ICompilerFactory	myBodyVisitorFactory;
 
+	@Inject
 	public PIRBodyCompiler(ICompilerFactory factory) {
 		myBodyVisitorFactory = factory;
 	}

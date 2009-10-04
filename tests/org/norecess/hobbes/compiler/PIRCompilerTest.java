@@ -20,7 +20,7 @@ public class PIRCompilerTest {
 	private IPIRBodyCompiler	myBodyCompiler;
 	private IPIREpilogCompiler	myEpilogCompiler;
 
-	private PIRCompiler			myCompiler;
+	private IPIRCompiler			myCompiler;
 
 	@Before
 	public void setUp() {

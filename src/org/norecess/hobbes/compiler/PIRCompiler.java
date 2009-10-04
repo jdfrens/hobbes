@@ -7,15 +7,18 @@ import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.backend.ICode;
 
+import com.google.inject.Inject;
+
 /*
  * This is the top-level compiler.  The component compiler does the hard work.
  */
-public class PIRCompiler {
+public class PIRCompiler implements IPIRCompiler {
 
 	private final IPIRPrologCompiler	myPrologCompiler;
 	private final IPIRBodyCompiler		myBodyCompiler;
 	private final IPIREpilogCompiler	myEpilogCompiler;
 
+	@Inject
 	public PIRCompiler(IPIRPrologCompiler prologCompiler,
 			IPIRBodyCompiler componentCompiler,
 			IPIREpilogCompiler epilogCompiler) {

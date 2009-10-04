@@ -4,4 +4,6 @@ public interface IPIRCleaner {
 
 	String process(String instruction);
 
+	ICode process(ICode code);
+
 }

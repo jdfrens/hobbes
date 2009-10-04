@@ -4,34 +4,47 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
+import org.norecess.hobbes.backend.CodeWriter;
+import org.norecess.hobbes.backend.ICodeWriter;
+import org.norecess.hobbes.backend.IPIRCleaner;
+import org.norecess.hobbes.backend.PIRCleaner;
 import org.norecess.hobbes.compiler.ArithmeticOperator;
 import org.norecess.hobbes.compiler.ComparisonOperator;
 import org.norecess.hobbes.compiler.CompilerFactory;
 import org.norecess.hobbes.compiler.ICompilerFactory;
 import org.norecess.hobbes.compiler.IPIRBodyCompiler;
+import org.norecess.hobbes.compiler.IPIRCompiler;
 import org.norecess.hobbes.compiler.IPIREpilogCompiler;
 import org.norecess.hobbes.compiler.IPIRPrologCompiler;
 import org.norecess.hobbes.compiler.OperatorInstruction;
 import org.norecess.hobbes.compiler.PIRBodyCompiler;
+import org.norecess.hobbes.compiler.PIRCompiler;
 import org.norecess.hobbes.compiler.PIREpilogCompiler;
 import org.norecess.hobbes.compiler.PIRPrologCompiler;
+import org.norecess.hobbes.compiler.resources.IResourceAllocator;
+import org.norecess.hobbes.compiler.resources.ResourceAllocator;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.Singleton;
+import com.google.inject.name.Names;
 
 public class PIRModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		bind(IPIRCleaner.class).to(PIRCleaner.class);
+		bind(IResourceAllocator.class).to(ResourceAllocator.class);
+		bind(ICodeWriter.class).to(CodeWriter.class);
+		bind(Appendable.class).annotatedWith(Names.named("output")).toInstance(
+				System.out);
+		bind(IPIRCompiler.class).to(PIRCompiler.class);
 		bind(IPIRPrologCompiler.class).to(PIRPrologCompiler.class);
-		bind(IPIREpilogCompiler.class).to(PIREpilogCompiler.class);
 		bind(IPIRBodyCompiler.class).to(PIRBodyCompiler.class);
+		bind(IPIREpilogCompiler.class).to(PIREpilogCompiler.class);
 		bind(ICompilerFactory.class).to(CompilerFactory.class);
 	}
 
 	@Provides
-	@Singleton
 	public Map<Operator, OperatorInstruction> provideOperatorInstructions() {
 		Map<Operator, OperatorInstruction> operatorInstructions = new HashMap<Operator, OperatorInstruction>();
 		addArithmeticOperators(operatorInstructions);

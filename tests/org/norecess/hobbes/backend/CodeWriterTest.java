@@ -18,7 +18,9 @@ public class CodeWriterTest {
 	@Before
 	public void setUp() {
 		myControl = EasyMock.createControl();
+
 		myAppendable = myControl.createMock(Appendable.class);
+
 		myWriter = new CodeWriter(myAppendable);
 	}
 

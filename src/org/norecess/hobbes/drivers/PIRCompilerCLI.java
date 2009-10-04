@@ -3,19 +3,15 @@ package org.norecess.hobbes.drivers;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 
 import org.antlr.runtime.RecognitionException;
-import org.norecess.hobbes.backend.CodeWriter;
-import org.norecess.hobbes.backend.PIRCleaner;
-import org.norecess.hobbes.compiler.CompilerFactory;
-import org.norecess.hobbes.compiler.OperatorInstructionsFactory;
-import org.norecess.hobbes.compiler.PIRBodyCompiler;
-import org.norecess.hobbes.compiler.PIRCompiler;
-import org.norecess.hobbes.compiler.PIREpilogCompiler;
-import org.norecess.hobbes.compiler.PIRPrologCompiler;
-import org.norecess.hobbes.compiler.resources.ResourceAllocator;
+import org.norecess.hobbes.backend.ICodeWriter;
+import org.norecess.hobbes.backend.IPIRCleaner;
+import org.norecess.hobbes.compiler.IPIRCompiler;
 import org.norecess.hobbes.frontend.HobbesFrontEnd;
+
+import com.google.inject.Guice;
+import com.google.inject.Inject;
 
 /**
  * The main driver. Usage: java org.norecess.hobbes.drivers.PIRCompiler
@@ -23,40 +19,28 @@ import org.norecess.hobbes.frontend.HobbesFrontEnd;
  */
 public class PIRCompilerCLI {
 
-	private final HobbesFrontEnd	myFrontEnd;
-	private final PrintWriter		myWriter;
+	private final IPIRCleaner	myPirCleaner;
+	private final ICodeWriter	myCodeWriter;
+	private final IPIRCompiler	myCompiler;
 
-	public PIRCompilerCLI(String inputName, PrintStream outputStream)
-			throws IOException {
-		this(new HobbesFrontEnd(new File(inputName)), new PrintWriter(
-				outputStream));
+	@Inject
+	public PIRCompilerCLI(IPIRCleaner cleaner, ICodeWriter codeWriter,
+			IPIRCompiler compiler) {
+		myPirCleaner = cleaner;
+		myCodeWriter = codeWriter;
+		myCompiler = compiler;
 	}
 
-	public PIRCompilerCLI(HobbesFrontEnd frontEnd, PrintWriter writer) {
-		myFrontEnd = frontEnd;
-		myWriter = writer;
-	}
-
-	public void generateCode() throws IOException, RecognitionException {
-		ResourceAllocator resourceAllocator = new ResourceAllocator();
-		new CodeWriter(myWriter)
-				.writeCode(new PIRCleaner().process(new PIRCompiler(
-						new PIRPrologCompiler(), new PIRBodyCompiler(
-								new CompilerFactory(resourceAllocator,
-										new OperatorInstructionsFactory()
-												.create())),
-						new PIREpilogCompiler()).compile(myFrontEnd.process())));
-	}
-
-	public void done() {
-		myWriter.close();
+	public void generateCode(String sourceFile, PrintStream out)
+			throws IOException, RecognitionException {
+		myCodeWriter.writeCode(myPirCleaner.process(myCompiler
+				.compile(new HobbesFrontEnd(new File(sourceFile)).process())));
 	}
 
 	public static void main(String[] args) throws IOException,
 			RecognitionException {
-		PIRCompilerCLI compiler = new PIRCompilerCLI(args[0], System.out);
-		compiler.generateCode();
-		compiler.done();
+		Guice.createInjector(new PIRModule()).getInstance(PIRCompilerCLI.class)
+				.generateCode(args[0], System.out);
 	}
 
 }

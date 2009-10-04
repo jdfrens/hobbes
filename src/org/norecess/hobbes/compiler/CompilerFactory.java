@@ -7,11 +7,14 @@ import org.norecess.hobbes.compiler.resources.IResourceAllocator;
 import org.norecess.hobbes.typechecker.ITypeChecker;
 import org.norecess.hobbes.typechecker.TypeChecker;
 
+import com.google.inject.Inject;
+
 public class CompilerFactory implements ICompilerFactory {
 
 	private final IResourceAllocator					myResourceAllocator;
 	private final Map<Operator, OperatorInstruction>	myOperatorInstructions;
 
+	@Inject
 	public CompilerFactory(IResourceAllocator resourceAllocator,
 			Map<Operator, OperatorInstruction> operatorInstructions) {
 		myResourceAllocator = resourceAllocator;
