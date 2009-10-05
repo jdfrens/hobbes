@@ -1,0 +1,18 @@
+One variable, interesting body.
+==== source
+let var x := 6
+in x + x
+end
+==== compilation
+.sub main
+	.param pmc argv
+	load_bytecode "print.pbc"
+	$I1 = 5
+	$I0 = $I1
+	$I2 = $I1
+	$I0 += $I2
+	print $I0
+	print "\n"
+.end
+==== execution
+12

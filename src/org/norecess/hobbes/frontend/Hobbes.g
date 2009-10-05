@@ -7,7 +7,9 @@ options {
 }
 tokens {
   ARGV;
+  DECLS;
   IF;
+  LET;
 }
 
 @header {
@@ -26,6 +28,13 @@ expression
   : comparitive_expression
   | 'if' expression 'then' expression 'else' expression 'end'
     -> ^(IF expression*)
+  | 'let' decls 'in' expression 'end'
+    -> ^(LET decls expression)
+  ;
+  
+decls
+  : ('var' IDENTIFIER ':=' expression)*
+    -> ^(DECLS (IDENTIFIER expression)*)
   ;
   
 comparitive_expression
@@ -51,7 +60,7 @@ multiplicative_op
   ;
 	
 simple_expression
-  : INTEGER | BOOLEAN
+  : INTEGER | BOOLEAN | IDENTIFIER
   | '('! expression ')'!
   | MINUS INTEGER
     -> ^(MINUS INTEGER)
@@ -65,6 +74,10 @@ INTEGER
 	
 BOOLEAN
   : '#f' | '#t'
+  ;
+  
+IDENTIFIER
+  : ('a'..'z') ('a'..'z' | '0'..'9')*
   ;
 
 PLUS  : '+' ;

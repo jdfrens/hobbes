@@ -3,11 +3,17 @@ package org.norecess.hobbes.frontend;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.norecess.antlr.ANTLRTester;
+import org.norecess.citkit.tir.DeclarationTIR;
+import org.norecess.citkit.tir.declarations.VariableDTIR;
 import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
+import org.norecess.citkit.tir.expressions.LetETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
@@ -99,6 +105,51 @@ public class HobbesTIRBuilderTest {
 		assertEquals(new OperatorETIR(new IntegerETIR(1),
 				Operator.GREATER_THAN, new IntegerETIR(2)), myTester
 				.treeParseInput("1 > 2"));
+	}
+
+	@Test
+	public void shouldBuildLetExpressions() {
+		assertEquals(new LetETIR(new ArrayList<DeclarationTIR>(),
+				new IntegerETIR(5)), myTester.treeParseInput("let in 5 end"));
+		assertEquals(new LetETIR(new ArrayList<DeclarationTIR>(),
+				new OperatorETIR(new VariableETIR(new SimpleLValueTIR("x")),
+						Operator.ADD, new IntegerETIR(5))), myTester
+				.treeParseInput("let in x + 5 end"));
+		assertEquals(new LetETIR( //
+				Arrays.asList(new VariableDTIR("x", new IntegerETIR(8))), //
+				new OperatorETIR(new VariableETIR(new SimpleLValueTIR("y")),
+						Operator.ADD, new IntegerETIR(5))), //
+				myTester.treeParseInput("let var x := 8 in y + 5 end"));
+	}
+
+	@Test
+	public void shouldBuildDecls() {
+		assertEquals(Arrays.asList(new VariableDTIR("x", new IntegerETIR(8))),
+				myTester.scanInput("var x := 8").parseAs("decls").treeParseAs(
+						"declarations"));
+		assertEquals(Arrays.asList(new VariableDTIR("y", HobbesBoolean.TRUE)),
+				myTester.scanInput("var y := #t").parseAs("decls").treeParseAs(
+						"declarations"));
+		assertEquals(Arrays.asList(new VariableDTIR("z", new OperatorETIR(
+				new VariableETIR(new SimpleLValueTIR("x")), Operator.ADD,
+				new IntegerETIR(23)))), myTester.scanInput("var z := x + 23")
+				.parseAs("decls").treeParseAs("declarations"));
+		assertEquals(Arrays.asList(new VariableDTIR("x", new IntegerETIR(8)), //
+				new VariableDTIR("y", HobbesBoolean.TRUE), //
+				new VariableDTIR("z", new OperatorETIR(new VariableETIR(
+						new SimpleLValueTIR("x")), Operator.ADD,
+						new IntegerETIR(23)))), //
+				myTester.scanInput("var x := 8  var y := #t  var z := x + 23")
+						.parseAs("decls").treeParseAs("declarations"));
+
+	}
+
+	@Test
+	public void shouldBuildVariableLValues() {
+		assertEquals(new VariableETIR(new SimpleLValueTIR("foo")), //
+				myTester.treeParseInput("foo"));
+		assertEquals(new VariableETIR(new SimpleLValueTIR("thx1138")), //
+				myTester.treeParseInput("thx1138"));
 	}
 
 	@Test

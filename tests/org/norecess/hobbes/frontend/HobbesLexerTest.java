@@ -44,6 +44,18 @@ public class HobbesLexerTest {
 	}
 
 	@Test
+	public void shouldRecognizeIdentifiers() {
+		assertToken(HobbesParser.IDENTIFIER, "foo", myTester.scanInput("foo"));
+		assertToken(HobbesParser.IDENTIFIER, "x", myTester.scanInput("x"));
+		assertToken(HobbesParser.IDENTIFIER, "f592", myTester.scanInput("f592"));
+	}
+
+	@Test
+	public void shouldNotRecognizeAsIdentifiers() {
+		refuteToken(HobbesParser.IDENTIFIER, myTester.scanInput("89x"));
+	}
+
+	@Test
 	public void shouldRecognizeArithmeticOperators() {
 		assertToken(HobbesLexer.PLUS, "+", myTester.scanInput("+"));
 		assertToken(HobbesLexer.MINUS, "-", myTester.scanInput("-"));

@@ -11,8 +11,10 @@ options {
   import org.norecess.hobbes.*;
   import org.norecess.citkit.tir.*;
   import org.norecess.citkit.tir.expressions.*;
+  import org.norecess.citkit.tir.declarations.*;
   import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
   import org.norecess.citkit.tir.lvalues.*;
+  import java.util.Arrays;
 }
 
 program returns [ExpressionTIR tir]
@@ -25,6 +27,8 @@ expression returns [ExpressionTIR tir]
     { tir = new IntegerETIR(i.getText()); }
   | b=BOOLEAN
     { tir = HobbesBoolean.parse(b.getText()); }
+  | ident=IDENTIFIER
+    { tir = new VariableETIR(new SimpleLValueTIR(ident.getText())); }
   | ^(ARGV e=expression)
     { tir = new VariableETIR(new SubscriptLValueTIR(new SimpleLValueTIR("ARGV"), e)); }
   | ^(MINUS i=INTEGER)
@@ -33,6 +37,16 @@ expression returns [ExpressionTIR tir]
     { tir = new OperatorETIR(left, op, right); }
   | ^(IF test=expression consequence=expression otherwise=expression)
     { tir = new IfETIR(test, consequence, otherwise); }
+  | ^(LET decls=declarations body=expression)
+    { tir = new LetETIR(decls, body); }
+  ;
+  
+declarations returns [List<DeclarationTIR> decls = new ArrayList<DeclarationTIR>()]
+  : ^(DECLS (
+        i=IDENTIFIER init=expression
+        { decls.add(new VariableDTIR(i.getText(), init)); }
+     )*
+    )
   ;
 
 operator returns [Operator o]

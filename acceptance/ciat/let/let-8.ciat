@@ -1,0 +1,16 @@
+One variable, simple body, boolean value
+==== source
+let var x := #t
+in x
+end
+==== compilation
+.sub main
+	.param pmc argv
+	load_bytecode "print.pbc"
+	$I1 = 1
+	$I0 = $I1
+	print_bool($I0)
+	print "\n"
+.end
+==== execution
+10

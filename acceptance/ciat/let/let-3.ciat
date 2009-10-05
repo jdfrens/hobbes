@@ -1,0 +1,20 @@
+One variable, interesting initialization, interesting body.
+==== source
+let var x := 2 * 9
+in x + 5
+end
+==== compilation
+.sub main
+	.param pmc argv
+	load_bytecode "print.pbc"
+	$I1 = 2
+	$I2 = 9
+	$I1 *= $I2
+	$I0 = $I1
+	$I3 = 5
+	$I0 += $I3
+	print $I0
+	print "\n"
+.end
+==== execution
+23

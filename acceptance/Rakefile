@@ -38,6 +38,15 @@ task :ciat do
   fail e if e
 end
 
+task :focused_tests => [:only_focused_tests, :ciat]
+
+CIAT::RakeTask.new(:only_focused_tests) do |task|
+  task.processors << interpreter
+  task.folder = "ciat/let"
+  task.report_title = "Focused Test: " + task.folder
+  task.output_folder = "focused"
+end
+
 CIAT::RakeTask.new(:compiler_tests) do |task|
   task.processors << compiler
   task.processors << executor

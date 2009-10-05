@@ -155,6 +155,36 @@ public class HobbesParserTest {
 	}
 
 	@Test
+	public void shouldParseVariableLValues() {
+		assertTree(HobbesParser.IDENTIFIER, "(foo)", myTester.parseInput("foo"));
+		assertTree(HobbesParser.IDENTIFIER, "(foobar)", myTester
+				.parseInput("foobar"));
+	}
+
+	@Test
+	public void shouldParseLetExpression() {
+		assertTree(HobbesParser.LET, "(LET(DECLS)(5))", myTester
+				.parseInput("let in 5 end"));
+		assertTree(HobbesParser.LET, "(LET(DECLS)(+(x)(5)))", myTester
+				.parseInput("let in x + 5 end"));
+		assertTree(HobbesParser.LET, "(LET(DECLS(x)(8))(+(y)(5)))", myTester
+				.parseInput("let var x := 8 in y + 5 end"));
+	}
+
+	@Test
+	public void shouldParseDecls() {
+		assertTree(HobbesParser.DECLS, "(DECLS(x)(8))", myTester.scanInput(
+				"var x := 8").parseAs("decls"));
+		assertTree(HobbesParser.DECLS, "(DECLS(y)(#t))", myTester.scanInput(
+				"var y := #t").parseAs("decls"));
+		assertTree(HobbesParser.DECLS, "(DECLS(z)(+(x)(23)))", myTester
+				.scanInput("var z := x + 23").parseAs("decls"));
+		assertTree(HobbesParser.DECLS, "(DECLS(x)(8)(y)(#t)(z)(+(x)(23)))",
+				myTester.scanInput("var x := 8  var y := #t  var z := x + 23")
+						.parseAs("decls"));
+	}
+
+	@Test
 	public void shouldParseACommandLineArgumentRequest() {
 		assertTree(HobbesParser.ARGV, "(ARGV(1))", myTester
 				.parseInput("ARGV[1]"));

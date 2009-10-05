@@ -1,0 +1,23 @@
+Nested lets, using outer variable to initialize inner.
+==== source
+let var x := 1 + 2
+in let var y := x * 3
+   in y
+   end
+end
+==== compilation
+.sub main
+	.param pmc argv
+	load_bytecode "print.pbc"
+	$I1 = 1
+	$I2 = 2
+	$I1 += $I2
+	$I3 = $I1
+	$I4 = 3
+	$I3 *= $I4
+	$I0 = $I3
+	print $I0
+	print "\n"
+.end
+==== execution
+9
