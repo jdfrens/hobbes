@@ -5,9 +5,8 @@ in x + x
 end
 ==== compilation
 .sub main
-	.param pmc argv
 	load_bytecode "print.pbc"
-	$I1 = 5
+	$I1 = 6
 	$I0 = $I1
 	$I2 = $I1
 	$I0 += $I2

@@ -1,6 +1,10 @@
 package org.norecess.hobbes.compiler;
 
+import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.tir.declarations.IFunctionDTIR;
+import org.norecess.citkit.tir.declarations.ITypeDTIR;
+import org.norecess.citkit.tir.declarations.IVariableDTIR;
 import org.norecess.citkit.tir.expressions.BreakETIR;
 import org.norecess.citkit.tir.expressions.IArrayETIR;
 import org.norecess.citkit.tir.expressions.IAssignmentETIR;
@@ -19,6 +23,9 @@ import org.norecess.citkit.tir.expressions.IStringETIR;
 import org.norecess.citkit.tir.expressions.IVariableETIR;
 import org.norecess.citkit.tir.expressions.IWhileETIR;
 import org.norecess.citkit.tir.expressions.NilETIR;
+import org.norecess.citkit.tir.lvalues.IFieldValueTIR;
+import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
+import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
 import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.backend.ICode;
 
@@ -47,7 +54,15 @@ public class PIRPrologCompiler implements IPIRPrologCompiler {
 		return code;
 	}
 
-	public ICode visitVariableETIR(IVariableETIR arg0) {
+	public ICode visitVariableETIR(IVariableETIR variable) {
+		return variable.getLValue().accept(this);
+	}
+
+	public ICode visitSimpleLValue(ISimpleLValueTIR simple) {
+		return new Code();
+	}
+
+	public ICode visitSubscriptLValue(ISubscriptLValueTIR arg0) {
 		return new Code(".param pmc argv");
 	}
 
@@ -59,8 +74,17 @@ public class PIRPrologCompiler implements IPIRPrologCompiler {
 		return code;
 	}
 
-	public Code visitLetETIR(ILetETIR arg0) {
-		return new Code();
+	public Code visitLetETIR(ILetETIR let) {
+		Code code = new Code();
+		for (DeclarationTIR declaration : let.getDeclarations()) {
+			code.append(declaration.accept(this));
+		}
+		code.append(let.getBody().accept(this));
+		return code;
+	}
+
+	public ICode visitVariableDTIR(IVariableDTIR declaration) {
+		return declaration.getInititialization().accept(this);
 	}
 
 	//
@@ -111,6 +135,18 @@ public class PIRPrologCompiler implements IPIRPrologCompiler {
 	}
 
 	public Code visitWhileETIR(IWhileETIR arg0) {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	public ICode visitFunctionDTIR(IFunctionDTIR arg0) {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	public ICode visitTypeDTIR(ITypeDTIR arg0) {
+		throw new IllegalStateException("unimplemented!");
+	}
+
+	public ICode visitFieldLValue(IFieldValueTIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 

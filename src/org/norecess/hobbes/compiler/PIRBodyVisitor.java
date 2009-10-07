@@ -1,7 +1,10 @@
 package org.norecess.hobbes.compiler;
 
+import java.util.List;
 import java.util.Map;
 
+import org.norecess.citkit.environment.IEnvironment;
+import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.expressions.BreakETIR;
 import org.norecess.citkit.tir.expressions.IArrayETIR;
@@ -36,30 +39,53 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 	private final IPIRBodyVisitor						myRecurser;
 	private final IResourceAllocator					myResourceAllocator;
 	private final Map<Operator, OperatorInstruction>	myOperatorInstructions;
+	private final IEnvironment<IRegister>				myEnvironment;
 	private final IRegister								myTarget;
 
 	public PIRBodyVisitor(IResourceAllocator resourceAllocator,
 			Map<Operator, OperatorInstruction> operatorInstructions,
-			IRegister target) {
+			IEnvironment<IRegister> environment, IRegister target) {
 		myOperatorInstructions = operatorInstructions;
 		myRecurser = this;
 		myResourceAllocator = resourceAllocator;
+		myEnvironment = environment;
 		myTarget = target;
 	}
 
 	public PIRBodyVisitor(IPIRBodyVisitor recurser,
 			IResourceAllocator resourceAllocator,
 			Map<Operator, OperatorInstruction> operatorInstructions,
-			IRegister target) {
+			IEnvironment<IRegister> environment, IRegister target) {
 		myRecurser = recurser;
 		myResourceAllocator = resourceAllocator;
 		myOperatorInstructions = operatorInstructions;
+		myEnvironment = environment;
 		myTarget = target;
 	}
 
 	public ICode recurse(ExpressionTIR expression, IRegister target) {
 		return expression.accept(new PIRBodyVisitor(myResourceAllocator,
-				myOperatorInstructions, target));
+				myOperatorInstructions, myEnvironment, target));
+	}
+
+	public ICode recurse(IEnvironment<IRegister> environment,
+			ExpressionTIR expression, IRegister target) {
+		return expression.accept(new PIRBodyVisitor(myResourceAllocator,
+				myOperatorInstructions, environment, target));
+	}
+
+	public ICode bind(List<? extends DeclarationTIR> declarations,
+			IEnvironment<IRegister> newEnvironment) {
+		ICode code = myResourceAllocator.createCode();
+		ICompilerBinder binder = myRecurser.createBinder(newEnvironment);
+		for (DeclarationTIR declaration : declarations) {
+			code.append(declaration.accept(binder));
+		}
+		return code;
+	}
+
+	public ICompilerBinder createBinder(IEnvironment<IRegister> environment) {
+		return new CompilerBinder(myRecurser, myResourceAllocator, environment);
 	}
 
 	public ICode visitIntegerETIR(IIntegerETIR integer) {
@@ -110,7 +136,17 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 
 	public ICode visitLetETIR(ILetETIR let) {
 		ICode code = myResourceAllocator.createCode();
-		code.append(myRecurser.recurse(let.getBody(), myTarget));
+		IEnvironment<IRegister> newEnvironment = myEnvironment.create();
+		code.append(myRecurser.bind(let.getDeclarations(), newEnvironment));
+		code
+				.append(myRecurser.recurse(newEnvironment, let.getBody(),
+						myTarget));
+		return code;
+	}
+
+	public ICode visitSimpleLValue(ISimpleLValueTIR variable) {
+		ICode code = myResourceAllocator.createCode();
+		code.add(myTarget, " = ", myEnvironment.get(variable.getName()));
 		return code;
 	}
 
@@ -166,10 +202,6 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 	}
 
 	public ICode visitFieldLValue(IFieldValueTIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public ICode visitSimpleLValue(ISimpleLValueTIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 

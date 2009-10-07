@@ -2,6 +2,7 @@ package org.norecess.hobbes.compiler;
 
 import static org.junit.Assert.assertSame;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,8 @@ import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
+import org.norecess.citkit.ISymbol;
+import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.LValueTIR;
@@ -19,6 +22,7 @@ import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
+import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
 import org.norecess.hobbes.HobbesBoolean;
 import org.norecess.hobbes.backend.ICode;
@@ -33,6 +37,7 @@ public class PIRBodyVisitorTest {
 	private IPIRBodyVisitor						myRecurser;
 	private IResourceAllocator					myResourceAllocator;
 	private Map<Operator, OperatorInstruction>	myOperatorInstructions;
+	private IEnvironment<IRegister>				myEnvironment;
 	private IRegister							myTarget;
 
 	private PIRBodyVisitor						myVisitor;
@@ -46,10 +51,62 @@ public class PIRBodyVisitorTest {
 		myResourceAllocator = myMocksControl
 				.createMock(IResourceAllocator.class);
 		myOperatorInstructions = myMocksControl.createMock(Map.class);
+		myEnvironment = myMocksControl.createMock(IEnvironment.class);
 		myTarget = myMocksControl.createMock(IRegister.class);
 
 		myVisitor = new PIRBodyVisitor(myRecurser, myResourceAllocator,
-				myOperatorInstructions, myTarget);
+				myOperatorInstructions, myEnvironment, myTarget);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldBindNothingToNewEnvironment() {
+		ICode code = expectNewCode();
+		IEnvironment<IRegister> environment = myMocksControl
+				.createMock(IEnvironment.class);
+		ICompilerBinder binder = myMocksControl
+				.createMock(ICompilerBinder.class);
+
+		EasyMock.expect(myRecurser.createBinder(environment)).andReturn(binder);
+
+		myMocksControl.replay();
+		assertSame(code, myVisitor.bind(Arrays.<DeclarationTIR> asList(),
+				environment));
+		myMocksControl.verify();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldBindThingsToNewEnvironment() {
+		ICode code = expectNewCode();
+		IEnvironment<IRegister> environment = myMocksControl
+				.createMock(IEnvironment.class);
+		ICompilerBinder binder = myMocksControl
+				.createMock(ICompilerBinder.class);
+		DeclarationTIR[] declarations = new DeclarationTIR[] {
+				myMocksControl.createMock(DeclarationTIR.class),
+				myMocksControl.createMock(DeclarationTIR.class),
+				myMocksControl.createMock(DeclarationTIR.class) };
+		ICode[] declarationCode = new ICode[] {
+				myMocksControl.createMock(ICode.class),
+				myMocksControl.createMock(ICode.class),
+				myMocksControl.createMock(ICode.class) };
+
+		EasyMock.expect(myRecurser.createBinder(environment)).andReturn(binder);
+		EasyMock.expect(declarations[0].accept(binder)).andReturn(
+				declarationCode[0]);
+		EasyMock.expect(code.append(declarationCode[0])).andReturn(code);
+		EasyMock.expect(declarations[1].accept(binder)).andReturn(
+				declarationCode[1]);
+		EasyMock.expect(code.append(declarationCode[1])).andReturn(code);
+		EasyMock.expect(declarations[2].accept(binder)).andReturn(
+				declarationCode[2]);
+		EasyMock.expect(code.append(declarationCode[2])).andReturn(code);
+
+		myMocksControl.replay();
+		assertSame(code, myVisitor.bind(Arrays.asList(declarations),
+				environment));
+		myMocksControl.verify();
 	}
 
 	@Test
@@ -188,18 +245,41 @@ public class PIRBodyVisitorTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void shouldCompileLet() {
+		ICode code = expectNewCode();
 		List<DeclarationTIR> declarations = myMocksControl
 				.createMock(List.class);
 		ExpressionTIR body = myMocksControl.createMock(ExpressionTIR.class);
-		ICode code = expectNewCode();
+		IEnvironment newEnvironment = myMocksControl
+				.createMock(IEnvironment.class);
+		ICode declarationsCode = myMocksControl.createMock(ICode.class);
 		ICode bodyCode = myMocksControl.createMock(ICode.class);
 
-		EasyMock.expect(myRecurser.recurse(body, myTarget)).andReturn(bodyCode);
+		EasyMock.expect(myEnvironment.create()).andReturn(newEnvironment);
+		EasyMock.expect(myRecurser.bind(declarations, newEnvironment))
+				.andReturn(declarationsCode);
+		EasyMock.expect(code.append(declarationsCode)).andReturn(code);
+		EasyMock.expect(myRecurser.recurse(newEnvironment, body, myTarget))
+				.andReturn(bodyCode);
 		EasyMock.expect(code.append(bodyCode)).andReturn(code);
 
 		myMocksControl.replay();
 		assertSame(code, myVisitor
 				.visitLetETIR(new LetETIR(declarations, body)));
+		myMocksControl.verify();
+	}
+
+	@Test
+	public void shouldCompileSimpleLValue() {
+		ICode code = expectNewCode();
+		ISymbol symbol = myMocksControl.createMock(ISymbol.class);
+		IRegister register = myMocksControl.createMock(IRegister.class);
+
+		EasyMock.expect(myEnvironment.get(symbol)).andReturn(register);
+		EasyMock.expect(code.add(myTarget, " = ", register)).andReturn(code);
+
+		myMocksControl.replay();
+		assertSame(code, myVisitor
+				.visitSimpleLValue(new SimpleLValueTIR(symbol)));
 		myMocksControl.verify();
 	}
 

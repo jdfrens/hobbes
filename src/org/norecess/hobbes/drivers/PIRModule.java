@@ -3,7 +3,10 @@ package org.norecess.hobbes.drivers;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.norecess.citkit.environment.IEnvironment;
+import org.norecess.citkit.environment.NullEnvironment;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
+import org.norecess.citkit.types.PrimitiveType;
 import org.norecess.hobbes.backend.CodeWriter;
 import org.norecess.hobbes.backend.ICodeWriter;
 import org.norecess.hobbes.backend.IPIRCleaner;
@@ -21,6 +24,7 @@ import org.norecess.hobbes.compiler.PIRBodyCompiler;
 import org.norecess.hobbes.compiler.PIRCompiler;
 import org.norecess.hobbes.compiler.PIREpilogCompiler;
 import org.norecess.hobbes.compiler.PIRPrologCompiler;
+import org.norecess.hobbes.compiler.resources.IRegister;
 import org.norecess.hobbes.compiler.resources.IResourceAllocator;
 import org.norecess.hobbes.compiler.resources.ResourceAllocator;
 
@@ -42,6 +46,16 @@ public class PIRModule extends AbstractModule {
 		bind(IPIRBodyCompiler.class).to(PIRBodyCompiler.class);
 		bind(IPIREpilogCompiler.class).to(PIREpilogCompiler.class);
 		bind(ICompilerFactory.class).to(CompilerFactory.class);
+	}
+
+	@Provides
+	public IEnvironment<IRegister> provideInitialEnvironment() {
+		return new NullEnvironment<IRegister>();
+	}
+
+	@Provides
+	public IEnvironment<PrimitiveType> provideInitialTypeEnvironment() {
+		return new NullEnvironment<PrimitiveType>();
 	}
 
 	@Provides
