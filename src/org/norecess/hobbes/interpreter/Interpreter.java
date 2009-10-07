@@ -2,6 +2,7 @@ package org.norecess.hobbes.interpreter;
 
 import java.util.Map;
 
+import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.data.DatumTIR;
 import org.norecess.citkit.tir.expressions.BreakETIR;
@@ -26,27 +27,44 @@ import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.lvalues.IFieldValueTIR;
 import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
-import org.norecess.citkit.visitors.ExpressionTIRVisitor;
-import org.norecess.citkit.visitors.LValueTIRVisitor;
 import org.norecess.hobbes.HobbesBoolean;
 import org.norecess.hobbes.interpreter.operators.Appliable;
 
 import com.google.inject.Inject;
 
-public class Interpreter implements ExpressionTIRVisitor<DatumTIR>,
-		LValueTIRVisitor<DatumTIR> {
+public class Interpreter implements IInterpreter {
 
+	private final IInterpreter				myRecursion;
 	private final IIntegerETIR[]			myArgv;
+	private final IEnvironment<DatumTIR>	myEnvironment;
 	private final Map<IOperator, Appliable>	myAppliables;
 
 	@Inject
-	public Interpreter(IIntegerETIR[] argv, Map<IOperator, Appliable> appliables) {
+	public Interpreter(IIntegerETIR[] argv, IEnvironment<DatumTIR> environment,
+			Map<IOperator, Appliable> appliables) {
+		myRecursion = this;
 		myArgv = argv;
+		myEnvironment = environment;
+		myAppliables = appliables;
+	}
+
+	public Interpreter(IInterpreter recursion, IIntegerETIR[] argv,
+			IEnvironment<DatumTIR> environment,
+			Map<IOperator, Appliable> appliables) {
+		myRecursion = recursion;
+		myArgv = argv;
+		myEnvironment = environment;
 		myAppliables = appliables;
 	}
 
 	public DatumTIR interpret(ExpressionTIR expression) {
 		return expression.accept(this);
+	}
+
+	public DatumTIR interpret(IEnvironment<DatumTIR> newEnvironment,
+			ExpressionTIR expression) {
+		return expression.accept(new Interpreter(myArgv, newEnvironment,
+				myAppliables));
 	}
 
 	public IIntegerETIR visitIntegerETIR(IIntegerETIR integer) {
@@ -67,13 +85,13 @@ public class Interpreter implements ExpressionTIRVisitor<DatumTIR>,
 				expression.getRight().accept(this));
 	}
 
-	public IIntegerETIR visitVariableETIR(IVariableETIR variable) {
-		return myArgv[((IIntegerETIR) variable.getLValue().accept(this))
-				.getValue()];
+	public DatumTIR visitVariableETIR(IVariableETIR variable) {
+		return variable.getLValue().accept(this);
 	}
 
 	public DatumTIR visitSubscriptLValue(ISubscriptLValueTIR subscript) {
-		return subscript.getIndex().accept(this);
+		return myArgv[((IIntegerETIR) subscript.getIndex().accept(this))
+				.getValue()];
 	}
 
 	public DatumTIR visitIfETIR(IIfETIR ife) {
@@ -82,6 +100,19 @@ public class Interpreter implements ExpressionTIRVisitor<DatumTIR>,
 		} else {
 			return ife.getElseClause().accept(this);
 		}
+	}
+
+	public DatumTIR visitLetETIR(ILetETIR let) {
+		return myRecursion.interpret(myRecursion.createBinder().bind(
+				let.getDeclarations()), let.getBody());
+	}
+
+	public IDeclarationBinder createBinder() {
+		return new DeclarationBinder(myRecursion, myEnvironment.create());
+	}
+
+	public DatumTIR visitSimpleLValue(ISimpleLValueTIR simple) {
+		return myEnvironment.get(simple.getName());
 	}
 
 	//
@@ -115,10 +146,6 @@ public class Interpreter implements ExpressionTIRVisitor<DatumTIR>,
 		throw new IllegalStateException("unimplemented!");
 	}
 
-	public IIntegerETIR visitLetETIR(ILetETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
 	public IIntegerETIR visitNilETIR(NilETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
@@ -140,10 +167,6 @@ public class Interpreter implements ExpressionTIRVisitor<DatumTIR>,
 	}
 
 	public IIntegerETIR visitFieldLValue(IFieldValueTIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public IIntegerETIR visitSimpleLValue(ISimpleLValueTIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 

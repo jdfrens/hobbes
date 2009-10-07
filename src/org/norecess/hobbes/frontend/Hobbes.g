@@ -26,10 +26,6 @@ program
 
 expression
   : comparitive_expression
-  | 'if' expression 'then' expression 'else' expression 'end'
-    -> ^(IF expression*)
-  | 'let' decls 'in' expression 'end'
-    -> ^(LET decls expression)
   ;
   
 decls
@@ -66,6 +62,10 @@ simple_expression
     -> ^(MINUS INTEGER)
   | 'ARGV[' INTEGER ']'
     -> ^(ARGV INTEGER)
+  | 'if' expression 'then' expression 'else' expression 'end'
+    -> ^(IF expression*)
+  | 'let' decls 'in' expression 'end'
+    -> ^(LET decls expression)
   ;
   
 INTEGER

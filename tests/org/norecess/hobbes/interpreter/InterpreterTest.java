@@ -3,17 +3,25 @@ package org.norecess.hobbes.interpreter;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
+import java.util.List;
 import java.util.Map;
 
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
+import org.norecess.citkit.ISymbol;
+import org.norecess.citkit.Symbol;
+import org.norecess.citkit.environment.IEnvironment;
+import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.tir.LValueTIR;
+import org.norecess.citkit.tir.data.DatumTIR;
 import org.norecess.citkit.tir.expressions.BooleanETIR;
 import org.norecess.citkit.tir.expressions.IIntegerETIR;
 import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
+import org.norecess.citkit.tir.expressions.LetETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
@@ -26,7 +34,9 @@ public class InterpreterTest {
 
 	private IMocksControl				myMocksControl;
 
+	private IInterpreter				myRecursion;
 	private IIntegerETIR[]				myArgv;
+	private IEnvironment<DatumTIR>		myEnvironment;
 	private Map<IOperator, Appliable>	myAppliables;
 
 	private Interpreter					myInterpreter;
@@ -36,10 +46,13 @@ public class InterpreterTest {
 	public void setUp() {
 		myMocksControl = EasyMock.createControl();
 
+		myRecursion = myMocksControl.createMock(IInterpreter.class);
 		myArgv = new IIntegerETIR[10];
+		myEnvironment = myMocksControl.createMock(IEnvironment.class);
 		myAppliables = myMocksControl.createMock(Map.class);
 
-		myInterpreter = new Interpreter(myArgv, myAppliables);
+		myInterpreter = new Interpreter(myRecursion, myArgv, myEnvironment,
+				myAppliables);
 	}
 
 	@Test
@@ -59,13 +72,16 @@ public class InterpreterTest {
 	}
 
 	@Test
-	public void shouldInterpretCommandLineArguments() {
-		myArgv[8] = new IntegerETIR(7);
-		assertEquals(new IntegerETIR(7), myInterpreter
-				.interpret(createArgvTree(8)));
-		myArgv[3] = new IntegerETIR(55);
-		assertEquals(new IntegerETIR(55), myInterpreter
-				.interpret(createArgvTree(3)));
+	public void shouldInterpretVariableETIR() {
+		LValueTIR lvalue = myMocksControl.createMock(LValueTIR.class);
+		DatumTIR result = myMocksControl.createMock(DatumTIR.class);
+
+		EasyMock.expect(lvalue.accept(myInterpreter)).andReturn(result);
+
+		myMocksControl.replay();
+		assertSame(result, myInterpreter.visitVariableETIR(new VariableETIR(
+				lvalue)));
+		myMocksControl.verify();
 	}
 
 	@Test
@@ -130,12 +146,58 @@ public class InterpreterTest {
 		myMocksControl.verify();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldInterpretLetExpression() {
+		List<DeclarationTIR> declarations = myMocksControl
+				.createMock(List.class);
+		ExpressionTIR body = myMocksControl.createMock(ExpressionTIR.class);
+		IDeclarationBinder binder = myMocksControl
+				.createMock(IDeclarationBinder.class);
+		IEnvironment<DatumTIR> newEnvironment = myMocksControl
+				.createMock(IEnvironment.class);
+		DatumTIR result = myMocksControl.createMock(DatumTIR.class);
+
+		EasyMock.expect(myRecursion.createBinder()).andReturn(binder);
+		EasyMock.expect(binder.bind(declarations)).andReturn(newEnvironment);
+		EasyMock.expect(myRecursion.interpret(newEnvironment, body)).andReturn(
+				result);
+
+		myMocksControl.replay();
+		assertSame(result, myInterpreter.visitLetETIR(new LetETIR(declarations,
+				body)));
+		myMocksControl.verify();
+	}
+
+	@Test
+	public void shouldInterpretSimpleLValue() {
+		ISymbol symbol = myMocksControl.createMock(ISymbol.class);
+		DatumTIR result = myMocksControl.createMock(DatumTIR.class);
+
+		EasyMock.expect(myEnvironment.get(symbol)).andReturn(result);
+
+		myMocksControl.replay();
+		assertSame(result, myInterpreter.visitSimpleLValue(new SimpleLValueTIR(
+				symbol)));
+		myMocksControl.verify();
+	}
+
+	@Test
+	public void shouldInterpretSubscriptLValue() {
+		myArgv[8] = new IntegerETIR(7);
+		assertEquals(new IntegerETIR(7), myInterpreter
+				.visitSubscriptLValue(createArgvTree(8)));
+		myArgv[3] = new IntegerETIR(55);
+		assertEquals(new IntegerETIR(55), myInterpreter
+				.visitSubscriptLValue(createArgvTree(3)));
+	}
+
 	//
 	// Helpers
 	//
-	private ExpressionTIR createArgvTree(int i) {
-		return new VariableETIR(new SubscriptLValueTIR(new SimpleLValueTIR(
-				"ARGV"), new IntegerETIR(i)));
+	private SubscriptLValueTIR createArgvTree(int i) {
+		return new SubscriptLValueTIR(new SimpleLValueTIR(Symbol
+				.createSymbol("ARGV")), new IntegerETIR(i));
 	}
 
 }

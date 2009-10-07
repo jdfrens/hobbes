@@ -9,6 +9,8 @@ options {
   package org.norecess.hobbes.frontend;
 
   import org.norecess.hobbes.*;
+  import org.norecess.citkit.ISymbol;
+  import org.norecess.citkit.Symbol;
   import org.norecess.citkit.tir.*;
   import org.norecess.citkit.tir.expressions.*;
   import org.norecess.citkit.tir.declarations.*;
@@ -27,10 +29,10 @@ expression returns [ExpressionTIR tir]
     { tir = new IntegerETIR(i.getText()); }
   | b=BOOLEAN
     { tir = HobbesBoolean.parse(b.getText()); }
-  | ident=IDENTIFIER
-    { tir = new VariableETIR(new SimpleLValueTIR(ident.getText())); }
+  | s=symbol
+    { tir = new VariableETIR(new SimpleLValueTIR(s)); }
   | ^(ARGV e=expression)
-    { tir = new VariableETIR(new SubscriptLValueTIR(new SimpleLValueTIR("ARGV"), e)); }
+    { tir = new VariableETIR(new SubscriptLValueTIR(new SimpleLValueTIR(Symbol.createSymbol("ARGV")), e)); }
   | ^(MINUS i=INTEGER)
     { tir = new IntegerETIR("-" + i.getText()); }
   | ^(op=operator left=expression right=expression)
@@ -41,10 +43,15 @@ expression returns [ExpressionTIR tir]
     { tir = new LetETIR(decls, body); }
   ;
   
+symbol returns [ISymbol symbol]
+  : i=IDENTIFIER
+    { symbol = Symbol.createSymbol(i.getText()); }
+  ;
+  
 declarations returns [List<DeclarationTIR> decls = new ArrayList<DeclarationTIR>()]
   : ^(DECLS (
-        i=IDENTIFIER init=expression
-        { decls.add(new VariableDTIR(i.getText(), init)); }
+        s=symbol init=expression
+        { decls.add(new VariableDTIR(s, init)); }
      )*
     )
   ;

@@ -1,16 +1,14 @@
-One variable, simple body.
+No declarations, simple body.
 ==== source
-let var x := 5
-in x
+let
+in 7
 end
 ==== compilation
 .sub main
-	.param pmc argv
 	load_bytecode "print.pbc"
-	$I1 = 5
-	$I0 = $I1
+	$I0 = 7
 	print $I0
 	print "\n"
 .end
 ==== execution
-5
+7

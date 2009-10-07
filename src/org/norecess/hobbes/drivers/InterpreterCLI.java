@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.antlr.runtime.RecognitionException;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
-import org.norecess.hobbes.interpreter.Interpreter;
+import org.norecess.hobbes.interpreter.IInterpreter;
 import org.norecess.hobbes.output.HobbesOutput;
 
 import com.google.inject.Guice;
@@ -14,11 +14,11 @@ public class InterpreterCLI {
 
 	private final HobbesOutput		myHobbesOutput;
 	private final IHobbesFrontEnd	myFrontEnd;
-	private final Interpreter		myInterpreter;
+	private final IInterpreter		myInterpreter;
 
 	@Inject
 	public InterpreterCLI(HobbesOutput hobbesOutput, IHobbesFrontEnd frontEnd,
-			Interpreter interpreter) {
+			IInterpreter interpreter) {
 		myHobbesOutput = hobbesOutput;
 		myFrontEnd = frontEnd;
 		myInterpreter = interpreter;

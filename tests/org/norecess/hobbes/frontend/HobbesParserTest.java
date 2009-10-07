@@ -209,4 +209,10 @@ public class HobbesParserTest {
 		assertTree(HobbesParser.IF, "(IF(ARGV(1))(+(1)(2))(*(3)(4)))", myTester
 				.parseInput("if ARGV[1] then 1 + 2 else 3 * 4 end"));
 	}
+
+	@Test
+	public void shouldParseIfAndLetAtBottom() {
+		assertTree(HobbesParser.MULTIPLY, "(*(LET(DECLS)(4))(IF(#t)(1)(2)))",
+				myTester.parseInput("let in 4 end * if #t then 1 else 2 end"));
+	}
 }
