@@ -1,34 +1,30 @@
-A let as a subexpression of an arithmetic expression
+A let using command-line arguments and an if.
 ==== source
-let var x := 1 + 2
+let var x := if ARGV[1] < ARGV[2] then 8 else 55 end
 in x + x
-end
-+
-let var x := 3 + 4
-    var y := 5 + 6
-in x + y
 end
 ==== compilation
 .sub main
+	.param pmc argv
 	load_bytecode "print.pbc"
 	$I1 = 1
+	$I1 = argv[$I0]
 	$I2 = 2
-	$I1 += $I2
-	$I0 = $I1
-	$I2 = $I1
-	$I0 += $I1
-	$I4 = 3
-	$I5 = 4
-	$I5 += $I4
-	$I6 = 5
-	$I7 = 6
-  $I6 += $I7
-  $I3 = $I4
-  $I8 = $I6
-  $I3 += $I8
+	$I2 = argv[$I2]
+	$I1 = $I1 < $I2
+	if $I1 goto label_1
+	$I1 = 55
+	goto label_2
+label_1:
+	$I1 = 8
+label_2:
+  $I0 = $I1
+  $I3 = $I1
   $I0 += $I3
 	print $I0
 	print "\n"
 .end
+==== command line
+183 5
 ==== execution
-24
+110

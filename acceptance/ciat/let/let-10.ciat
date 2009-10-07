@@ -25,6 +25,6 @@ label_2:
 	print "\n"
 .end
 ==== command line
-183 5
+4 10
 ==== execution
-110
+16
