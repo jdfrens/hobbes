@@ -108,6 +108,12 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 		return code;
 	}
 
+	public ICode visitLetETIR(ILetETIR let) {
+		ICode code = myResourceAllocator.createCode();
+		code.append(myRecurser.recurse(let.getBody(), myTarget));
+		return code;
+	}
+
 	//
 	// Unimplemented
 	//
@@ -136,10 +142,6 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 	}
 
 	public ICode visitLambdaETIR(ILambdaETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public ICode visitLetETIR(ILetETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 

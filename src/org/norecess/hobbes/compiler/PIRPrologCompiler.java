@@ -59,6 +59,10 @@ public class PIRPrologCompiler implements IPIRPrologCompiler {
 		return code;
 	}
 
+	public Code visitLetETIR(ILetETIR arg0) {
+		return new Code();
+	}
+
 	//
 	// Unimplemented
 	//
@@ -87,10 +91,6 @@ public class PIRPrologCompiler implements IPIRPrologCompiler {
 	}
 
 	public Code visitLambdaETIR(ILambdaETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public Code visitLetETIR(ILetETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 

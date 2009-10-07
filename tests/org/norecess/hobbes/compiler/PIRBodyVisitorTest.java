@@ -2,16 +2,19 @@ package org.norecess.hobbes.compiler;
 
 import static org.junit.Assert.assertSame;
 
+import java.util.List;
 import java.util.Map;
 
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
+import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.LValueTIR;
 import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
+import org.norecess.citkit.tir.expressions.LetETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
@@ -179,6 +182,24 @@ public class PIRBodyVisitorTest {
 		myMocksControl.replay();
 		assertSame(code, myVisitor.visitSubscriptLValue(new SubscriptLValueTIR(
 				null, new IntegerETIR(88))));
+		myMocksControl.verify();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldCompileLet() {
+		List<DeclarationTIR> declarations = myMocksControl
+				.createMock(List.class);
+		ExpressionTIR body = myMocksControl.createMock(ExpressionTIR.class);
+		ICode code = expectNewCode();
+		ICode bodyCode = myMocksControl.createMock(ICode.class);
+
+		EasyMock.expect(myRecurser.recurse(body, myTarget)).andReturn(bodyCode);
+		EasyMock.expect(code.append(bodyCode)).andReturn(code);
+
+		myMocksControl.replay();
+		assertSame(code, myVisitor
+				.visitLetETIR(new LetETIR(declarations, body)));
 		myMocksControl.verify();
 	}
 

@@ -3,14 +3,18 @@ package org.norecess.hobbes.typechecker;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 
+import java.util.List;
+
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
+import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.LValueTIR;
 import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
+import org.norecess.citkit.tir.expressions.LetETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
@@ -107,6 +111,25 @@ public class TypeCheckerTest {
 		myMocksControl.verify();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldCheckLet() {
+		PrimitiveType result = myMocksControl.createMock(PrimitiveType.class);
+		List<DeclarationTIR> declarations = myMocksControl
+				.createMock(List.class);
+		ExpressionTIR body = myMocksControl.createMock(ExpressionTIR.class);
+
+		EasyMock.expect(body.accept(myTypeChecker)).andReturn(result);
+
+		myMocksControl.replay();
+		assertSame(result, myTypeChecker.visitLetETIR(new LetETIR(declarations,
+				body)));
+		myMocksControl.verify();
+	}
+
+	//
+	// Helpers
+	//
 	private OperatorETIR comparisonExpression(Operator operator) {
 		return new OperatorETIR(new IntegerETIR(55), operator, new IntegerETIR(
 				3));

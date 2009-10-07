@@ -2,14 +2,18 @@ package org.norecess.hobbes.compiler;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
+
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
+import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.LValueTIR;
 import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
+import org.norecess.citkit.tir.expressions.LetETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
@@ -30,18 +34,33 @@ public class PIRPrologCompilerTest {
 	}
 
 	@Test
+	public void shouldGenerateProlog() {
+		ExpressionTIR expression = myMocksControl
+				.createMock(ExpressionTIR.class);
+
+		EasyMock.expect(expression.accept(myPrologCompiler)).andReturn(
+				new Code("expression's contribution"));
+
+		myMocksControl.replay();
+		assertEquals(new Code(".sub main", "expression's contribution",
+				"load_bytecode \"print.pbc\""), //
+				myPrologCompiler.generateProlog(expression));
+		myMocksControl.verify();
+	}
+
+	@Test
 	public void shouldGeneratePrologForInteger() {
 		myMocksControl.replay();
-		assertEquals(new Code(".sub main", "load_bytecode \"print.pbc\""),
-				myPrologCompiler.generateProlog(new IntegerETIR(5)));
+		assertEquals(new Code(), myPrologCompiler
+				.visitIntegerETIR(new IntegerETIR(5)));
 		myMocksControl.verify();
 	}
 
 	@Test
 	public void shouldGeneratePrologForBoolean() {
 		myMocksControl.replay();
-		assertEquals(new Code(".sub main", "load_bytecode \"print.pbc\""),
-				myPrologCompiler.generateProlog(HobbesBoolean.TRUE));
+		assertEquals(new Code(), myPrologCompiler
+				.visitBooleanETIR(HobbesBoolean.TRUE));
 		myMocksControl.verify();
 	}
 
@@ -50,9 +69,8 @@ public class PIRPrologCompilerTest {
 		LValueTIR lvalue = myMocksControl.createMock(LValueTIR.class);
 
 		myMocksControl.replay();
-		assertEquals(new Code(".sub main", ".param pmc argv",
-				"load_bytecode \"print.pbc\""), myPrologCompiler
-				.generateProlog(new VariableETIR(lvalue)));
+		assertEquals(new Code(".param pmc argv"), myPrologCompiler
+				.visitVariableETIR(new VariableETIR(lvalue)));
 		myMocksControl.verify();
 	}
 
@@ -68,9 +86,8 @@ public class PIRPrologCompilerTest {
 				new Code("right prolog"));
 
 		myMocksControl.replay();
-		assertEquals(new Code(".sub main", "left prolog", "right prolog",
-				"load_bytecode \"print.pbc\""), myPrologCompiler
-				.generateProlog(new OperatorETIR(left, operator, right)));
+		assertEquals(new Code("left prolog", "right prolog"), myPrologCompiler
+				.visitOperatorETIR(new OperatorETIR(left, operator, right)));
 		myMocksControl.verify();
 	}
 
@@ -90,10 +107,23 @@ public class PIRPrologCompilerTest {
 				new Code("else prolog"));
 
 		myMocksControl.replay();
-		assertEquals(new Code(".sub main", "test prolog", "then prolog",
-				"else prolog", "load_bytecode \"print.pbc\""), //
-				myPrologCompiler.generateProlog(new IfETIR(test, consequence,
+		assertEquals(new Code("test prolog", "then prolog", "else prolog"), //
+				myPrologCompiler.visitIfETIR(new IfETIR(test, consequence,
 						otherwise)));
 		myMocksControl.verify();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldGeneratePrologForLet() {
+		List<DeclarationTIR> declarations = myMocksControl
+				.createMock(List.class);
+		ExpressionTIR body = myMocksControl.createMock(ExpressionTIR.class);
+
+		myMocksControl.replay();
+		assertEquals(new Code(), myPrologCompiler.visitLetETIR(new LetETIR(
+				declarations, body)));
+		myMocksControl.verify();
+	}
+
 }

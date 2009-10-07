@@ -57,6 +57,10 @@ public class TypeChecker implements ITypeChecker {
 		return ife.getThenClause().accept(this);
 	}
 
+	public PrimitiveType visitLetETIR(ILetETIR let) {
+		return let.getBody().accept(this);
+	}
+
 	//
 	// Unimplemented
 	//
@@ -85,10 +89,6 @@ public class TypeChecker implements ITypeChecker {
 	}
 
 	public PrimitiveType visitLambdaETIR(ILambdaETIR arg0) {
-		throw new IllegalStateException("unimplemented!");
-	}
-
-	public PrimitiveType visitLetETIR(ILetETIR arg0) {
 		throw new IllegalStateException("unimplemented!");
 	}
 
