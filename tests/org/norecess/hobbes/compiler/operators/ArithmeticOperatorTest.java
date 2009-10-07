@@ -1,10 +1,11 @@
-package org.norecess.hobbes.compiler;
+package org.norecess.hobbes.compiler.operators;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.norecess.hobbes.backend.Code;
+import org.norecess.hobbes.compiler.operators.ArithmeticOperator;
 import org.norecess.hobbes.compiler.resources.Register;
 import org.norecess.hobbes.compiler.resources.ResourceAllocator;
 

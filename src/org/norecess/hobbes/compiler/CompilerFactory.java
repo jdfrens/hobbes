@@ -5,6 +5,7 @@ import java.util.Map;
 import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.types.PrimitiveType;
+import org.norecess.hobbes.compiler.operators.OperatorInstruction;
 import org.norecess.hobbes.compiler.resources.IRegister;
 import org.norecess.hobbes.compiler.resources.IResourceAllocator;
 import org.norecess.hobbes.typechecker.ITypeChecker;

@@ -1,4 +1,4 @@
-package org.norecess.hobbes.compiler;
+package org.norecess.hobbes.compiler.operators;
 
 import org.norecess.hobbes.backend.ICode;
 import org.norecess.hobbes.compiler.resources.IRegister;
