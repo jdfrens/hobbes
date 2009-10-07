@@ -1,4 +1,4 @@
-package org.norecess.hobbes.drivers;
+package org.norecess.hobbes.drivers.injection;
 
 import java.util.HashMap;
 import java.util.Map;

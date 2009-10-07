@@ -3,6 +3,7 @@ package org.norecess.hobbes.drivers;
 import java.io.IOException;
 
 import org.antlr.runtime.RecognitionException;
+import org.norecess.hobbes.drivers.injection.InterpreterModule;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
 import org.norecess.hobbes.interpreter.IInterpreter;
 import org.norecess.hobbes.output.HobbesOutput;

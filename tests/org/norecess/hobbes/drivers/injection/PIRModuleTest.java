@@ -1,9 +1,10 @@
-package org.norecess.hobbes.drivers;
+package org.norecess.hobbes.drivers.injection;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.hobbes.compiler.resources.IRegister;
+import org.norecess.hobbes.drivers.injection.PIRModule;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;

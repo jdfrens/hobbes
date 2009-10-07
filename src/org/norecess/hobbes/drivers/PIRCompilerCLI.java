@@ -8,6 +8,7 @@ import org.antlr.runtime.RecognitionException;
 import org.norecess.hobbes.backend.ICodeWriter;
 import org.norecess.hobbes.backend.IPIRCleaner;
 import org.norecess.hobbes.compiler.IPIRCompiler;
+import org.norecess.hobbes.drivers.injection.PIRModule;
 import org.norecess.hobbes.frontend.HobbesFrontEnd;
 
 import com.google.inject.Guice;
