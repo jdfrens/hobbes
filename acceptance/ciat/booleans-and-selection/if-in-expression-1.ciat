@@ -1,9 +1,15 @@
-A second true if.
+If expressions as factors in a multiplication
 ==== source
 if #t then
   1 + 2
 else
   8 * 4
+end
+*
+if #f then
+  5
+else
+  9
 end
 ==== compilation
 .sub main
@@ -19,8 +25,16 @@ label_1:
 	$I2 = 2
 	$I0 += $I2
 label_2:
+	$I3 = 0
+	if $I3 goto label_3
+	$I3 = 9
+	goto label_4
+label_3:
+	$I3 = 5
+label_4:
+	$I0 *= $I3
 	print $I0
 	print "\n"
 .end
 ==== execution
-3
+27
