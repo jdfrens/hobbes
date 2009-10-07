@@ -6,6 +6,9 @@ import org.antlr.runtime.RecognitionException;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.backend.ICode;
+import org.norecess.hobbes.compiler.body.IPIRBodyCompiler;
+import org.norecess.hobbes.compiler.epilog.IPIREpilogCompiler;
+import org.norecess.hobbes.compiler.prolog.IPIRPrologCompiler;
 
 import com.google.inject.Inject;
 

@@ -1,4 +1,4 @@
-package org.norecess.hobbes.compiler;
+package org.norecess.hobbes.compiler.body;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,6 +10,9 @@ import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.types.BooleanType;
 import org.norecess.citkit.types.IntegerType;
 import org.norecess.hobbes.backend.Code;
+import org.norecess.hobbes.compiler.ICompilerFactory;
+import org.norecess.hobbes.compiler.body.IPIRBodyVisitor;
+import org.norecess.hobbes.compiler.body.PIRBodyCompiler;
 import org.norecess.hobbes.typechecker.ITypeChecker;
 
 public class PIRBodyCompilerTest {

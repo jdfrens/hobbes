@@ -1,4 +1,4 @@
-package org.norecess.hobbes.compiler;
+package org.norecess.hobbes.compiler.body;
 
 import static org.junit.Assert.assertSame;
 
@@ -26,6 +26,9 @@ import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
 import org.norecess.hobbes.HobbesBoolean;
 import org.norecess.hobbes.backend.ICode;
+import org.norecess.hobbes.compiler.ICompilerBinder;
+import org.norecess.hobbes.compiler.body.IPIRBodyVisitor;
+import org.norecess.hobbes.compiler.body.PIRBodyVisitor;
 import org.norecess.hobbes.compiler.operators.OperatorInstruction;
 import org.norecess.hobbes.compiler.resources.ILabel;
 import org.norecess.hobbes.compiler.resources.IRegister;

@@ -1,4 +1,4 @@
-package org.norecess.hobbes.compiler;
+package org.norecess.hobbes.compiler.prolog;
 
 import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;

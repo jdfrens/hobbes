@@ -5,6 +5,7 @@ import org.norecess.citkit.tir.declarations.IFunctionDTIR;
 import org.norecess.citkit.tir.declarations.ITypeDTIR;
 import org.norecess.citkit.tir.declarations.IVariableDTIR;
 import org.norecess.hobbes.backend.ICode;
+import org.norecess.hobbes.compiler.body.IPIRBodyVisitor;
 import org.norecess.hobbes.compiler.resources.IRegister;
 import org.norecess.hobbes.compiler.resources.IResourceAllocator;
 

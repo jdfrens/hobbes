@@ -1,4 +1,4 @@
-package org.norecess.hobbes.compiler;
+package org.norecess.hobbes.compiler.prolog;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
@@ -25,6 +25,7 @@ import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
 import org.norecess.hobbes.HobbesBoolean;
 import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.backend.ICode;
+import org.norecess.hobbes.compiler.prolog.PIRPrologCompiler;
 import org.norecess.hobbes.support.HobbesEasyMock;
 import org.norecess.hobbes.support.IHobbesMocksControl;
 

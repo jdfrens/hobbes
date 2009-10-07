@@ -11,6 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.hobbes.backend.Code;
+import org.norecess.hobbes.compiler.body.IPIRBodyCompiler;
+import org.norecess.hobbes.compiler.epilog.IPIREpilogCompiler;
+import org.norecess.hobbes.compiler.prolog.IPIRPrologCompiler;
 
 public class PIRCompilerTest {
 

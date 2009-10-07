@@ -1,4 +1,4 @@
-package org.norecess.hobbes.compiler;
+package org.norecess.hobbes.compiler.epilog;
 
 import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.backend.ICode;

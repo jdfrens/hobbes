@@ -1,10 +1,11 @@
-package org.norecess.hobbes.compiler;
+package org.norecess.hobbes.compiler.epilog;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.norecess.hobbes.backend.Code;
+import org.norecess.hobbes.compiler.epilog.PIREpilogCompiler;
 
 public class PIREpilogCompilerTest {
 

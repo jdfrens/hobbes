@@ -11,6 +11,7 @@ import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.declarations.VariableDTIR;
 import org.norecess.hobbes.backend.ICode;
+import org.norecess.hobbes.compiler.body.IPIRBodyVisitor;
 import org.norecess.hobbes.compiler.resources.IRegister;
 import org.norecess.hobbes.compiler.resources.IResourceAllocator;
 

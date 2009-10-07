@@ -1,9 +1,10 @@
-package org.norecess.hobbes.compiler;
+package org.norecess.hobbes.compiler.body;
 
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.types.BooleanType;
 import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.backend.ICode;
+import org.norecess.hobbes.compiler.ICompilerFactory;
 import org.norecess.hobbes.compiler.resources.IRegister;
 import org.norecess.hobbes.compiler.resources.Register;
 

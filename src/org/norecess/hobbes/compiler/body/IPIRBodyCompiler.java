@@ -1,4 +1,4 @@
-package org.norecess.hobbes.compiler;
+package org.norecess.hobbes.compiler.body;
 
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.hobbes.backend.ICode;
