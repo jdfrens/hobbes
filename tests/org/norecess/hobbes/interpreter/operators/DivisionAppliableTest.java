@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 
-public class DivisionOperatorTest {
+public class DivisionAppliableTest {
 
 	private DivisionAppliable	myOperator;
 

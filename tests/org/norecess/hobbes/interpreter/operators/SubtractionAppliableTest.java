@@ -6,21 +6,21 @@ import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 
-public class AdditionOperatorTest {
+public class SubtractionAppliableTest {
 
-	private AdditionAppliable	myOperator;
+	private SubtractionAppliable	myOperator;
 
 	@Before
 	public void setUp() {
-		myOperator = new AdditionAppliable();
+		myOperator = new SubtractionAppliable();
 	}
 
 	@Test
-	public void shouldInterpretMultiplication() {
-		assertEquals(new IntegerETIR(10), myOperator.apply(new IntegerETIR(2),
+	public void shouldInterpretSubtraction() {
+		assertEquals(new IntegerETIR(-6), myOperator.apply(new IntegerETIR(2),
 				new IntegerETIR(8)));
 		assertEquals(new IntegerETIR(5), myOperator.apply(new IntegerETIR(15),
-				new IntegerETIR(-10)));
+				new IntegerETIR(10)));
 	}
 
 }

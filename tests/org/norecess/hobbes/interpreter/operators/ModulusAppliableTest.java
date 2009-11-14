@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 
-public class ModulusOperatorTest {
+public class ModulusAppliableTest {
 
 	private ModulusAppliable	myOperator;
 

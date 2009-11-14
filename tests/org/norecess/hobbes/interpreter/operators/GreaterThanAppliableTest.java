@@ -7,18 +7,18 @@ import org.junit.Test;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.hobbes.HobbesBoolean;
 
-public class NotEqualsOperatorTest {
+public class GreaterThanAppliableTest {
 
-	private NotEqualsAppliable	myOperator;
+	private GreaterThanAppliable	myOperator;
 
 	@Before
 	public void setUp() {
-		myOperator = new NotEqualsAppliable();
+		myOperator = new GreaterThanAppliable();
 	}
 
 	@Test
-	public void shouldApplyNotEquals() {
-		assertEquals(HobbesBoolean.TRUE, myOperator.apply(new IntegerETIR(4),
+	public void shouldApplyGreaterThan() {
+		assertEquals(HobbesBoolean.FALSE, myOperator.apply(new IntegerETIR(4),
 				new IntegerETIR(12)));
 		assertEquals(HobbesBoolean.TRUE, myOperator.apply(new IntegerETIR(9),
 				new IntegerETIR(1)));
