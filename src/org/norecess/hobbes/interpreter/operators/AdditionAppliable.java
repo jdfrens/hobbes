@@ -3,7 +3,7 @@ package org.norecess.hobbes.interpreter.operators;
 import org.norecess.citkit.tir.data.DatumTIR;
 import org.norecess.citkit.tir.expressions.IIntegerETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
-import org.norecess.hobbes.interpreter.HobbesTypeException;
+import org.norecess.hobbes.typechecker.HobbesTypeException;
 
 public class AdditionAppliable implements Appliable {
 

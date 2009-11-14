@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.norecess.citkit.tir.data.DatumTIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.types.HobbesType;
-import org.norecess.hobbes.interpreter.HobbesTypeException;
+import org.norecess.hobbes.typechecker.HobbesTypeException;
 
 public class AdditionAppliableTest {
 

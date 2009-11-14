@@ -31,6 +31,8 @@ import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
 import org.norecess.hobbes.HobbesBoolean;
 import org.norecess.hobbes.interpreter.operators.Appliable;
+import org.norecess.hobbes.typechecker.HobbesTypeException;
+import org.norecess.hobbes.typechecker.OperatorTypeException;
 
 public class InterpreterTest {
 
@@ -40,6 +42,7 @@ public class InterpreterTest {
 	private IIntegerETIR[]				myArgv;
 	private IEnvironment<DatumTIR>		myEnvironment;
 	private Map<IOperator, Appliable>	myAppliables;
+	private IErrorHandler				myErrorHandler;
 
 	private Interpreter					myInterpreter;
 
@@ -52,9 +55,10 @@ public class InterpreterTest {
 		myArgv = new IIntegerETIR[10];
 		myEnvironment = myMocksControl.createMock(IEnvironment.class);
 		myAppliables = myMocksControl.createMock(Map.class);
+		myErrorHandler = myMocksControl.createMock(IErrorHandler.class);
 
 		myInterpreter = new Interpreter(myRecursion, myArgv, myEnvironment,
-				myAppliables);
+				myAppliables, myErrorHandler);
 	}
 
 	@Test
@@ -67,26 +71,6 @@ public class InterpreterTest {
 
 		myMocksControl.replay();
 		assertSame(result, myInterpreter.interpret(expression));
-		myMocksControl.verify();
-	}
-
-	@Test
-	public void shouldInterpretWithTypeException() {
-		IPosition position = myMocksControl.createMock(IPosition.class);
-		ExpressionTIR expression = myMocksControl
-				.createMock(ExpressionTIR.class);
-
-		EasyMock.expect(expression.accept(myInterpreter)).andThrow(
-				new HobbesTypeException("bad types"));
-		EasyMock.expect(expression.getPosition()).andReturn(position);
-
-		myMocksControl.replay();
-		try {
-			myInterpreter.interpret(expression);
-			fail("should throw type exception");
-		} catch (HobbesTypeException e) {
-			assertSame(position, e.getPosition());
-		}
 		myMocksControl.verify();
 	}
 
@@ -141,6 +125,40 @@ public class InterpreterTest {
 		assertSame(result, myInterpreter.visitOperatorETIR(new OperatorETIR(
 				left, operator, right)));
 		myMocksControl.verify();
+	}
+
+	@Test
+	public void shouldInterpretOperatorExpressionWithTypeException() {
+		IPosition position = myMocksControl.createMock(IPosition.class);
+		IOperator operator = myMocksControl.createMock(IOperator.class);
+		ExpressionTIR left = myMocksControl.createMock(ExpressionTIR.class);
+		ExpressionTIR right = myMocksControl.createMock(ExpressionTIR.class);
+		OperatorETIR expression = new OperatorETIR(position, left, operator,
+				right);
+		Appliable appliable = myMocksControl.createMock(Appliable.class);
+		IIntegerETIR leftResult = myMocksControl.createMock(IIntegerETIR.class);
+		IIntegerETIR rightResult = myMocksControl
+				.createMock(IIntegerETIR.class);
+		HobbesTypeException expected = new HobbesTypeException("something");
+
+		EasyMock.expect(myAppliables.get(operator)).andReturn(appliable)
+				.atLeastOnce();
+		EasyMock.expect(left.accept(myInterpreter)).andReturn(leftResult);
+		EasyMock.expect(right.accept(myInterpreter)).andReturn(rightResult);
+		EasyMock.expect(appliable.apply(leftResult, rightResult)).andThrow(
+				new OperatorTypeException());
+		EasyMock.expect(myErrorHandler.handleTypeError(expression)).andReturn(
+				expected);
+
+		myMocksControl.replay();
+		try {
+			myInterpreter.visitOperatorETIR(expression);
+			fail("should throw type exception");
+		} catch (HobbesTypeException actual) {
+			assertSame(expected, actual);
+		} finally {
+			myMocksControl.verify();
+		}
 	}
 
 	@Test

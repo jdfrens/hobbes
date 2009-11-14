@@ -13,9 +13,9 @@ import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.data.DatumTIR;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
-import org.norecess.hobbes.interpreter.HobbesTypeException;
 import org.norecess.hobbes.interpreter.IInterpreter;
 import org.norecess.hobbes.output.IHobbesOutput;
+import org.norecess.hobbes.typechecker.HobbesTypeException;
 
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 

@@ -6,9 +6,9 @@ import java.io.PrintStream;
 import org.antlr.runtime.RecognitionException;
 import org.norecess.hobbes.drivers.injection.InterpreterModule;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
-import org.norecess.hobbes.interpreter.HobbesTypeException;
 import org.norecess.hobbes.interpreter.IInterpreter;
 import org.norecess.hobbes.output.IHobbesOutput;
+import org.norecess.hobbes.typechecker.HobbesTypeException;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;

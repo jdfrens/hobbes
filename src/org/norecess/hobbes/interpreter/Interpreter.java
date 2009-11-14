@@ -29,6 +29,7 @@ import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
 import org.norecess.hobbes.HobbesBoolean;
 import org.norecess.hobbes.interpreter.operators.Appliable;
+import org.norecess.hobbes.typechecker.OperatorTypeException;
 
 import com.google.inject.Inject;
 
@@ -38,38 +39,36 @@ public class Interpreter implements IInterpreter {
 	private final IIntegerETIR[]			myArgv;
 	private final IEnvironment<DatumTIR>	myEnvironment;
 	private final Map<IOperator, Appliable>	myAppliables;
+	private final IErrorHandler				myErrorHandler;
 
 	@Inject
 	public Interpreter(IIntegerETIR[] argv, IEnvironment<DatumTIR> environment,
-			Map<IOperator, Appliable> appliables) {
+			Map<IOperator, Appliable> appliables, IErrorHandler errorHandler) {
 		myRecursion = this;
 		myArgv = argv;
 		myEnvironment = environment;
 		myAppliables = appliables;
+		myErrorHandler = errorHandler;
 	}
 
 	public Interpreter(IInterpreter recursion, IIntegerETIR[] argv,
 			IEnvironment<DatumTIR> environment,
-			Map<IOperator, Appliable> appliables) {
+			Map<IOperator, Appliable> appliables, IErrorHandler errorHandler) {
 		myRecursion = recursion;
 		myArgv = argv;
 		myEnvironment = environment;
 		myAppliables = appliables;
+		myErrorHandler = errorHandler;
 	}
 
 	public DatumTIR interpret(ExpressionTIR expression) {
-		try {
-			return expression.accept(this);
-		} catch (HobbesTypeException e) {
-			e.setPositionIfUnset(expression.getPosition());
-			throw e;
-		}
+		return expression.accept(this);
 	}
 
 	public DatumTIR interpret(IEnvironment<DatumTIR> newEnvironment,
 			ExpressionTIR expression) {
-		return new Interpreter(myArgv, newEnvironment, myAppliables)
-				.interpret(expression);
+		return new Interpreter(myArgv, newEnvironment, myAppliables,
+				myErrorHandler).interpret(expression);
 	}
 
 	public IIntegerETIR visitIntegerETIR(IIntegerETIR integer) {
@@ -81,9 +80,13 @@ public class Interpreter implements IInterpreter {
 	}
 
 	public DatumTIR visitOperatorETIR(IOperatorETIR expression) {
-		return myAppliables.get(expression.getOperator()).apply(
-				expression.getLeft().accept(this),
-				expression.getRight().accept(this));
+		try {
+			return myAppliables.get(expression.getOperator()).apply(
+					expression.getLeft().accept(this),
+					expression.getRight().accept(this));
+		} catch (OperatorTypeException e) {
+			throw myErrorHandler.handleTypeError(expression);
+		}
 	}
 
 	public DatumTIR visitVariableETIR(IVariableETIR variable) {

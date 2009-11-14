@@ -11,6 +11,8 @@ import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.hobbes.drivers.ArgsToIntegers;
 import org.norecess.hobbes.frontend.HobbesFrontEnd;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
+import org.norecess.hobbes.interpreter.ErrorHandler;
+import org.norecess.hobbes.interpreter.IErrorHandler;
 import org.norecess.hobbes.interpreter.IInterpreter;
 import org.norecess.hobbes.interpreter.Interpreter;
 import org.norecess.hobbes.interpreter.operators.Appliable;
@@ -36,6 +38,7 @@ public class InterpreterModule extends AbstractModule {
 		bind(IHobbesFrontEnd.class).to(HobbesFrontEnd.class);
 		bind(File.class).annotatedWith(Names.named("SourceFile")).toInstance(
 				new File(myArgs[0]));
+		bind(IErrorHandler.class).to(ErrorHandler.class);
 		bind(IInterpreter.class).to(Interpreter.class);
 	}
 

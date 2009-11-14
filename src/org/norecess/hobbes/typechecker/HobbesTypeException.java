@@ -1,4 +1,4 @@
-package org.norecess.hobbes.interpreter;
+package org.norecess.hobbes.typechecker;
 
 import org.norecess.citkit.tir.IPosition;
 
@@ -10,6 +10,11 @@ public class HobbesTypeException extends RuntimeException {
 
 	public HobbesTypeException(String message) {
 		super(message);
+	}
+
+	public HobbesTypeException(IPosition position, String message) {
+		super(message);
+		myPosition = position;
 	}
 
 	public void setPositionIfUnset(IPosition position) {
