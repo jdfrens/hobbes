@@ -1,0 +1,7 @@
+Equals works only on integers.  (Really?)
+==== source
+#f == 10
+==== compilation error
+Error on line 1: bool == int is not defined
+==== execution error
+Error on line 1: bool == int is not defined

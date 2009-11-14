@@ -1,0 +1,9 @@
+Subtractions wants integers only; and the line number matters.
+==== source
+#t
+-
+8
+==== compilation error
+Error on line 2: bool - int is not defined
+==== execution error
+Error on line 2: bool - int is not defined

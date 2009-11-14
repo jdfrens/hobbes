@@ -1,39 +1,53 @@
 package org.norecess.hobbes.drivers;
 
 import java.io.IOException;
+import java.io.PrintStream;
 
 import org.antlr.runtime.RecognitionException;
 import org.norecess.hobbes.drivers.injection.InterpreterModule;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
+import org.norecess.hobbes.interpreter.HobbesTypeException;
 import org.norecess.hobbes.interpreter.IInterpreter;
-import org.norecess.hobbes.output.HobbesOutput;
+import org.norecess.hobbes.output.IHobbesOutput;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 
 public class InterpreterCLI {
 
-	private final HobbesOutput		myHobbesOutput;
+	public static final int			STATUS_OK			= 0;
+	public static final int			STATUS_TYPE_ERROR	= 1;
+
+	private final IHobbesOutput		myHobbesOutput;
 	private final IHobbesFrontEnd	myFrontEnd;
 	private final IInterpreter		myInterpreter;
 
 	@Inject
-	public InterpreterCLI(HobbesOutput hobbesOutput, IHobbesFrontEnd frontEnd,
+	public InterpreterCLI(IHobbesOutput hobbesOutput, IHobbesFrontEnd frontEnd,
 			IInterpreter interpreter) {
 		myHobbesOutput = hobbesOutput;
 		myFrontEnd = frontEnd;
 		myInterpreter = interpreter;
 	}
 
-	public void doit(String[] args) throws IOException, RecognitionException {
-		System.out.println(myHobbesOutput.asHobbesOutput(myInterpreter
-				.interpret(myFrontEnd.process())));
+	public int doit(PrintStream out, PrintStream err, String[] args)
+			throws IOException, RecognitionException {
+		try {
+			out.println(myHobbesOutput.asHobbesOutput(myInterpreter
+					.interpret(myFrontEnd.process())));
+			return STATUS_OK;
+		} catch (HobbesTypeException e) {
+			err.println("Error on line 1: " + e.getMessage()
+					+ " is not defined");
+			return STATUS_TYPE_ERROR;
+		}
 	}
 
 	public static void main(String[] args) throws IOException,
 			RecognitionException {
-		Guice.createInjector(new InterpreterModule(args)).getInstance(
-				InterpreterCLI.class).doit(args);
+		System.exit(Guice.createInjector(new InterpreterModule(args))
+				.getInstance(InterpreterCLI.class).doit(System.out, System.err,
+						args));
 	}
 
 }

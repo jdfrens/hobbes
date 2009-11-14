@@ -1,7 +1,6 @@
 require 'ciat'
-require 'ciat/compilers/java'
-require 'ciat/executors/java'
-require 'ciat/executors/parrot'
+require 'ciat/processors/java'
+require 'ciat/processors/parrot'
 
 task :default => :ciat
 
@@ -10,58 +9,71 @@ def classpath
 end
 
 def compiler
-  CIAT::Compilers::Java.new(classpath,
-    'org.norecess.hobbes.drivers.PIRCompilerCLI',
-    :description => 'Hobbes Compiler')
+  CIAT::Processors::Java.new(classpath,
+    'org.norecess.hobbes.drivers.PIRCompilerCLI') do |compiler|
+    compiler.kind = CIAT::Processors::Compiler.new
+    compiler.description = 'Hobbes Compiler'
+  end
 end
 
 def interpreter
-  CIAT::Executors::Java.new(classpath, 
-    'org.norecess.hobbes.drivers.InterpreterCLI',
-    :description => 'Hobbes Interpreter')
+  CIAT::Processors::Java.new(classpath, 
+    'org.norecess.hobbes.drivers.InterpreterCLI') do |executor|
+    executor.description = 'Hobbes Interpreter'
+  end
 end
 
 def executor
-  CIAT::Executors::Parrot.new(:description => 'PIR VM',
-    :processor_kind => CIAT::Processors::CompilationInterpreter.new,
-    :libraries => ["../pirlib"])
+  CIAT::Processors::Parrot.new do |executor|
+    executor.description = 'PIR VM'
+    executor.kind = CIAT::Processors::CompilationInterpreter.new
+    executor.libraries = ["../pirlib"]
+  end
 end
 
+desc "run both the interpreter and compiler tests"
 task :ciat do
   ex = nil
   begin
-    Rake::Task['interpreter_tests'].invoke
+    Rake::Task['ciat:interpreter'].invoke
   rescue Exception => e
     ex = e
   end
-  Rake::Task['compiler_tests'].invoke
+  Rake::Task['ciat:compiler'].invoke
   fail e if e
 end
 
-task :focused_tests => [:only_focused_tests, :ciat]
+namespace :ciat do
+  CIAT::RakeTask.new(:focused) do |task|
+    type = :interpreter
+    if type == :interpreter
+      task.processors << interpreter
+    else
+      task.processors << compiler
+      task.processors << executor
+    end
+    task.folder = "ciat/type-checking"
+    task.report_title = "Focused Test: " + task.folder
+    task.output_folder = "tmp/focused"
+  end
 
-CIAT::RakeTask.new(:only_focused_tests) do |task|
-  type = :compiler
-  if type == :interpreter
-    task.processors << interpreter
-  else
+  CIAT::RakeTask.new(:compiler) do |task|
     task.processors << compiler
     task.processors << executor
+    task.report_title = "Hobbes Compiler"
+    task.output_folder = "tmp/compiler"
   end
-  task.folder = "ciat/let"
-  task.report_title = "Focused Test: " + task.folder
-  task.output_folder = "focused"
+
+  CIAT::RakeTask.new(:interpreter) do |task|
+    task.processors << interpreter
+    task.report_title = "Hobbes Interpreter"
+    task.output_folder = "tmp/interpreter"
+  end
 end
 
-CIAT::RakeTask.new(:compiler_tests) do |task|
-  task.processors << compiler
-  task.processors << executor
-  task.report_title = "Hobbes Compiler"
-  task.output_folder = "compiler"
-end
-
-CIAT::RakeTask.new(:interpreter_tests) do |task|
-  task.processors << interpreter
-  task.report_title = "Hobbes Interpreter"
-  task.output_folder = "interpreter"
+task :view do
+  require 'launchy'
+  Launchy.open("tmp/interpreter/report.html")
+  Launchy.open("tmp/compiler/report.html")
+  Launchy.open("tmp/focused/report.html")
 end

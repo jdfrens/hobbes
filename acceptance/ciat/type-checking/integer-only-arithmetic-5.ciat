@@ -1,0 +1,7 @@
+Modulus will not tolerate booleans!
+==== source
+#f % #f
+==== compilation error
+Error on line 1: bool % bool is not defined
+==== execution error
+Error on line 1: bool % bool is not defined

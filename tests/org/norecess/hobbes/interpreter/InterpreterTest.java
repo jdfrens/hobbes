@@ -2,6 +2,7 @@ package org.norecess.hobbes.interpreter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.norecess.citkit.Symbol;
 import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.tir.IPosition;
 import org.norecess.citkit.tir.LValueTIR;
 import org.norecess.citkit.tir.data.DatumTIR;
 import org.norecess.citkit.tir.expressions.BooleanETIR;
@@ -53,6 +55,39 @@ public class InterpreterTest {
 
 		myInterpreter = new Interpreter(myRecursion, myArgv, myEnvironment,
 				myAppliables);
+	}
+
+	@Test
+	public void shouldInterpret() {
+		ExpressionTIR expression = myMocksControl
+				.createMock(ExpressionTIR.class);
+		DatumTIR result = myMocksControl.createMock(DatumTIR.class);
+
+		EasyMock.expect(expression.accept(myInterpreter)).andReturn(result);
+
+		myMocksControl.replay();
+		assertSame(result, myInterpreter.interpret(expression));
+		myMocksControl.verify();
+	}
+
+	@Test
+	public void shouldInterpretWithTypeException() {
+		IPosition position = myMocksControl.createMock(IPosition.class);
+		ExpressionTIR expression = myMocksControl
+				.createMock(ExpressionTIR.class);
+
+		EasyMock.expect(expression.accept(myInterpreter)).andThrow(
+				new HobbesTypeException("bad types"));
+		EasyMock.expect(expression.getPosition()).andReturn(position);
+
+		myMocksControl.replay();
+		try {
+			myInterpreter.interpret(expression);
+			fail("should throw type exception");
+		} catch (HobbesTypeException e) {
+			assertSame(position, e.getPosition());
+		}
+		myMocksControl.verify();
 	}
 
 	@Test
@@ -103,8 +138,8 @@ public class InterpreterTest {
 				result);
 
 		myMocksControl.replay();
-		assertSame(result, myInterpreter.interpret(new OperatorETIR(left,
-				operator, right)));
+		assertSame(result, myInterpreter.visitOperatorETIR(new OperatorETIR(
+				left, operator, right)));
 		myMocksControl.verify();
 	}
 

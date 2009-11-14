@@ -58,13 +58,18 @@ public class Interpreter implements IInterpreter {
 	}
 
 	public DatumTIR interpret(ExpressionTIR expression) {
-		return expression.accept(this);
+		try {
+			return expression.accept(this);
+		} catch (HobbesTypeException e) {
+			e.setPositionIfUnset(expression.getPosition());
+			throw e;
+		}
 	}
 
 	public DatumTIR interpret(IEnvironment<DatumTIR> newEnvironment,
 			ExpressionTIR expression) {
-		return expression.accept(new Interpreter(myArgv, newEnvironment,
-				myAppliables));
+		return new Interpreter(myArgv, newEnvironment, myAppliables)
+				.interpret(expression);
 	}
 
 	public IIntegerETIR visitIntegerETIR(IIntegerETIR integer) {
@@ -76,10 +81,6 @@ public class Interpreter implements IInterpreter {
 	}
 
 	public DatumTIR visitOperatorETIR(IOperatorETIR expression) {
-		if (myAppliables.get(expression.getOperator()) == null) {
-			throw new IllegalStateException("cannot compute "
-					+ expression.getOperator());
-		}
 		return myAppliables.get(expression.getOperator()).apply(
 				expression.getLeft().accept(this),
 				expression.getRight().accept(this));

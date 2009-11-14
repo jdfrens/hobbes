@@ -1,0 +1,7 @@
+Integer plus boolean equals error!
+==== source
+10 + #t
+==== compilation error
+Error on line 1: int + bool is not defined
+==== execution error
+Error on line 1: int + bool is not defined
