@@ -2,6 +2,6 @@ Not equals works only on integers.
 ==== source
 82 != #f
 ==== compilation error
-Error on line 1: int != bool is not defined
+Error on line 1: int <> bool is not defined
 ==== execution error
-Error on line 1: int != bool is not defined
+Error on line 1: int <> bool is not defined
