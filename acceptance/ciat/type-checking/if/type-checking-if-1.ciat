@@ -1,0 +1,11 @@
+Type error in test clause of an if.
+==== source
+if #t < 5 then
+  2
+else
+  8
+end
+==== compilation error
+Error on line 1: bool < int is not defined
+==== execution error
+Error on line 1: bool < int is not defined

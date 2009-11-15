@@ -1,0 +1,5 @@
+if #f then
+  2
+else
+  8 / #t
+end

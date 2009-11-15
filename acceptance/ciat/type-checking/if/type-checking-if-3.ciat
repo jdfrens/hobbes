@@ -1,0 +1,11 @@
+Type error in else clause of an if.
+==== source
+if #f then
+  2
+else
+  8 / #t
+end
+==== compilation error
+Error on line 4: int / bool is not defined
+==== execution error
+Error on line 4: int / bool is not defined
