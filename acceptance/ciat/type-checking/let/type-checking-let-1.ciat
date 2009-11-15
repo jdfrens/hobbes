@@ -1,0 +1,11 @@
+Type error in variable declaration.
+==== source
+let
+  var x := #t + 10
+in
+  x < 5
+end
+==== compilation error
+Error on line 2: bool + int is not defined
+==== execution error
+Error on line 2: bool + int is not defined

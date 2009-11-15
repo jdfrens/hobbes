@@ -7,9 +7,9 @@ import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
-import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.IPosition;
-import org.norecess.citkit.tir.expressions.OperatorETIR;
+import org.norecess.citkit.tir.data.DatumTIR;
+import org.norecess.citkit.tir.expressions.IOperatorETIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.types.HobbesType;
 import org.norecess.hobbes.typechecker.HobbesTypeException;
@@ -29,18 +29,21 @@ public class ErrorHandlerTest {
 	@Test
 	public void shouldHandleOperatorTypeError() {
 		IPosition position = myMocksControl.createMock(IPosition.class);
-		ExpressionTIR left = myMocksControl.createMock(ExpressionTIR.class);
 		IOperator operator = myMocksControl.createMock(IOperator.class);
-		ExpressionTIR right = myMocksControl.createMock(ExpressionTIR.class);
+		IOperatorETIR expression = myMocksControl
+				.createMock(IOperatorETIR.class);
+		DatumTIR leftResult = myMocksControl.createMock(DatumTIR.class);
+		DatumTIR rightResult = myMocksControl.createMock(DatumTIR.class);
 
-		expectToShortString(left, "typeA");
+		EasyMock.expect(expression.getPosition()).andReturn(position);
+		expectToShortString(leftResult, "typeA");
+		EasyMock.expect(expression.getOperator()).andReturn(operator);
 		EasyMock.expect(operator.getPunctuation()).andReturn("op");
-		expectToShortString(right, "typeQ");
+		expectToShortString(rightResult, "typeQ");
 
 		myMocksControl.replay();
 		assertHobbesTypeException(position, "typeA op typeQ", myErrorHandler
-				.handleTypeError(new OperatorETIR(position, left, operator,
-						right)));
+				.handleTypeError(expression, leftResult, rightResult));
 		myMocksControl.verify();
 	}
 
@@ -50,8 +53,7 @@ public class ErrorHandlerTest {
 		assertEquals(message, actual.getMessage());
 	}
 
-	private void expectToShortString(ExpressionTIR expression,
-			String shortString) {
+	private void expectToShortString(DatumTIR expression, String shortString) {
 		HobbesType type = myMocksControl.createMock(HobbesType.class);
 		EasyMock.expect(expression.getType()).andReturn(type);
 		EasyMock.expect(type.toShortString()).andReturn(shortString);

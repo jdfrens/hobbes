@@ -1,0 +1,11 @@
+Type error in body of let.
+==== source
+let
+  var x := 88
+in
+  x < #f
+end
+==== compilation error
+Error on line 4: int < bool is not defined
+==== execution error
+Error on line 4: int < bool is not defined

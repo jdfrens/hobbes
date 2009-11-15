@@ -80,12 +80,20 @@ public class Interpreter implements IInterpreter {
 	}
 
 	public DatumTIR visitOperatorETIR(IOperatorETIR expression) {
+		IOperator operator = expression.getOperator();
+		DatumTIR leftResult = expression.getLeft().accept(this);
+		DatumTIR rightResult = expression.getRight().accept(this);
+		return visitInterpreterOperatorETIR(expression, operator, leftResult,
+				rightResult);
+	}
+
+	private DatumTIR visitInterpreterOperatorETIR(IOperatorETIR expression,
+			IOperator operator, DatumTIR leftResult, DatumTIR rightResult) {
 		try {
-			return myAppliables.get(expression.getOperator()).apply(
-					expression.getLeft().accept(this),
-					expression.getRight().accept(this));
+			return myAppliables.get(operator).apply(leftResult, rightResult);
 		} catch (OperatorTypeException e) {
-			throw myErrorHandler.handleTypeError(expression);
+			throw myErrorHandler.handleTypeError(expression, leftResult,
+					rightResult);
 		}
 	}
 

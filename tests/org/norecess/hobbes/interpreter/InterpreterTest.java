@@ -148,8 +148,9 @@ public class InterpreterTest {
 		EasyMock.expect(right.accept(myInterpreter)).andReturn(rightResult);
 		EasyMock.expect(appliable.apply(leftResult, rightResult)).andThrow(
 				new OperatorTypeException());
-		EasyMock.expect(myErrorHandler.handleTypeError(expression)).andReturn(
-				expected);
+		EasyMock.expect(
+				myErrorHandler.handleTypeError(expression, leftResult,
+						rightResult)).andReturn(expected);
 
 		myMocksControl.replay();
 		try {
