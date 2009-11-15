@@ -139,7 +139,8 @@ public class InterpreterTest {
 		IIntegerETIR leftResult = myMocksControl.createMock(IIntegerETIR.class);
 		IIntegerETIR rightResult = myMocksControl
 				.createMock(IIntegerETIR.class);
-		HobbesTypeException expected = new HobbesTypeException("something");
+		HobbesTypeException expected = new HobbesTypeException(position,
+				"something");
 
 		EasyMock.expect(myAppliables.get(operator)).andReturn(appliable)
 				.atLeastOnce();
