@@ -11,6 +11,8 @@ import org.junit.Test;
 import org.norecess.antlr.ANTLRTester;
 import org.norecess.citkit.Symbol;
 import org.norecess.citkit.tir.DeclarationTIR;
+import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.tir.Position;
 import org.norecess.citkit.tir.declarations.VariableDTIR;
 import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
@@ -72,6 +74,14 @@ public class HobbesTIRBuilderTest {
 				new IntegerETIR(2)), myTester.treeParseInput("1*2"));
 		assertEquals(new OperatorETIR(new IntegerETIR(1055), Operator.MULTIPLY,
 				new IntegerETIR(222)), myTester.treeParseInput("1055*222"));
+	}
+
+	@Test
+	public void shouldBuildOperatorsWithPosition() {
+		assertLine(1, "1 + 2");
+		assertLine(2, "1 \n - \n 2");
+		assertLine(1, "1 * 2");
+		assertLine(5, "#t \n\n\n\n == #f\n\n");
 	}
 
 	@Test
@@ -199,4 +209,10 @@ public class HobbesTIRBuilderTest {
 						new IntegerETIR(4))), myTester
 				.treeParseInput("if #f then 2+8 else 3*4 end"));
 	}
+
+	private void assertLine(int line, String expression) {
+		assertEquals(new Position(line), ((ExpressionTIR) myTester
+				.treeParseInput(expression)).getPosition());
+	}
+
 }

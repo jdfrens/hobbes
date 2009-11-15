@@ -11,6 +11,8 @@ import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.tir.IPosition;
+import org.norecess.citkit.tir.Position;
 import org.norecess.citkit.tir.data.DatumTIR;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
 import org.norecess.hobbes.interpreter.IInterpreter;
@@ -65,16 +67,17 @@ public class InterpreterCLITest {
 			IOException {
 		String[] args = new String[0];
 		ByteOutputStream err = new ByteOutputStream();
+		IPosition position = new Position(55);
 		ExpressionTIR tir = myMocksControl.createMock(ExpressionTIR.class);
 
 		EasyMock.expect(myFrontend.process()).andReturn(tir);
 		EasyMock.expect(myInterpreter.interpret(tir)).andThrow(
-				new HobbesTypeException("<this operation>"));
+				new HobbesTypeException(position, "<this operation>"));
 
 		myMocksControl.replay();
 		assertEquals(InterpreterCLI.STATUS_TYPE_ERROR, myInterpreterCLI.doit(
 				null, new PrintStream(err), args));
-		assertEquals("Error on line 1: <this operation> is not defined\n", err
+		assertEquals("Error on line 55: <this operation> is not defined\n", err
 				.toString());
 		myMocksControl.verify();
 	}

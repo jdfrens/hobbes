@@ -37,8 +37,8 @@ public class InterpreterCLI {
 					.interpret(myFrontEnd.process())));
 			return STATUS_OK;
 		} catch (HobbesTypeException e) {
-			err.println("Error on line 1: " + e.getMessage()
-					+ " is not defined");
+			err.println("Error on line " + e.getPosition().getPosition() + ": "
+					+ e.getMessage() + " is not defined");
 			return STATUS_TYPE_ERROR;
 		}
 	}

@@ -36,7 +36,7 @@ expression returns [ExpressionTIR tir]
   | ^(MINUS i=INTEGER)
     { tir = new IntegerETIR("-" + i.getText()); }
   | ^(op=operator left=expression right=expression)
-    { tir = new OperatorETIR(left, op, right); }
+    { tir = new OperatorETIR(new Position(op.line), left, op.operator, right); }
   | ^(IF test=expression consequence=expression otherwise=expression)
     { tir = new IfETIR(test, consequence, otherwise); }
   | ^(LET decls=declarations body=expression)
@@ -56,11 +56,17 @@ declarations returns [List<DeclarationTIR> decls = new ArrayList<DeclarationTIR>
     )
   ;
 
-operator returns [Operator o]
+operator returns [Operator operator, int line]
   : op=( PLUS | MINUS | MULTIPLY | DIVIDE | MODULUS | LT | LTE | GTE | GT )
-    { o = Operator.convertPunctuation(op.getText()); }
-  | eq=( EQ )
-    { o = Operator.EQUALS; }
-  | neq=( NEQ )
-    { o = Operator.NOT_EQUALS; }
+    { 
+      $line = op.getLine(); 
+      $operator = Operator.convertPunctuation(op.getText());
+    }
+  | op=EQ
+    { 
+      $line = op.getLine();  
+      $operator = Operator.EQUALS; 
+    }
+  | op=NEQ
+    { $line = op.getLine();  $operator = Operator.NOT_EQUALS; }
   ;
