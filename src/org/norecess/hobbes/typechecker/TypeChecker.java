@@ -128,8 +128,18 @@ public class TypeChecker implements ITypeChecker {
 
 	public PrimitiveType visitIfETIR(IIfETIR ife) {
 		checkIfTest(ife.getPosition(), myRecurser.recurse(ife.getTest()));
-		myRecurser.recurse(ife.getElseClause());
-		return myRecurser.recurse(ife.getThenClause());
+		return checkThenAndElse(ife, myRecurser.recurse(ife.getThenClause()),
+				myRecurser.recurse(ife.getElseClause()));
+	}
+
+	private PrimitiveType checkThenAndElse(IIfETIR ife, PrimitiveType thenType,
+			PrimitiveType elseType) {
+		if (elseType != thenType) {
+			throw new HobbesTypeException(ife.getPosition(), "then clause is "
+					+ thenType.toShortString() + ", else clause is "
+					+ elseType.toShortString());
+		}
+		return thenType;
 	}
 
 	private void checkIfTest(IPosition position, PrimitiveType testType) {

@@ -1,0 +1,11 @@
+An if should return the same type regardless of the test.
+==== source
+if 5 > 9 then
+  #t
+else
+  888
+end
+==== compilation error
+Error on line 1: then clause is bool, else clause is int
+==== execution error
+Error on line 1: then clause is bool, else clause is int

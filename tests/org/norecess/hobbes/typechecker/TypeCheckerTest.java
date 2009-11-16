@@ -158,19 +158,16 @@ public class TypeCheckerTest {
 				.createMock(ExpressionTIR.class);
 		ExpressionTIR otherwise = myMocksControl
 				.createMock(ExpressionTIR.class);
-		PrimitiveType consequenceType = myMocksControl
-				.createMock(PrimitiveType.class);
-		PrimitiveType otherwiseType = myMocksControl
+		PrimitiveType returnType = myMocksControl
 				.createMock(PrimitiveType.class);
 
 		EasyMock.expect(myRecurser.recurse(test)).andReturn(
 				BooleanType.BOOLEAN_TYPE);
-		EasyMock.expect(myRecurser.recurse(consequence)).andReturn(
-				consequenceType);
-		EasyMock.expect(myRecurser.recurse(otherwise)).andReturn(otherwiseType);
+		EasyMock.expect(myRecurser.recurse(consequence)).andReturn(returnType);
+		EasyMock.expect(myRecurser.recurse(otherwise)).andReturn(returnType);
 
 		myMocksControl.replay();
-		assertSame(consequenceType, myTypeChecker.visitIfETIR(new IfETIR(test,
+		assertSame(returnType, myTypeChecker.visitIfETIR(new IfETIR(test,
 				consequence, otherwise)));
 		myMocksControl.verify();
 	}
@@ -219,6 +216,39 @@ public class TypeCheckerTest {
 			fail("should have throw a type-checking exception");
 		} catch (HobbesTypeException actual) {
 			assertEquals("if test must be bool, not OTHER", actual.getMessage());
+			myMocksControl.verify();
+		}
+	}
+
+	@Test
+	public void shouldCheckIfWithMismatchingThenAndElse() {
+		IPosition position = myMocksControl.createMock(IPosition.class);
+		ExpressionTIR test = myMocksControl.createMock(ExpressionTIR.class);
+		ExpressionTIR consequence = myMocksControl
+				.createMock(ExpressionTIR.class);
+		ExpressionTIR otherwise = myMocksControl
+				.createMock(ExpressionTIR.class);
+		PrimitiveType consequenceType = myMocksControl
+				.createMock(PrimitiveType.class);
+		PrimitiveType otherwiseType = myMocksControl
+				.createMock(PrimitiveType.class);
+
+		EasyMock.expect(myRecurser.recurse(test)).andReturn(
+				BooleanType.BOOLEAN_TYPE);
+		EasyMock.expect(myRecurser.recurse(consequence)).andReturn(
+				consequenceType);
+		EasyMock.expect(consequenceType.toShortString()).andReturn("ASD");
+		EasyMock.expect(myRecurser.recurse(otherwise)).andReturn(otherwiseType);
+		EasyMock.expect(otherwiseType.toShortString()).andReturn("QWE");
+
+		myMocksControl.replay();
+		try {
+			myTypeChecker.visitIfETIR(new IfETIR(position, test, consequence,
+					otherwise));
+			fail("should have throw a type-checking exception");
+		} catch (HobbesTypeException actual) {
+			assertEquals("then clause is ASD, else clause is QWE", actual
+					.getMessage());
 			myMocksControl.verify();
 		}
 	}
