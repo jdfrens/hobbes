@@ -36,7 +36,7 @@ public class InterpreterSystem implements IInterpreterSystem {
 			tir.accept(myTypeChecker);
 		} catch (HobbesTypeException e) {
 			err.println("Error on line " + e.getPosition().getPosition() + ": "
-					+ e.getMessage() + " is not defined");
+					+ e.getMessage());
 			throw new AbortInterpretationException(
 					CLIStatusCodes.STATUS_TYPE_ERROR);
 		}

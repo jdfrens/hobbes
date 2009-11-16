@@ -66,8 +66,8 @@ public class ErrorHandlerTest {
 		EasyMock.expect(operator.getPunctuation()).andReturn("op");
 
 		myMocksControl.replay();
-		assertHobbesTypeException(position, "foobar op barfoo", myErrorHandler
-				.handleTypeError(expression, leftType, rightType));
+		assertHobbesTypeException(position, "foobar op barfoo is not defined",
+				myErrorHandler.handleTypeError(expression, leftType, rightType));
 		myMocksControl.verify();
 	}
 

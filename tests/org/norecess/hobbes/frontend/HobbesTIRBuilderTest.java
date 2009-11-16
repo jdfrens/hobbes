@@ -1,7 +1,6 @@
 package org.norecess.hobbes.frontend;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,9 +40,23 @@ public class HobbesTIRBuilderTest {
 	}
 
 	@Test
+	public void shouldBuildIntegersWithPosition() {
+		assertLine(1, "23");
+		assertLine(2, "\n 23");
+		assertLine(5, "\n\n\n\n 23");
+	}
+
+	@Test
 	public void shouldBuildBooleans() {
-		assertSame(HobbesBoolean.TRUE, myTester.treeParseInput("#t"));
-		assertSame(HobbesBoolean.FALSE, myTester.treeParseInput("#f"));
+		assertEquals(HobbesBoolean.TRUE, myTester.treeParseInput("#t"));
+		assertEquals(HobbesBoolean.FALSE, myTester.treeParseInput("#f"));
+	}
+
+	@Test
+	public void shouldBuildBooleansWithPosition() {
+		assertLine(1, "#t");
+		assertLine(2, "\n #f");
+		assertLine(7, "\n\n\n\n\n\n #f");
 	}
 
 	@Test
@@ -208,6 +221,13 @@ public class HobbesTIRBuilderTest {
 				new OperatorETIR(new IntegerETIR(3), Operator.MULTIPLY,
 						new IntegerETIR(4))), myTester
 				.treeParseInput("if #f then 2+8 else 3*4 end"));
+	}
+
+	@Test
+	public void shouldBuildIfExpressionsWithPosition() {
+		assertLine(1, "if #t then 2 else 3 end");
+		assertLine(1, "if #t \n then 2 \n else 3 \n end");
+		assertLine(3, "\n\n if #t then 2 else 3 end");
 	}
 
 	private void assertLine(int line, String expression) {

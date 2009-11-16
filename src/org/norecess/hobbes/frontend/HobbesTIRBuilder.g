@@ -26,9 +26,9 @@ program returns [ExpressionTIR tir]
 
 expression returns [ExpressionTIR tir]
   : i=INTEGER
-    { tir = new IntegerETIR(i.getText()); }
+    { tir = new IntegerETIR(new Position(i.getLine()), i.getText()); }
   | b=BOOLEAN
-    { tir = HobbesBoolean.parse(b.getText()); }
+    { tir = new BooleanETIR(new Position(b.getLine()), b.getText()); }
   | s=symbol
     { tir = new VariableETIR(new SimpleLValueTIR(s)); }
   | ^(ARGV e=expression)
@@ -38,7 +38,7 @@ expression returns [ExpressionTIR tir]
   | ^(op=operator left=expression right=expression)
     { tir = new OperatorETIR(new Position(op.line), left, op.operator, right); }
   | ^(IF test=expression consequence=expression otherwise=expression)
-    { tir = new IfETIR(test, consequence, otherwise); }
+    { tir = new IfETIR(test.getPosition(), test, consequence, otherwise); }
   | ^(LET decls=declarations body=expression)
     { tir = new LetETIR(decls, body); }
   ;

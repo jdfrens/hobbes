@@ -6,6 +6,7 @@ import java.util.Map;
 import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.tir.IPosition;
 import org.norecess.citkit.tir.expressions.BreakETIR;
 import org.norecess.citkit.tir.expressions.IArrayETIR;
 import org.norecess.citkit.tir.expressions.IAssignmentETIR;
@@ -126,7 +127,15 @@ public class TypeChecker implements ITypeChecker {
 	}
 
 	public PrimitiveType visitIfETIR(IIfETIR ife) {
-		return ife.getThenClause().accept(this);
+		checkIfTest(ife.getPosition(), myRecurser.recurse(ife.getTest()));
+		return myRecurser.recurse(ife.getThenClause());
+	}
+
+	private void checkIfTest(IPosition position, PrimitiveType testType) {
+		if (testType != BooleanType.BOOLEAN_TYPE) {
+			throw new HobbesTypeException(position,
+					"if test must be bool, not " + testType.toShortString());
+		}
 	}
 
 	public PrimitiveType visitLetETIR(ILetETIR let) {

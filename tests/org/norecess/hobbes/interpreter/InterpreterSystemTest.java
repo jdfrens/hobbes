@@ -69,7 +69,7 @@ public class InterpreterSystemTest {
 		ExpressionTIR tir = myMocksControl.createMock(ExpressionTIR.class);
 
 		EasyMock.expect(tir.accept(myTypeChecker)).andThrow(
-				new HobbesTypeException(position, "<this operation>"));
+				new HobbesTypeException(position, "<type error message>"));
 
 		myMocksControl.replay();
 		try {
@@ -77,8 +77,8 @@ public class InterpreterSystemTest {
 			fail("should fail to type check");
 		} catch (AbortInterpretationException e) {
 			assertEquals(CLIStatusCodes.STATUS_TYPE_ERROR, e.getStatus());
-			assertEquals("Error on line 55: <this operation> is not defined\n",
-					err.toString());
+			assertEquals("Error on line 55: <type error message>\n", err
+					.toString());
 		}
 		myMocksControl.verify();
 	}

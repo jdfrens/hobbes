@@ -24,7 +24,7 @@ public class ErrorHandler implements IErrorHandler {
 		return new HobbesTypeException(expression.getPosition(), //
 				leftType.toShortString() + " "
 						+ expression.getOperator().getPunctuation() + " "
-						+ rightType.toShortString());
+						+ rightType.toShortString() + " is not defined");
 	}
 
 }

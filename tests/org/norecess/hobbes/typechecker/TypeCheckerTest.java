@@ -158,14 +158,66 @@ public class TypeCheckerTest {
 				.createMock(ExpressionTIR.class);
 		ExpressionTIR otherwise = myMocksControl
 				.createMock(ExpressionTIR.class);
-		PrimitiveType type = myMocksControl.createMock(PrimitiveType.class);
+		PrimitiveType consequenceType = myMocksControl
+				.createMock(PrimitiveType.class);
 
-		EasyMock.expect(consequence.accept(myTypeChecker)).andReturn(type);
+		EasyMock.expect(myRecurser.recurse(test)).andReturn(
+				BooleanType.BOOLEAN_TYPE);
+		EasyMock.expect(myRecurser.recurse(consequence)).andReturn(
+				consequenceType);
 
 		myMocksControl.replay();
-		assertSame(type, myTypeChecker.visitIfETIR(new IfETIR(test,
+		assertSame(consequenceType, myTypeChecker.visitIfETIR(new IfETIR(test,
 				consequence, otherwise)));
 		myMocksControl.verify();
+	}
+
+	@Test
+	public void shouldCheckIfWithErrorInTest() {
+		IPosition position = myMocksControl.createMock(IPosition.class);
+		ExpressionTIR test = myMocksControl.createMock(ExpressionTIR.class);
+		ExpressionTIR consequence = myMocksControl
+				.createMock(ExpressionTIR.class);
+		ExpressionTIR otherwise = myMocksControl
+				.createMock(ExpressionTIR.class);
+		HobbesTypeException exception = new HobbesTypeException(position,
+				"<message>");
+
+		EasyMock.expect(myRecurser.recurse(test)).andThrow(exception);
+
+		myMocksControl.replay();
+		try {
+			myTypeChecker.visitIfETIR(new IfETIR(position, test, consequence,
+					otherwise));
+			fail("should have throw a type-checking exception");
+		} catch (HobbesTypeException actual) {
+			assertSame(exception, actual);
+			myMocksControl.verify();
+		}
+	}
+
+	@Test
+	public void shouldCheckIfWithNonBooleanTest() {
+		IPosition position = myMocksControl.createMock(IPosition.class);
+		ExpressionTIR test = myMocksControl.createMock(ExpressionTIR.class);
+		ExpressionTIR consequence = myMocksControl
+				.createMock(ExpressionTIR.class);
+		ExpressionTIR otherwise = myMocksControl
+				.createMock(ExpressionTIR.class);
+		PrimitiveType testType = myMocksControl.createMock(PrimitiveType.class);
+
+		EasyMock.expect(myRecurser.recurse(test)).andReturn(testType);
+		EasyMock.expect(testType.toShortString()).andReturn("OTHER");
+
+		myMocksControl.replay();
+		try {
+			myTypeChecker.visitIfETIR(new IfETIR(position, test, consequence,
+					otherwise));
+			fail("should have throw a type-checking exception");
+		} catch (HobbesTypeException actual) {
+			assertEquals("if test must be bool, not OTHER", actual.getMessage());
+			myMocksControl.verify();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
