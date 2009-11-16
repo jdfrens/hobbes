@@ -10,6 +10,7 @@ import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.types.PrimitiveType;
 import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.compiler.body.IPIRBodyCompiler;
 import org.norecess.hobbes.compiler.epilog.IPIREpilogCompiler;
@@ -23,7 +24,7 @@ public class PIRCompilerTest {
 	private IPIRBodyCompiler	myBodyCompiler;
 	private IPIREpilogCompiler	myEpilogCompiler;
 
-	private IPIRCompiler			myCompiler;
+	private IPIRCompiler		myCompiler;
 
 	@Before
 	public void setUp() {
@@ -40,13 +41,15 @@ public class PIRCompilerTest {
 	@Test
 	public void shouldCompile() throws RecognitionException, IOException {
 		ExpressionTIR tir = myControl.createMock(ExpressionTIR.class);
+		PrimitiveType returnType = myControl.createMock(PrimitiveType.class);
 
+		EasyMock.expect(myBodyCompiler.typeCheck(tir)).andReturn(returnType);
 		EasyMock.expect(myPrologCompiler.generateProlog(tir)).andReturn(
 				new Code("prolog"));
 		EasyMock.expect(myBodyCompiler.generate(tir)).andReturn(
 				new Code("body"));
-		EasyMock.expect(myBodyCompiler.generatePrint(tir)).andReturn(
-				new Code("print"));
+		EasyMock.expect(myBodyCompiler.generatePrint(returnType, tir))
+				.andReturn(new Code("print"));
 		EasyMock.expect(myEpilogCompiler.generate()).andReturn(
 				new Code("epilog"));
 

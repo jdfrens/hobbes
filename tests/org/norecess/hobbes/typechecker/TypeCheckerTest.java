@@ -2,10 +2,12 @@ package org.norecess.hobbes.typechecker;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.easymock.EasyMock;
 import org.junit.Before;
@@ -14,40 +16,48 @@ import org.norecess.citkit.ISymbol;
 import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.tir.IPosition;
 import org.norecess.citkit.tir.LValueTIR;
 import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.LetETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
-import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
+import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
 import org.norecess.citkit.types.BooleanType;
 import org.norecess.citkit.types.IntegerType;
 import org.norecess.citkit.types.PrimitiveType;
 import org.norecess.hobbes.HobbesBoolean;
+import org.norecess.hobbes.interpreter.IErrorHandler;
 import org.norecess.hobbes.support.HobbesEasyMock;
 import org.norecess.hobbes.support.IHobbesMocksControl;
+import org.norecess.hobbes.typechecker.operators.OperatorTypeChecker;
 
 public class TypeCheckerTest {
 
-	private IHobbesMocksControl			myMocksControl;
+	private IHobbesMocksControl					myMocksControl;
 
-	private ITypeChecker				myRecurser;
-	private IEnvironment<PrimitiveType>	myEnvironment;
+	private IEnvironment<PrimitiveType>			myEnvironment;
+	private IErrorHandler						myErrorHandler;
+	private Map<IOperator, OperatorTypeChecker>	myOperatorTypeCheckers;
+	private ITypeChecker						myRecurser;
 
-	private TypeChecker					myTypeChecker;
+	private TypeChecker							myTypeChecker;
 
 	@SuppressWarnings("unchecked")
 	@Before
 	public void setUp() {
 		myMocksControl = HobbesEasyMock.createControl();
 
-		myRecurser = myMocksControl.createMock(ITypeChecker.class);
 		myEnvironment = myMocksControl.createMock(IEnvironment.class);
+		myErrorHandler = myMocksControl.createMock(IErrorHandler.class);
+		myOperatorTypeCheckers = myMocksControl.createMock(Map.class);
+		myRecurser = myMocksControl.createMock(ITypeChecker.class);
 
-		myTypeChecker = new TypeChecker(myEnvironment, myRecurser);
+		myTypeChecker = new TypeChecker(myEnvironment, myErrorHandler,
+				myOperatorTypeCheckers, myRecurser);
 	}
 
 	@Test
@@ -67,35 +77,65 @@ public class TypeCheckerTest {
 	}
 
 	@Test
-	public void shouldCheckArithmeticOperators() {
-		assertEquals(IntegerType.INTEGER_TYPE, myTypeChecker
-				.visitOperatorETIR(arithmeticExpression(Operator.ADD)));
-		assertEquals(IntegerType.INTEGER_TYPE, myTypeChecker
-				.visitOperatorETIR(arithmeticExpression(Operator.SUBTRACT)));
-		assertEquals(IntegerType.INTEGER_TYPE, myTypeChecker
-				.visitOperatorETIR(arithmeticExpression(Operator.MULTIPLY)));
-		assertEquals(IntegerType.INTEGER_TYPE, myTypeChecker
-				.visitOperatorETIR(arithmeticExpression(Operator.DIVIDE)));
-		assertEquals(IntegerType.INTEGER_TYPE, myTypeChecker
-				.visitOperatorETIR(arithmeticExpression(Operator.MODULUS)));
+	public void shouldCheckArithmeticOperator() {
+		ExpressionTIR left = myMocksControl.createMock(ExpressionTIR.class);
+		IOperator op = myMocksControl.createMock(IOperator.class);
+		ExpressionTIR right = myMocksControl.createMock(ExpressionTIR.class);
+		PrimitiveType leftType = myMocksControl.createMock(PrimitiveType.class);
+		PrimitiveType rightType = myMocksControl
+				.createMock(PrimitiveType.class);
+		OperatorTypeChecker operatorTypeChecker = myMocksControl
+				.createMock(OperatorTypeChecker.class);
+		PrimitiveType result = myMocksControl.createMock(PrimitiveType.class);
+
+		EasyMock.expect(myRecurser.recurse(left)).andReturn(leftType);
+		EasyMock.expect(myRecurser.recurse(right)).andReturn(rightType);
+		EasyMock.expect(myOperatorTypeCheckers.get(op)).andReturn(
+				operatorTypeChecker);
+		EasyMock.expect(operatorTypeChecker.check(leftType, rightType))
+				.andReturn(result);
+
+		myMocksControl.replay();
+		assertSame(result, myTypeChecker.visitOperatorETIR(new OperatorETIR(
+				left, op, right)));
+		myMocksControl.verify();
 	}
 
 	@Test
-	public void shouldCheckComparisonOperators() {
-		assertEquals(BooleanType.BOOLEAN_TYPE, myTypeChecker
-				.visitOperatorETIR(comparisonExpression(Operator.LESS_THAN)));
-		assertEquals(BooleanType.BOOLEAN_TYPE, myTypeChecker
-				.visitOperatorETIR(comparisonExpression(Operator.LESS_EQUALS)));
-		assertEquals(BooleanType.BOOLEAN_TYPE, myTypeChecker
-				.visitOperatorETIR(comparisonExpression(Operator.EQUALS)));
-		assertEquals(BooleanType.BOOLEAN_TYPE, myTypeChecker
-				.visitOperatorETIR(comparisonExpression(Operator.NOT_EQUALS)));
-		assertEquals(
-				BooleanType.BOOLEAN_TYPE,
-				myTypeChecker
-						.visitOperatorETIR(comparisonExpression(Operator.GREATER_EQUALS)));
-		assertEquals(BooleanType.BOOLEAN_TYPE, myTypeChecker
-				.visitOperatorETIR(comparisonExpression(Operator.GREATER_THAN)));
+	public void shouldCheckArithmeticOperatorWithTypeError() {
+		IPosition position = myMocksControl.createMock(IPosition.class);
+		ExpressionTIR left = myMocksControl.createMock(ExpressionTIR.class);
+		IOperator op = myMocksControl.createMock(IOperator.class);
+		ExpressionTIR right = myMocksControl.createMock(ExpressionTIR.class);
+		OperatorETIR expression = new OperatorETIR(position, left, op, right);
+		PrimitiveType leftType = myMocksControl.createMock(PrimitiveType.class);
+		PrimitiveType rightType = myMocksControl
+				.createMock(PrimitiveType.class);
+		OperatorTypeChecker operatorTypeChecker = myMocksControl
+				.createMock(OperatorTypeChecker.class);
+		HobbesTypeException expected = new HobbesTypeException(position,
+				"something");
+
+		EasyMock.expect(myRecurser.recurse(left)).andReturn(leftType);
+		EasyMock.expect(myRecurser.recurse(right)).andReturn(rightType);
+		EasyMock.expect(myOperatorTypeCheckers.get(op)).andReturn(
+				operatorTypeChecker);
+		EasyMock.expect(operatorTypeChecker.check(leftType, rightType))
+				.andThrow(new OperatorTypeException());
+		EasyMock
+				.expect(
+						myErrorHandler.handleTypeError(expression, leftType,
+								rightType)).andReturn(expected);
+
+		myMocksControl.replay();
+		try {
+			myTypeChecker.visitOperatorETIR(expression);
+			fail("should throw type exception");
+		} catch (HobbesTypeException actual) {
+			assertSame(expected, actual);
+		} finally {
+			myMocksControl.verify();
+		}
 	}
 
 	@Test
@@ -214,18 +254,6 @@ public class TypeCheckerTest {
 		assertSame(IntegerType.INTEGER_TYPE, myTypeChecker
 				.visitSubscriptLValue(new SubscriptLValueTIR(variable, index)));
 		myMocksControl.verify();
-	}
-
-	//
-	// Helpers
-	//
-	private OperatorETIR comparisonExpression(Operator operator) {
-		return new OperatorETIR(new IntegerETIR(55), operator, new IntegerETIR(
-				3));
-	}
-
-	private OperatorETIR arithmeticExpression(Operator operator) {
-		return comparisonExpression(operator);
 	}
 
 }

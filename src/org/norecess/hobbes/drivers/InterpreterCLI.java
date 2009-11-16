@@ -4,50 +4,43 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import org.antlr.runtime.RecognitionException;
+import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.hobbes.drivers.injection.InterpreterModule;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
-import org.norecess.hobbes.interpreter.IInterpreter;
-import org.norecess.hobbes.output.IHobbesOutput;
-import org.norecess.hobbes.typechecker.HobbesTypeException;
+import org.norecess.hobbes.interpreter.IInterpreterSystem;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 
 public class InterpreterCLI {
 
-	public static final int			STATUS_OK			= 0;
-	public static final int			STATUS_TYPE_ERROR	= 1;
-
-	private final IHobbesOutput		myHobbesOutput;
-	private final IHobbesFrontEnd	myFrontEnd;
-	private final IInterpreter		myInterpreter;
+	private final IHobbesFrontEnd		myFrontEnd;
+	private final IInterpreterSystem	mySystem;
 
 	@Inject
-	public InterpreterCLI(IHobbesOutput hobbesOutput, IHobbesFrontEnd frontEnd,
-			IInterpreter interpreter) {
-		myHobbesOutput = hobbesOutput;
+	public InterpreterCLI(IHobbesFrontEnd frontEnd, IInterpreterSystem system) {
 		myFrontEnd = frontEnd;
-		myInterpreter = interpreter;
+		mySystem = system;
 	}
 
-	public int doit(PrintStream out, PrintStream err, String[] args)
+	public void doit(PrintStream out, PrintStream err, String[] args)
 			throws IOException, RecognitionException {
-		try {
-			out.println(myHobbesOutput.asHobbesOutput(myInterpreter
-					.interpret(myFrontEnd.process())));
-			return STATUS_OK;
-		} catch (HobbesTypeException e) {
-			err.println("Error on line " + e.getPosition().getPosition() + ": "
-					+ e.getMessage() + " is not defined");
-			return STATUS_TYPE_ERROR;
-		}
+		ExpressionTIR tir = myFrontEnd.process();
+		mySystem.typeCheck(err, tir);
+		mySystem.evalAndPrint(out, tir);
 	}
 
 	public static void main(String[] args) throws IOException,
 			RecognitionException {
-		System.exit(Guice.createInjector(new InterpreterModule(args))
-				.getInstance(InterpreterCLI.class).doit(System.out, System.err,
-						args));
+		try {
+			InterpreterCLI interpreterCLI = Guice.createInjector(
+					new InterpreterModule(args)).getInstance(
+					InterpreterCLI.class);
+			interpreterCLI.doit(System.out, System.err, args);
+			System.exit(CLIStatusCodes.STATUS_OK);
+		} catch (AbortInterpretationException e) {
+			System.exit(e.getStatus());
+		}
 	}
 
 }

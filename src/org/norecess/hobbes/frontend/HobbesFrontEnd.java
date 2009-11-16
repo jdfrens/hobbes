@@ -20,20 +20,28 @@ import com.google.inject.name.Named;
  */
 public class HobbesFrontEnd implements IHobbesFrontEnd {
 
-	private final ANTLRStringStream	myInputStream;
+	private ANTLRStringStream	myInputStream;
+	private File				myFile;
 
 	public HobbesFrontEnd(ANTLRStringStream inputStream) {
 		myInputStream = inputStream;
 	}
 
 	@Inject
-	public HobbesFrontEnd(@Named("SourceFile") File file) throws IOException {
-		myInputStream = new ANTLRInputStream(new FileInputStream(file));
+	public HobbesFrontEnd(@Named("SourceFile") File file) {
+		myFile = file;
 	}
 
-	public ExpressionTIR process() throws RecognitionException {
+	public ExpressionTIR process() throws RecognitionException, IOException {
 		Tree tree = new HobbesParser(new CommonTokenStream(new HobbesLexer(
-				myInputStream))).program().tree;
+				getInputStream()))).program().tree;
 		return new HobbesTIRBuilder(new CommonTreeNodeStream(tree)).program();
+	}
+
+	private ANTLRStringStream getInputStream() throws IOException {
+		if (myInputStream == null) {
+			myInputStream = new ANTLRInputStream(new FileInputStream(myFile));
+		}
+		return myInputStream;
 	}
 }

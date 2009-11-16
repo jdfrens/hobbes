@@ -1,0 +1,11 @@
+A simple integer is not a good if test.
+==== source
+if 5 then
+  222
+else
+  888
+end
+==== compilation error
+Error on line 1: if test must be bool, not int
+==== execution error
+Error on line 1: if test must be bool, not int

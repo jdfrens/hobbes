@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.antlr.runtime.RecognitionException;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.types.PrimitiveType;
 import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.backend.ICode;
 import org.norecess.hobbes.compiler.body.IPIRBodyCompiler;
@@ -32,10 +33,11 @@ public class PIRCompiler implements IPIRCompiler {
 
 	public ICode compile(ExpressionTIR tir) throws IOException,
 			RecognitionException {
+		PrimitiveType returnType = myBodyCompiler.typeCheck(tir);
 		ICode code = new Code();
 		code.append(myPrologCompiler.generateProlog(tir));
 		code.append(myBodyCompiler.generate(tir));
-		code.append(myBodyCompiler.generatePrint(tir));
+		code.append(myBodyCompiler.generatePrint(returnType, tir));
 		code.append(myEpilogCompiler.generate());
 		return code;
 	}

@@ -127,6 +127,7 @@ public class InterpreterTest {
 		myMocksControl.verify();
 	}
 
+	// TODO: this should not be necessary after type checker is working
 	@Test
 	public void shouldInterpretOperatorExpressionWithTypeException() {
 		IPosition position = myMocksControl.createMock(IPosition.class);

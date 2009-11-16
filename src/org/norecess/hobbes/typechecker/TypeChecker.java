@@ -1,7 +1,7 @@
 package org.norecess.hobbes.typechecker;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.tir.DeclarationTIR;
@@ -24,36 +24,43 @@ import org.norecess.citkit.tir.expressions.IStringETIR;
 import org.norecess.citkit.tir.expressions.IVariableETIR;
 import org.norecess.citkit.tir.expressions.IWhileETIR;
 import org.norecess.citkit.tir.expressions.NilETIR;
-import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
+import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.lvalues.IFieldValueTIR;
 import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
 import org.norecess.citkit.types.BooleanType;
 import org.norecess.citkit.types.IntegerType;
 import org.norecess.citkit.types.PrimitiveType;
+import org.norecess.hobbes.interpreter.IErrorHandler;
+import org.norecess.hobbes.typechecker.operators.OperatorTypeChecker;
 
 import com.google.inject.Inject;
 
 public class TypeChecker implements ITypeChecker {
 
-	private static final List<Operator>			ARITHMETIC_OPERATORS	= Arrays
-																				.asList(new Operator[] {
-			Operator.ADD, Operator.SUBTRACT, Operator.MULTIPLY,
-			Operator.DIVIDE, Operator.MODULUS									});
-
-	private final IEnvironment<PrimitiveType>	myEnvironment;
-	private final ITypeChecker					myRecurser;
+	private final IEnvironment<PrimitiveType>			myEnvironment;
+	private final Map<IOperator, OperatorTypeChecker>	myOperatorTypeCheckers;
+	private final ITypeChecker							myRecurser;
+	private final IErrorHandler							myErrorHandler;
 
 	@Inject
-	public TypeChecker(IEnvironment<PrimitiveType> environment) {
+	public TypeChecker(IEnvironment<PrimitiveType> environment,
+			IErrorHandler errorHandler,
+			Map<IOperator, OperatorTypeChecker> operatorTypeCheckers) {
 		myEnvironment = environment;
+		myErrorHandler = errorHandler;
+		myOperatorTypeCheckers = operatorTypeCheckers;
 		myRecurser = this;
 	}
 
 	public TypeChecker(IEnvironment<PrimitiveType> environment,
+			IErrorHandler errorHandler,
+			Map<IOperator, OperatorTypeChecker> operatorTypeCheckers,
 			ITypeChecker recurser) {
-		myRecurser = recurser;
 		myEnvironment = environment;
+		myErrorHandler = errorHandler;
+		myOperatorTypeCheckers = operatorTypeCheckers;
+		myRecurser = recurser;
 	}
 
 	public PrimitiveType recurse(ExpressionTIR expression) {
@@ -62,7 +69,8 @@ public class TypeChecker implements ITypeChecker {
 
 	public PrimitiveType recurse(IEnvironment<PrimitiveType> newEnvironment,
 			ExpressionTIR expression) {
-		return expression.accept(new TypeChecker(newEnvironment));
+		return expression.accept(new TypeChecker(newEnvironment,
+				myErrorHandler, myOperatorTypeCheckers));
 	}
 
 	public IEnvironment<PrimitiveType> bind(
@@ -88,10 +96,20 @@ public class TypeChecker implements ITypeChecker {
 	}
 
 	public PrimitiveType visitOperatorETIR(IOperatorETIR expression) {
-		if (ARITHMETIC_OPERATORS.contains(expression.getOperator())) {
-			return IntegerType.INTEGER_TYPE;
-		} else {
-			return BooleanType.BOOLEAN_TYPE;
+		return visitInterpretedOperatorETIR(expression, expression
+				.getOperator(), myRecurser.recurse(expression.getLeft()),
+				myRecurser.recurse(expression.getRight()));
+	}
+
+	private PrimitiveType visitInterpretedOperatorETIR(
+			IOperatorETIR expression, IOperator operator,
+			PrimitiveType leftType, PrimitiveType rightType) {
+		try {
+			return myOperatorTypeCheckers.get(operator).check(leftType,
+					rightType);
+		} catch (OperatorTypeException e) {
+			throw myErrorHandler.handleTypeError(expression, leftType,
+					rightType);
 		}
 	}
 

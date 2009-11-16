@@ -2,6 +2,7 @@ package org.norecess.hobbes.compiler.body;
 
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.types.BooleanType;
+import org.norecess.citkit.types.PrimitiveType;
 import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.backend.ICode;
 import org.norecess.hobbes.compiler.ICompilerFactory;
@@ -31,15 +32,19 @@ public class PIRBodyCompiler implements IPIRBodyCompiler {
 		return code;
 	}
 
-	public ICode generatePrint(ExpressionTIR tir) {
+	public ICode generatePrint(PrimitiveType returnType, ExpressionTIR tir) {
 		ICode code = new Code();
-		if (tir.accept(myBodyVisitorFactory.createTypeChecker()) == BooleanType.BOOLEAN_TYPE) {
+		if (returnType == BooleanType.BOOLEAN_TYPE) {
 			code.add("print_bool(", ACC, ")");
 		} else {
 			code.add("print " + ACC);
 		}
 		code.add("print \"\\n\"");
 		return code;
+	}
+
+	public PrimitiveType typeCheck(ExpressionTIR tir) {
+		return tir.accept(myBodyVisitorFactory.createTypeChecker());
 	}
 
 }

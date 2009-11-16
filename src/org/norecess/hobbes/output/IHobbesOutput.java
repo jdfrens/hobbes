@@ -4,6 +4,6 @@ import org.norecess.citkit.tir.data.DatumTIR;
 
 public interface IHobbesOutput {
 
-	public abstract String asHobbesOutput(DatumTIR value);
+	public String asHobbesOutput(DatumTIR value);
 
 }

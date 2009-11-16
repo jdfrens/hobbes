@@ -40,7 +40,8 @@ public class CompilerFactory implements ICompilerFactory {
 	}
 
 	public ITypeChecker createTypeChecker() {
-		return new TypeChecker(myTypeEnvironment);
+		return new TypeChecker(myTypeEnvironment, null, null); // TODO: nulls
+																// are bad
 	}
 
 }

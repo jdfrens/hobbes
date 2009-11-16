@@ -12,12 +12,14 @@ import org.norecess.citkit.tir.data.DatumTIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.types.HobbesType;
+import org.norecess.citkit.types.PrimitiveType;
 import org.norecess.hobbes.typechecker.HobbesTypeException;
 
 public class ErrorHandlerTest {
 
-	private ErrorHandler	myErrorHandler;
 	private IMocksControl	myMocksControl;
+
+	private ErrorHandler	myErrorHandler;
 
 	@Before
 	public void setUp() {
@@ -27,7 +29,7 @@ public class ErrorHandlerTest {
 	}
 
 	@Test
-	public void shouldHandleOperatorTypeError() {
+	public void shouldHandleOperatorTypeErrorDeprecated() {
 		IPosition position = myMocksControl.createMock(IPosition.class);
 		IOperator operator = myMocksControl.createMock(IOperator.class);
 		IOperatorETIR expression = myMocksControl
@@ -44,6 +46,28 @@ public class ErrorHandlerTest {
 		myMocksControl.replay();
 		assertHobbesTypeException(position, "typeA op typeQ", myErrorHandler
 				.handleTypeError(expression, leftResult, rightResult));
+		myMocksControl.verify();
+	}
+
+	@Test
+	public void shouldHandleOperatorTypeError() {
+		IOperatorETIR expression = myMocksControl
+				.createMock(IOperatorETIR.class);
+		PrimitiveType leftType = myMocksControl.createMock(PrimitiveType.class);
+		PrimitiveType rightType = myMocksControl
+				.createMock(PrimitiveType.class);
+		IPosition position = myMocksControl.createMock(IPosition.class);
+		IOperator operator = myMocksControl.createMock(IOperator.class);
+
+		EasyMock.expect(expression.getPosition()).andReturn(position);
+		EasyMock.expect(expression.getOperator()).andReturn(operator);
+		EasyMock.expect(leftType.toShortString()).andReturn("foobar");
+		EasyMock.expect(rightType.toShortString()).andReturn("barfoo");
+		EasyMock.expect(operator.getPunctuation()).andReturn("op");
+
+		myMocksControl.replay();
+		assertHobbesTypeException(position, "foobar op barfoo", myErrorHandler
+				.handleTypeError(expression, leftType, rightType));
 		myMocksControl.verify();
 	}
 
