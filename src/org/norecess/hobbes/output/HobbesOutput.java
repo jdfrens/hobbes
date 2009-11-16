@@ -6,9 +6,9 @@ import org.norecess.hobbes.HobbesBoolean;
 public class HobbesOutput implements IHobbesOutput {
 
 	public String asHobbesOutput(DatumTIR value) {
-		if (value == HobbesBoolean.TRUE) {
+		if (HobbesBoolean.TRUE.equals(value)) {
 			return "#t";
-		} else if (value == HobbesBoolean.FALSE) {
+		} else if (HobbesBoolean.FALSE.equals(value)) {
 			return "#f";
 		} else {
 			return value.toString();

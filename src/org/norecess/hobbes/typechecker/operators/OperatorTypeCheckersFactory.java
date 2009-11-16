@@ -19,10 +19,10 @@ public class OperatorTypeCheckersFactory {
 	public Map<IOperator, OperatorTypeChecker> createOperatorTypeCheckers() {
 		add(
 				new ArithmeticTypeChecker(), //
-				Operator.ADD, Operator.SUBTRACT,
-				Operator.MULTIPLY,
-				Operator.DIVIDE,
-				Operator.MODULUS, //
+				Operator.ADD, Operator.SUBTRACT, Operator.MULTIPLY,
+				Operator.DIVIDE, Operator.MODULUS);
+		add(
+				new ComparisonTypeChecker(), //
 				Operator.LESS_THAN, Operator.LESS_EQUALS, Operator.EQUALS,
 				Operator.GREATER_EQUALS, Operator.GREATER_THAN,
 				Operator.NOT_EQUALS);

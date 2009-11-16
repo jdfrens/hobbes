@@ -1,5 +1,5 @@
-if #f then
-  2
+if 5 + 9 then
+  222
 else
-  8 / #t
+  888
 end
