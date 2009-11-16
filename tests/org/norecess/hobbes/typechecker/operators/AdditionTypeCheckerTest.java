@@ -11,13 +11,13 @@ public class AdditionTypeCheckerTest {
 
 	private IMocksControl		myMocksControl;
 
-	private AdditionTypeChecker	myTypeChecker;
+	private ArithmeticTypeChecker	myTypeChecker;
 
 	@Before
 	public void setUp() {
 		myMocksControl = EasyMock.createControl();
 
-		myTypeChecker = new AdditionTypeChecker();
+		myTypeChecker = new ArithmeticTypeChecker();
 	}
 
 	@Test(expected = OperatorTypeException.class)

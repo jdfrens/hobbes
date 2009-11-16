@@ -17,8 +17,22 @@ public class OperatorTypeCheckersFactory {
 	}
 
 	public Map<IOperator, OperatorTypeChecker> createOperatorTypeCheckers() {
-		add(Operator.ADD, new AdditionTypeChecker());
+		add(
+				new ArithmeticTypeChecker(), //
+				Operator.ADD, Operator.SUBTRACT,
+				Operator.MULTIPLY,
+				Operator.DIVIDE,
+				Operator.MODULUS, //
+				Operator.LESS_THAN, Operator.LESS_EQUALS, Operator.EQUALS,
+				Operator.GREATER_EQUALS, Operator.GREATER_THAN,
+				Operator.NOT_EQUALS);
 		return myTypeCheckers;
+	}
+
+	private void add(OperatorTypeChecker typeChecker, Operator... operators) {
+		for (Operator operator : operators) {
+			add(operator, typeChecker);
+		}
 	}
 
 	private void add(Operator operator, OperatorTypeChecker typeChecker) {
