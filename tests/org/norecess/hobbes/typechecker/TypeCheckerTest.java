@@ -160,11 +160,14 @@ public class TypeCheckerTest {
 				.createMock(ExpressionTIR.class);
 		PrimitiveType consequenceType = myMocksControl
 				.createMock(PrimitiveType.class);
+		PrimitiveType otherwiseType = myMocksControl
+				.createMock(PrimitiveType.class);
 
 		EasyMock.expect(myRecurser.recurse(test)).andReturn(
 				BooleanType.BOOLEAN_TYPE);
 		EasyMock.expect(myRecurser.recurse(consequence)).andReturn(
 				consequenceType);
+		EasyMock.expect(myRecurser.recurse(otherwise)).andReturn(otherwiseType);
 
 		myMocksControl.replay();
 		assertSame(consequenceType, myTypeChecker.visitIfETIR(new IfETIR(test,

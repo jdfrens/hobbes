@@ -128,6 +128,7 @@ public class TypeChecker implements ITypeChecker {
 
 	public PrimitiveType visitIfETIR(IIfETIR ife) {
 		checkIfTest(ife.getPosition(), myRecurser.recurse(ife.getTest()));
+		myRecurser.recurse(ife.getElseClause());
 		return myRecurser.recurse(ife.getThenClause());
 	}
 
