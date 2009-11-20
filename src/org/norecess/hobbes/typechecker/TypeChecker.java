@@ -54,7 +54,7 @@ public class TypeChecker implements ITypeChecker {
 		myRecurser = this;
 	}
 
-	public TypeChecker(IEnvironment<PrimitiveType> environment,
+	TypeChecker(IEnvironment<PrimitiveType> environment,
 			IErrorHandler errorHandler,
 			Map<IOperator, OperatorTypeChecker> operatorTypeCheckers,
 			ITypeChecker recurser) {
@@ -106,8 +106,9 @@ public class TypeChecker implements ITypeChecker {
 			IOperatorETIR expression, IOperator operator,
 			PrimitiveType leftType, PrimitiveType rightType) {
 		try {
-			return myOperatorTypeCheckers.get(operator).check(leftType,
-					rightType);
+			OperatorTypeChecker operatorTypeChecker = myOperatorTypeCheckers
+					.get(operator);
+			return operatorTypeChecker.check(leftType, rightType);
 		} catch (OperatorTypeException e) {
 			throw myErrorHandler.handleTypeError(expression, leftType,
 					rightType);

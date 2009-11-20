@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.environment.NullEnvironment;
+import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.types.PrimitiveType;
 import org.norecess.hobbes.backend.CodeWriter;
@@ -27,6 +28,10 @@ import org.norecess.hobbes.compiler.prolog.PIRPrologCompiler;
 import org.norecess.hobbes.compiler.resources.IRegister;
 import org.norecess.hobbes.compiler.resources.IResourceAllocator;
 import org.norecess.hobbes.compiler.resources.ResourceAllocator;
+import org.norecess.hobbes.interpreter.ErrorHandler;
+import org.norecess.hobbes.interpreter.IErrorHandler;
+import org.norecess.hobbes.typechecker.operators.OperatorTypeChecker;
+import org.norecess.hobbes.typechecker.operators.OperatorTypeCheckersFactory;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -46,6 +51,7 @@ public class PIRModule extends AbstractModule {
 		bind(IPIRBodyCompiler.class).to(PIRBodyCompiler.class);
 		bind(IPIREpilogCompiler.class).to(PIREpilogCompiler.class);
 		bind(ICompilerFactory.class).to(CompilerFactory.class);
+		bind(IErrorHandler.class).to(ErrorHandler.class);
 	}
 
 	@Provides
@@ -59,15 +65,20 @@ public class PIRModule extends AbstractModule {
 	}
 
 	@Provides
-	public Map<Operator, OperatorInstruction> provideOperatorInstructions() {
-		Map<Operator, OperatorInstruction> operatorInstructions = new HashMap<Operator, OperatorInstruction>();
+	public Map<IOperator, OperatorTypeChecker> provideOperatorTypeCheckers() {
+		return new OperatorTypeCheckersFactory().createOperatorTypeCheckers();
+	}
+
+	@Provides
+	public Map<IOperator, OperatorInstruction> provideOperatorInstructions() {
+		Map<IOperator, OperatorInstruction> operatorInstructions = new HashMap<IOperator, OperatorInstruction>();
 		addArithmeticOperators(operatorInstructions);
 		addComparisonOperators(operatorInstructions);
 		return operatorInstructions;
 	}
 
 	private void addComparisonOperators(
-			Map<Operator, OperatorInstruction> operatorInstructions) {
+			Map<IOperator, OperatorInstruction> operatorInstructions) {
 		operatorInstructions.put(Operator.LESS_THAN,
 				new ComparisonOperator("<"));
 		operatorInstructions.put(Operator.LESS_EQUALS, new ComparisonOperator(
@@ -82,7 +93,7 @@ public class PIRModule extends AbstractModule {
 	}
 
 	private void addArithmeticOperators(
-			Map<Operator, OperatorInstruction> operatorInstructions) {
+			Map<IOperator, OperatorInstruction> operatorInstructions) {
 		operatorInstructions.put(Operator.ADD, new ArithmeticOperator("+"));
 		operatorInstructions
 				.put(Operator.SUBTRACT, new ArithmeticOperator("-"));

@@ -24,7 +24,7 @@ import org.norecess.citkit.tir.expressions.IStringETIR;
 import org.norecess.citkit.tir.expressions.IVariableETIR;
 import org.norecess.citkit.tir.expressions.IWhileETIR;
 import org.norecess.citkit.tir.expressions.NilETIR;
-import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
+import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.lvalues.IFieldValueTIR;
 import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
@@ -41,12 +41,12 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 
 	private final IPIRBodyVisitor						myRecurser;
 	private final IResourceAllocator					myResourceAllocator;
-	private final Map<Operator, OperatorInstruction>	myOperatorInstructions;
+	private final Map<IOperator, OperatorInstruction>	myOperatorInstructions;
 	private final IEnvironment<IRegister>				myEnvironment;
 	private final IRegister								myTarget;
 
 	public PIRBodyVisitor(IResourceAllocator resourceAllocator,
-			Map<Operator, OperatorInstruction> operatorInstructions,
+			Map<IOperator, OperatorInstruction> operatorInstructions,
 			IEnvironment<IRegister> environment, IRegister target) {
 		myOperatorInstructions = operatorInstructions;
 		myRecurser = this;
@@ -57,7 +57,7 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 
 	public PIRBodyVisitor(IPIRBodyVisitor recurser,
 			IResourceAllocator resourceAllocator,
-			Map<Operator, OperatorInstruction> operatorInstructions,
+			Map<IOperator, OperatorInstruction> operatorInstructions,
 			IEnvironment<IRegister> environment, IRegister target) {
 		myRecurser = recurser;
 		myResourceAllocator = resourceAllocator;
@@ -98,7 +98,7 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 
 	public ICode visitBooleanETIR(IBooleanETIR b) {
 		ICode code = myResourceAllocator.createCode();
-		code.add(myTarget, " = ", b == HobbesBoolean.TRUE ? "1" : "0");
+		code.add(myTarget, " = ", HobbesBoolean.TRUE.equals(b) ? "1" : "0");
 		return code;
 	}
 

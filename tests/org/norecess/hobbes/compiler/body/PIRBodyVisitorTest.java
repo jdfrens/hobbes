@@ -15,20 +15,17 @@ import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.LValueTIR;
+import org.norecess.citkit.tir.expressions.BooleanETIR;
 import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.LetETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
-import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
 import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
-import org.norecess.hobbes.HobbesBoolean;
 import org.norecess.hobbes.backend.ICode;
 import org.norecess.hobbes.compiler.ICompilerBinder;
-import org.norecess.hobbes.compiler.body.IPIRBodyVisitor;
-import org.norecess.hobbes.compiler.body.PIRBodyVisitor;
 import org.norecess.hobbes.compiler.operators.OperatorInstruction;
 import org.norecess.hobbes.compiler.resources.ILabel;
 import org.norecess.hobbes.compiler.resources.IRegister;
@@ -40,7 +37,7 @@ public class PIRBodyVisitorTest {
 
 	private IPIRBodyVisitor						myRecurser;
 	private IResourceAllocator					myResourceAllocator;
-	private Map<Operator, OperatorInstruction>	myOperatorInstructions;
+	private Map<IOperator, OperatorInstruction>	myOperatorInstructions;
 	private IEnvironment<IRegister>				myEnvironment;
 	private IRegister							myTarget;
 
@@ -131,7 +128,7 @@ public class PIRBodyVisitorTest {
 		EasyMock.expect(code.add(myTarget, " = ", "1")).andReturn(code);
 
 		myMocksControl.replay();
-		assertSame(code, myVisitor.visitBooleanETIR(HobbesBoolean.TRUE));
+		assertSame(code, myVisitor.visitBooleanETIR(new BooleanETIR(true)));
 		myMocksControl.verify();
 	}
 
@@ -142,7 +139,7 @@ public class PIRBodyVisitorTest {
 		EasyMock.expect(code.add(myTarget, " = ", "0")).andReturn(code);
 
 		myMocksControl.replay();
-		assertSame(code, myVisitor.visitBooleanETIR(HobbesBoolean.FALSE));
+		assertSame(code, myVisitor.visitBooleanETIR(new BooleanETIR(false)));
 		myMocksControl.verify();
 	}
 
