@@ -9,6 +9,7 @@ import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.types.HobbesType;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
 import org.norecess.hobbes.interpreter.ITranslatorSystem;
 
@@ -41,10 +42,12 @@ public class InterpreterCLITest {
 	public void shouldDoIt() throws IOException, RecognitionException {
 		PrintStream out = new PrintStream(new ByteOutputStream());
 		PrintStream err = new PrintStream(new ByteOutputStream());
+		HobbesType returnType = myMocksControl.createMock(HobbesType.class);
 		ExpressionTIR tir = myMocksControl.createMock(ExpressionTIR.class);
 
 		EasyMock.expect(myFrontend.process()).andReturn(tir);
-		myInterpreterSystem.typeCheck(err, tir);
+		EasyMock.expect(myInterpreterSystem.typeCheck(err, tir)).andReturn(
+				returnType);
 		myInterpreterSystem.evalAndPrint(out, tir);
 		myExternalSystem.exit(CLIStatusCodes.STATUS_OK);
 
@@ -53,4 +56,21 @@ public class InterpreterCLITest {
 		myMocksControl.verify();
 	}
 
+	@Test
+	public void shouldDoItWithException() throws IOException,
+			RecognitionException {
+		PrintStream out = new PrintStream(new ByteOutputStream());
+		PrintStream err = new PrintStream(new ByteOutputStream());
+		ExpressionTIR tir = myMocksControl.createMock(ExpressionTIR.class);
+		int exitStatus = 6665;
+
+		EasyMock.expect(myFrontend.process()).andReturn(tir);
+		EasyMock.expect(myInterpreterSystem.typeCheck(err, tir)).andThrow(
+				new AbortInterpretationException(exitStatus));
+		myExternalSystem.exit(exitStatus);
+
+		myMocksControl.replay();
+		myInterpreterCLI.doit(new String[0], out, err);
+		myMocksControl.verify();
+	}
 }

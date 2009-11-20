@@ -3,6 +3,7 @@ package org.norecess.hobbes.interpreter;
 import java.io.PrintStream;
 
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.types.HobbesType;
 import org.norecess.hobbes.drivers.AbortInterpretationException;
 import org.norecess.hobbes.drivers.CLIStatusCodes;
 import org.norecess.hobbes.output.IHobbesOutput;
@@ -31,9 +32,9 @@ public class InterpreterSystem implements ITranslatorSystem {
 						.interpret(tir)));
 	}
 
-	public void typeCheck(PrintStream err, ExpressionTIR tir) {
+	public HobbesType typeCheck(PrintStream err, ExpressionTIR tir) {
 		try {
-			tir.accept(myTypeChecker);
+			return tir.accept(myTypeChecker);
 		} catch (HobbesTypeException e) {
 			err.println("Error on line " + e.getPosition().getPosition() + ": "
 					+ e.getMessage());
