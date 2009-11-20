@@ -16,8 +16,9 @@ public class PIRModuleTest {
 
 	@Before
 	public void setUp() {
-		myInjector = Guice.createInjector(new FrontEndModule(new String[] {
-				"foo", "bar" }), new PIRModule(), new TypeCheckerModule());
+		String[] args = new String[] { "foo", "bar" };
+		myInjector = Guice.createInjector(PIRCompilerCLI
+				.generateInjectorModules(args));
 	}
 
 	@Test

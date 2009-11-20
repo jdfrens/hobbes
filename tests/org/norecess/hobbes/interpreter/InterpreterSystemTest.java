@@ -15,7 +15,7 @@ import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.IPosition;
 import org.norecess.citkit.tir.Position;
 import org.norecess.citkit.tir.data.DatumTIR;
-import org.norecess.hobbes.drivers.AbortInterpretationException;
+import org.norecess.hobbes.drivers.AbortTranslatorException;
 import org.norecess.hobbes.drivers.CLIStatusCodes;
 import org.norecess.hobbes.output.IHobbesOutput;
 import org.norecess.hobbes.typechecker.HobbesTypeException;
@@ -75,7 +75,7 @@ public class InterpreterSystemTest {
 		try {
 			mySystem.typeCheck(new PrintStream(err), tir);
 			fail("should fail to type check");
-		} catch (AbortInterpretationException e) {
+		} catch (AbortTranslatorException e) {
 			assertEquals(CLIStatusCodes.STATUS_TYPE_ERROR, e.getStatus());
 			assertEquals("Error on line 55: <type error message>\n", err
 					.toString());

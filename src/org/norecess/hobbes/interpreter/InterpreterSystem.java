@@ -4,7 +4,7 @@ import java.io.PrintStream;
 
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.types.HobbesType;
-import org.norecess.hobbes.drivers.AbortInterpretationException;
+import org.norecess.hobbes.drivers.AbortTranslatorException;
 import org.norecess.hobbes.drivers.CLIStatusCodes;
 import org.norecess.hobbes.output.IHobbesOutput;
 import org.norecess.hobbes.typechecker.HobbesTypeException;
@@ -39,7 +39,7 @@ public class InterpreterSystem implements ITranslatorSystem {
 		} catch (HobbesTypeException e) {
 			err.println("Error on line " + e.getPosition().getPosition() + ": "
 					+ e.getMessage());
-			throw new AbortInterpretationException(
+			throw new AbortTranslatorException(
 					CLIStatusCodes.STATUS_TYPE_ERROR);
 		}
 	}

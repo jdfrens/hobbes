@@ -37,7 +37,7 @@ public class InterpreterCLI {
 			HobbesType returnType = myTranslatorSystem.typeCheck(err, tir);
 			myTranslatorSystem.evalAndPrint(out, returnType, tir);
 			myExternalSystem.exit(CLIStatusCodes.STATUS_OK);
-		} catch (AbortInterpretationException e) {
+		} catch (AbortTranslatorException e) {
 			myExternalSystem.exit(e.getStatus());
 		}
 	}
