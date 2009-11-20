@@ -29,7 +29,6 @@ import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
 import org.norecess.hobbes.HobbesBoolean;
 import org.norecess.hobbes.interpreter.operators.Appliable;
-import org.norecess.hobbes.typechecker.OperatorTypeException;
 
 import com.google.inject.Inject;
 
@@ -88,12 +87,7 @@ public class Interpreter implements IInterpreter {
 
 	private DatumTIR visitInterpretedOperatorETIR(IOperatorETIR expression,
 			IOperator operator, DatumTIR leftResult, DatumTIR rightResult) {
-		try {
-			return myAppliables.get(operator).apply(leftResult, rightResult);
-		} catch (OperatorTypeException e) {
-			throw myErrorHandler.handleTypeError(expression, leftResult,
-					rightResult);
-		}
+		return myAppliables.get(operator).apply(leftResult, rightResult);
 	}
 
 	public DatumTIR visitVariableETIR(IVariableETIR variable) {

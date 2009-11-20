@@ -3,7 +3,6 @@ package org.norecess.hobbes.drivers.injection;
 import org.junit.Before;
 import org.junit.Test;
 import org.norecess.hobbes.drivers.InterpreterCLI;
-import org.norecess.hobbes.interpreter.IInterpreter;
 
 import com.google.inject.Guice;
 
@@ -13,19 +12,15 @@ public class InterpreterModuleTest {
 
 	@Before
 	public void setUp() {
-		myInterpreterModule = new InterpreterModule(
-				new String[] { "foo", "bar" });
-	}
-
-	@Test
-	public void shouldGenerateInstance() {
-		Guice.createInjector(myInterpreterModule).getInstance(
-				IInterpreter.class);
+		myInterpreterModule = new InterpreterModule();
 	}
 
 	@Test
 	public void shouldGenerateInstanceOfCLI() {
-		Guice.createInjector(myInterpreterModule).getInstance(
-				InterpreterCLI.class);
+		Guice.createInjector( //
+				myInterpreterModule, //
+				new FrontEndModule(new String[] { "foo", "bar" }), //
+				new TypeCheckerModule() //
+				).getInstance(InterpreterCLI.class);
 	}
 }

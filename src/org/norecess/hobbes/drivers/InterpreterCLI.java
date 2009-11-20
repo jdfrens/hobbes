@@ -5,7 +5,9 @@ import java.io.PrintStream;
 
 import org.antlr.runtime.RecognitionException;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.hobbes.drivers.injection.FrontEndModule;
 import org.norecess.hobbes.drivers.injection.InterpreterModule;
+import org.norecess.hobbes.drivers.injection.TypeCheckerModule;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
 import org.norecess.hobbes.interpreter.IInterpreterSystem;
 
@@ -34,8 +36,10 @@ public class InterpreterCLI {
 			RecognitionException {
 		try {
 			InterpreterCLI interpreterCLI = Guice.createInjector(
-					new InterpreterModule(args)).getInstance(
-					InterpreterCLI.class);
+					new FrontEndModule(args), //
+					new TypeCheckerModule(), //
+					new InterpreterModule() //
+					).getInstance(InterpreterCLI.class);
 			interpreterCLI.doit(System.out, System.err, args);
 			System.exit(CLIStatusCodes.STATUS_OK);
 		} catch (AbortInterpretationException e) {
