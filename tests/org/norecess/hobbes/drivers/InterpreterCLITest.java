@@ -14,6 +14,7 @@ import org.norecess.hobbes.frontend.IHobbesFrontEnd;
 import org.norecess.hobbes.translator.ITranslator;
 import org.norecess.hobbes.typechecker.ITopLevelTypeChecker;
 
+import com.google.inject.Guice;
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 
 public class InterpreterCLITest {
@@ -38,6 +39,13 @@ public class InterpreterCLITest {
 
 		myInterpreterCLI = new InterpreterCLI(myExternalSystem, myFrontend,
 				myTypeChecker, myTranslator);
+	}
+
+	@Test
+	public void shouldGenerateInstanceOfCLI() {
+		String[] args = new String[] { "foo", "bar" };
+		Guice.createInjector(InterpreterCLI.createInjectorModules(args))
+				.getInstance(InterpreterCLI.class);
 	}
 
 	@Test
