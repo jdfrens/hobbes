@@ -7,7 +7,6 @@ import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.environment.NullEnvironment;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
-import org.norecess.citkit.types.PrimitiveType;
 import org.norecess.hobbes.backend.CodeWriter;
 import org.norecess.hobbes.backend.ICodeWriter;
 import org.norecess.hobbes.backend.IPIRCleaner;
@@ -30,8 +29,6 @@ import org.norecess.hobbes.compiler.resources.IResourceAllocator;
 import org.norecess.hobbes.compiler.resources.ResourceAllocator;
 import org.norecess.hobbes.interpreter.ErrorHandler;
 import org.norecess.hobbes.interpreter.IErrorHandler;
-import org.norecess.hobbes.typechecker.operators.OperatorTypeChecker;
-import org.norecess.hobbes.typechecker.operators.OperatorTypeCheckersFactory;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -57,16 +54,6 @@ public class PIRModule extends AbstractModule {
 	@Provides
 	public IEnvironment<IRegister> provideInitialEnvironment() {
 		return new NullEnvironment<IRegister>();
-	}
-
-	@Provides
-	public IEnvironment<PrimitiveType> provideInitialTypeEnvironment() {
-		return new NullEnvironment<PrimitiveType>();
-	}
-
-	@Provides
-	public Map<IOperator, OperatorTypeChecker> provideOperatorTypeCheckers() {
-		return new OperatorTypeCheckersFactory().createOperatorTypeCheckers();
 	}
 
 	@Provides

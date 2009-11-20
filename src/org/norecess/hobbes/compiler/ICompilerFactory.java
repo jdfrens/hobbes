@@ -7,6 +7,7 @@ public interface ICompilerFactory {
 
 	public abstract IPIRBodyVisitor createBodyVisitor();
 
+	@Deprecated
 	public abstract ITypeChecker createTypeChecker();
 
 }

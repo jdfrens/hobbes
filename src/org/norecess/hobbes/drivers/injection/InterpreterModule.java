@@ -9,7 +9,7 @@ import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.hobbes.interpreter.ErrorHandler;
 import org.norecess.hobbes.interpreter.IErrorHandler;
 import org.norecess.hobbes.interpreter.IInterpreter;
-import org.norecess.hobbes.interpreter.IInterpreterSystem;
+import org.norecess.hobbes.interpreter.ITranslatorSystem;
 import org.norecess.hobbes.interpreter.Interpreter;
 import org.norecess.hobbes.interpreter.InterpreterSystem;
 import org.norecess.hobbes.interpreter.operators.Appliable;
@@ -27,7 +27,7 @@ public class InterpreterModule extends AbstractModule {
 		bind(IHobbesOutput.class).to(HobbesOutput.class);
 		bind(IErrorHandler.class).to(ErrorHandler.class);
 		bind(IInterpreter.class).to(Interpreter.class);
-		bind(IInterpreterSystem.class).to(InterpreterSystem.class);
+		bind(ITranslatorSystem.class).to(InterpreterSystem.class);
 	}
 
 	@Provides

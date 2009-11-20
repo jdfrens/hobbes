@@ -47,6 +47,7 @@ public class CompilerFactory implements ICompilerFactory {
 				myEnvironment, PIRBodyCompiler.ACC);
 	}
 
+	@Deprecated
 	public ITypeChecker createTypeChecker() {
 		return new TypeChecker(myTypeEnvironment, myErrorHandler,
 				myOperatorTypeCheckers);

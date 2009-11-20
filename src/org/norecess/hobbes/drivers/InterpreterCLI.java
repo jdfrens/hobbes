@@ -5,46 +5,51 @@ import java.io.PrintStream;
 
 import org.antlr.runtime.RecognitionException;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.hobbes.drivers.injection.ExternalSystemModule;
 import org.norecess.hobbes.drivers.injection.FrontEndModule;
 import org.norecess.hobbes.drivers.injection.InterpreterModule;
 import org.norecess.hobbes.drivers.injection.TypeCheckerModule;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
-import org.norecess.hobbes.interpreter.IInterpreterSystem;
+import org.norecess.hobbes.interpreter.ITranslatorSystem;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 
 public class InterpreterCLI {
 
-	private final IHobbesFrontEnd		myFrontEnd;
-	private final IInterpreterSystem	mySystem;
+	private final IExternalSystem	myExternalSystem;
+	private final IHobbesFrontEnd	myFrontEnd;
+	private final ITranslatorSystem	myTranslatorSystem;
 
 	@Inject
-	public InterpreterCLI(IHobbesFrontEnd frontEnd, IInterpreterSystem system) {
+	public InterpreterCLI(IExternalSystem externalSystem,
+			IHobbesFrontEnd frontEnd, ITranslatorSystem system) {
+		myExternalSystem = externalSystem;
 		myFrontEnd = frontEnd;
-		mySystem = system;
+		myTranslatorSystem = system;
 	}
 
-	public void doit(PrintStream out, PrintStream err, String[] args)
+	public void doit(String[] args, PrintStream out, PrintStream err)
 			throws IOException, RecognitionException {
-		ExpressionTIR tir = myFrontEnd.process();
-		mySystem.typeCheck(err, tir);
-		mySystem.evalAndPrint(out, tir);
+		try {
+			ExpressionTIR tir = myFrontEnd.process();
+			myTranslatorSystem.typeCheck(err, tir);
+			myTranslatorSystem.evalAndPrint(out, tir);
+			myExternalSystem.exit(CLIStatusCodes.STATUS_OK);
+		} catch (AbortInterpretationException e) {
+			myExternalSystem.exit(e.getStatus());
+		}
 	}
 
 	public static void main(String[] args) throws IOException,
 			RecognitionException {
-		try {
-			InterpreterCLI interpreterCLI = Guice.createInjector(
-					new FrontEndModule(args), //
-					new TypeCheckerModule(), //
-					new InterpreterModule() //
-					).getInstance(InterpreterCLI.class);
-			interpreterCLI.doit(System.out, System.err, args);
-			System.exit(CLIStatusCodes.STATUS_OK);
-		} catch (AbortInterpretationException e) {
-			System.exit(e.getStatus());
-		}
+		InterpreterCLI interpreterCLI = Guice.createInjector(
+				new ExternalSystemModule(), //
+				new FrontEndModule(args), //
+				new TypeCheckerModule(), //
+				new InterpreterModule() //
+				).getInstance(InterpreterCLI.class);
+		interpreterCLI.doit(args, System.out, System.err);
 	}
 
 }

@@ -14,6 +14,7 @@ public interface IPIRBodyCompiler {
 
 	public ICode generatePrint(PrimitiveType returnType, ExpressionTIR tir);
 
+	@Deprecated
 	public PrimitiveType typeCheck(ExpressionTIR tir);
 
 }

@@ -11,7 +11,7 @@ import org.norecess.hobbes.typechecker.ITypeChecker;
 
 import com.google.inject.Inject;
 
-public class InterpreterSystem implements IInterpreterSystem {
+public class InterpreterSystem implements ITranslatorSystem {
 
 	private final ITypeChecker	myTypeChecker;
 	private final IInterpreter	myInterpreter;

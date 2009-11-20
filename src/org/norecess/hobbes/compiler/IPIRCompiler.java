@@ -8,7 +8,7 @@ import org.norecess.hobbes.backend.ICode;
 
 public interface IPIRCompiler {
 
-	public abstract ICode compile(ExpressionTIR tir) throws IOException,
+	public ICode compile(ExpressionTIR tir) throws IOException,
 			RecognitionException;
 
 }

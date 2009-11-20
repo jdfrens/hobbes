@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
-import org.norecess.hobbes.interpreter.IInterpreterSystem;
+import org.norecess.hobbes.interpreter.ITranslatorSystem;
 
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 
@@ -18,8 +18,9 @@ public class InterpreterCLITest {
 
 	private IMocksControl		myMocksControl;
 
+	private IExternalSystem		myExternalSystem;
 	private IHobbesFrontEnd		myFrontend;
-	private IInterpreterSystem	myInterpreterSystem;
+	private ITranslatorSystem	myInterpreterSystem;
 
 	private InterpreterCLI		myInterpreterCLI;
 
@@ -27,11 +28,13 @@ public class InterpreterCLITest {
 	public void setUp() {
 		myMocksControl = EasyMock.createControl();
 
+		myExternalSystem = myMocksControl.createMock(IExternalSystem.class);
 		myFrontend = myMocksControl.createMock(IHobbesFrontEnd.class);
 		myInterpreterSystem = myMocksControl
-				.createMock(IInterpreterSystem.class);
+				.createMock(ITranslatorSystem.class);
 
-		myInterpreterCLI = new InterpreterCLI(myFrontend, myInterpreterSystem);
+		myInterpreterCLI = new InterpreterCLI(myExternalSystem, myFrontend,
+				myInterpreterSystem);
 	}
 
 	@Test
@@ -43,9 +46,10 @@ public class InterpreterCLITest {
 		EasyMock.expect(myFrontend.process()).andReturn(tir);
 		myInterpreterSystem.typeCheck(err, tir);
 		myInterpreterSystem.evalAndPrint(out, tir);
+		myExternalSystem.exit(CLIStatusCodes.STATUS_OK);
 
 		myMocksControl.replay();
-		myInterpreterCLI.doit(out, err, new String[0]);
+		myInterpreterCLI.doit(new String[0], out, err);
 		myMocksControl.verify();
 	}
 

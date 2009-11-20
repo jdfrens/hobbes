@@ -45,14 +45,14 @@ end
 
 namespace :ciat do
   CIAT::RakeTask.new(:focused) do |task|
-    type = :compiler
+    type = ENV['type'] || :interpreter
     if type == :interpreter
       task.processors << interpreter
     else
       task.processors << compiler
       task.processors << executor
     end
-    task.folder = "ciat/arithmetic/basic operators"
+    task.folder = ENV['folder'] || 'ciat'
     task.report_title = "Focused Test: " + task.folder
     task.output_folder = "tmp/focused"
   end
