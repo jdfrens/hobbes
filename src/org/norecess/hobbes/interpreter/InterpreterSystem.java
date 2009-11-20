@@ -7,11 +7,13 @@ import org.norecess.citkit.types.HobbesType;
 import org.norecess.hobbes.drivers.AbortTranslatorException;
 import org.norecess.hobbes.drivers.CLIStatusCodes;
 import org.norecess.hobbes.output.IHobbesOutput;
+import org.norecess.hobbes.translator.ITranslatorSystem;
 import org.norecess.hobbes.typechecker.HobbesTypeException;
 import org.norecess.hobbes.typechecker.ITypeChecker;
 
 import com.google.inject.Inject;
 
+@Deprecated
 public class InterpreterSystem implements ITranslatorSystem {
 
 	private final ITypeChecker	myTypeChecker;
@@ -26,21 +28,21 @@ public class InterpreterSystem implements ITranslatorSystem {
 		myHobbesOutput = hobbesOutput;
 	}
 
+	@Deprecated
 	public void evalAndPrint(PrintStream out, HobbesType returnType,
-			ExpressionTIR tir) {
-		out
-				.println(myHobbesOutput.asHobbesOutput(myInterpreter
-						.interpret(tir)));
+			ExpressionTIR expression) {
+		out.println(myHobbesOutput.asHobbesOutput(myInterpreter
+				.interpret(expression)));
 	}
 
-	public HobbesType typeCheck(PrintStream err, ExpressionTIR tir) {
+	@Deprecated
+	public HobbesType typeCheck(PrintStream err, ExpressionTIR expression) {
 		try {
-			return tir.accept(myTypeChecker);
+			return expression.accept(myTypeChecker);
 		} catch (HobbesTypeException e) {
 			err.println("Error on line " + e.getPosition().getPosition() + ": "
 					+ e.getMessage());
-			throw new AbortTranslatorException(
-					CLIStatusCodes.STATUS_TYPE_ERROR);
+			throw new AbortTranslatorException(CLIStatusCodes.STATUS_TYPE_ERROR);
 		}
 	}
 

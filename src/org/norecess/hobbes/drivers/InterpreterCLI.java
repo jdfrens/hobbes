@@ -11,31 +11,36 @@ import org.norecess.hobbes.drivers.injection.FrontEndModule;
 import org.norecess.hobbes.drivers.injection.InterpreterModule;
 import org.norecess.hobbes.drivers.injection.TypeCheckerModule;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
-import org.norecess.hobbes.interpreter.ITranslatorSystem;
+import org.norecess.hobbes.translator.ITranslator;
+import org.norecess.hobbes.typechecker.ITopLevelTypeChecker;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;
+import com.google.inject.Module;
 
 public class InterpreterCLI {
 
-	private final IExternalSystem	myExternalSystem;
-	private final IHobbesFrontEnd	myFrontEnd;
-	private final ITranslatorSystem	myTranslatorSystem;
+	private final IExternalSystem		myExternalSystem;
+	private final IHobbesFrontEnd		myFrontEnd;
+	private final ITopLevelTypeChecker	myTypeChecker;
+	private final ITranslator			myTranslator;
 
 	@Inject
 	public InterpreterCLI(IExternalSystem externalSystem,
-			IHobbesFrontEnd frontEnd, ITranslatorSystem system) {
+			IHobbesFrontEnd frontEnd, ITopLevelTypeChecker typeChecker,
+			ITranslator translator) {
 		myExternalSystem = externalSystem;
 		myFrontEnd = frontEnd;
-		myTranslatorSystem = system;
+		myTypeChecker = typeChecker;
+		myTranslator = translator;
 	}
 
 	public void doit(String[] args, PrintStream out, PrintStream err)
 			throws IOException, RecognitionException {
 		try {
-			ExpressionTIR tir = myFrontEnd.process();
-			HobbesType returnType = myTranslatorSystem.typeCheck(err, tir);
-			myTranslatorSystem.evalAndPrint(out, returnType, tir);
+			ExpressionTIR expression = myFrontEnd.process();
+			HobbesType returnType = myTypeChecker.typeCheck(err, expression);
+			myTranslator.evalAndPrint(out, returnType, expression);
 			myExternalSystem.exit(CLIStatusCodes.STATUS_OK);
 		} catch (AbortTranslatorException e) {
 			myExternalSystem.exit(e.getStatus());
@@ -44,13 +49,16 @@ public class InterpreterCLI {
 
 	public static void main(String[] args) throws IOException,
 			RecognitionException {
-		InterpreterCLI interpreterCLI = Guice.createInjector(
-				new ExternalSystemModule(), //
+		Guice.createInjector(createInjectorModules(args)). //
+				getInstance(InterpreterCLI.class). //
+				doit(args, System.out, System.err);
+	}
+
+	public static Module[] createInjectorModules(String[] args) {
+		return new Module[] { new ExternalSystemModule(), //
 				new FrontEndModule(args), //
 				new TypeCheckerModule(), //
-				new InterpreterModule() //
-				).getInstance(InterpreterCLI.class);
-		interpreterCLI.doit(args, System.out, System.err);
+				new InterpreterModule() };
 	}
 
 }

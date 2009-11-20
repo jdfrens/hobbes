@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.hobbes.compiler.resources.IRegister;
-import org.norecess.hobbes.drivers.PIRCompilerCLI;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -16,9 +15,7 @@ public class PIRModuleTest {
 
 	@Before
 	public void setUp() {
-		String[] args = new String[] { "foo", "bar" };
-		myInjector = Guice.createInjector(PIRCompilerCLI
-				.generateInjectorModules(args));
+		myInjector = Guice.createInjector(new PIRModule());
 	}
 
 	@Test
@@ -27,8 +24,4 @@ public class PIRModuleTest {
 		});
 	}
 
-	@Test
-	public void shouldProduceCLI() {
-		myInjector.getInstance(PIRCompilerCLI.class);
-	}
 }

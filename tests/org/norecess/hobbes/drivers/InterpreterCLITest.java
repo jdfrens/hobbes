@@ -11,19 +11,21 @@ import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.types.HobbesType;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
-import org.norecess.hobbes.interpreter.ITranslatorSystem;
+import org.norecess.hobbes.translator.ITranslator;
+import org.norecess.hobbes.typechecker.ITopLevelTypeChecker;
 
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 
 public class InterpreterCLITest {
 
-	private IMocksControl		myMocksControl;
+	private IMocksControl			myMocksControl;
 
-	private IExternalSystem		myExternalSystem;
-	private IHobbesFrontEnd		myFrontend;
-	private ITranslatorSystem	myInterpreterSystem;
+	private IExternalSystem			myExternalSystem;
+	private IHobbesFrontEnd			myFrontend;
+	private ITopLevelTypeChecker	myTypeChecker;
+	private ITranslator				myTranslator;
 
-	private InterpreterCLI		myInterpreterCLI;
+	private InterpreterCLI			myInterpreterCLI;
 
 	@Before
 	public void setUp() {
@@ -31,11 +33,11 @@ public class InterpreterCLITest {
 
 		myExternalSystem = myMocksControl.createMock(IExternalSystem.class);
 		myFrontend = myMocksControl.createMock(IHobbesFrontEnd.class);
-		myInterpreterSystem = myMocksControl
-				.createMock(ITranslatorSystem.class);
+		myTypeChecker = myMocksControl.createMock(ITopLevelTypeChecker.class);
+		myTranslator = myMocksControl.createMock(ITranslator.class);
 
 		myInterpreterCLI = new InterpreterCLI(myExternalSystem, myFrontend,
-				myInterpreterSystem);
+				myTypeChecker, myTranslator);
 	}
 
 	@Test
@@ -46,9 +48,9 @@ public class InterpreterCLITest {
 		ExpressionTIR tir = myMocksControl.createMock(ExpressionTIR.class);
 
 		EasyMock.expect(myFrontend.process()).andReturn(tir);
-		EasyMock.expect(myInterpreterSystem.typeCheck(err, tir)).andReturn(
-				returnType);
-		myInterpreterSystem.evalAndPrint(out, returnType, tir);
+		EasyMock.expect(myTypeChecker.typeCheck(err, tir))
+				.andReturn(returnType);
+		myTranslator.evalAndPrint(out, returnType, tir);
 		myExternalSystem.exit(CLIStatusCodes.STATUS_OK);
 
 		myMocksControl.replay();
@@ -65,7 +67,7 @@ public class InterpreterCLITest {
 		int exitStatus = 6665;
 
 		EasyMock.expect(myFrontend.process()).andReturn(tir);
-		EasyMock.expect(myInterpreterSystem.typeCheck(err, tir)).andThrow(
+		EasyMock.expect(myTypeChecker.typeCheck(err, tir)).andThrow(
 				new AbortTranslatorException(exitStatus));
 		myExternalSystem.exit(exitStatus);
 

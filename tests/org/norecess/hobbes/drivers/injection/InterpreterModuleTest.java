@@ -17,11 +17,8 @@ public class InterpreterModuleTest {
 
 	@Test
 	public void shouldGenerateInstanceOfCLI() {
-		Guice.createInjector( //
-				myInterpreterModule, //
-				new ExternalSystemModule(), //
-				new FrontEndModule(new String[] { "foo", "bar" }), //
-				new TypeCheckerModule() //
-				).getInstance(InterpreterCLI.class);
+		String[] args = new String[] { "foo", "bar" };
+		Guice.createInjector(InterpreterCLI.createInjectorModules(args))
+				.getInstance(InterpreterCLI.class);
 	}
 }

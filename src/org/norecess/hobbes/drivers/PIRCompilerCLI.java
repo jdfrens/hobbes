@@ -5,6 +5,7 @@ import java.io.PrintStream;
 
 import org.antlr.runtime.RecognitionException;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.types.HobbesType;
 import org.norecess.hobbes.backend.ICodeWriter;
 import org.norecess.hobbes.backend.IPIRCleaner;
 import org.norecess.hobbes.compiler.IPIRCompiler;
@@ -13,6 +14,7 @@ import org.norecess.hobbes.drivers.injection.FrontEndModule;
 import org.norecess.hobbes.drivers.injection.PIRModule;
 import org.norecess.hobbes.drivers.injection.TypeCheckerModule;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
+import org.norecess.hobbes.typechecker.ITopLevelTypeChecker;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;
@@ -24,18 +26,20 @@ import com.google.inject.Module;
  */
 public class PIRCompilerCLI {
 
-	private final IExternalSystem	myExternalSystem;
-	private final IHobbesFrontEnd	myFrontEnd;
-	private final IPIRCompiler		myCompiler;
-	private final IPIRCleaner		myPirCleaner;
-	private final ICodeWriter		myCodeWriter;
+	private final IExternalSystem		myExternalSystem;
+	private final IHobbesFrontEnd		myFrontEnd;
+	private final ITopLevelTypeChecker	myTopLevelTypeChecker;
+	private final IPIRCompiler			myCompiler;
+	private final IPIRCleaner			myPirCleaner;
+	private final ICodeWriter			myCodeWriter;
 
 	@Inject
 	public PIRCompilerCLI(IExternalSystem externalSystem,
-			IHobbesFrontEnd frontEnd, IPIRCompiler compiler,
-			IPIRCleaner cleaner, ICodeWriter codeWriter) {
+			IHobbesFrontEnd frontEnd, ITopLevelTypeChecker topLevelTypeChecker,
+			IPIRCompiler compiler, IPIRCleaner cleaner, ICodeWriter codeWriter) {
 		myExternalSystem = externalSystem;
 		myFrontEnd = frontEnd;
+		myTopLevelTypeChecker = topLevelTypeChecker;
 		myPirCleaner = cleaner;
 		myCodeWriter = codeWriter;
 		myCompiler = compiler;
@@ -45,8 +49,10 @@ public class PIRCompilerCLI {
 			throws IOException, RecognitionException {
 		try {
 			ExpressionTIR expression = myFrontEnd.process();
-			myCodeWriter.writeCode(myPirCleaner.process(myCompiler
-					.compile(expression)));
+			HobbesType returnType = myTopLevelTypeChecker.typeCheck(System.err,
+					expression);
+			myCodeWriter.writeCode(myPirCleaner.process(myCompiler.compile(
+					returnType, expression)));
 		} catch (AbortTranslatorException e) {
 			myExternalSystem.exit(e.getStatus());
 		}

@@ -6,7 +6,9 @@ import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.environment.NullEnvironment;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.types.PrimitiveType;
+import org.norecess.hobbes.typechecker.ITopLevelTypeChecker;
 import org.norecess.hobbes.typechecker.ITypeChecker;
+import org.norecess.hobbes.typechecker.TopLevelTypeChecker;
 import org.norecess.hobbes.typechecker.TypeChecker;
 import org.norecess.hobbes.typechecker.operators.OperatorTypeChecker;
 import org.norecess.hobbes.typechecker.operators.OperatorTypeCheckersFactory;
@@ -19,6 +21,7 @@ public class TypeCheckerModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(ITypeChecker.class).to(TypeChecker.class);
+		bind(ITopLevelTypeChecker.class).to(TopLevelTypeChecker.class);
 	}
 
 	@Provides

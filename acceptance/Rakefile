@@ -45,8 +45,8 @@ end
 
 namespace :ciat do
   CIAT::RakeTask.new(:focused) do |task|
-    type = ENV['type'] || :interpreter
-    if type == :interpreter
+    type = ENV['type'] || "interpreter"
+    if type == "interpreter"
       task.processors << interpreter
     else
       task.processors << compiler
@@ -76,4 +76,11 @@ task :view do
   Launchy.open("tmp/interpreter/report.html")
   Launchy.open("tmp/compiler/report.html")
   Launchy.open("tmp/focused/report.html")
+end
+
+namespace :view do
+  require 'launchy'
+  task :focused do
+    Launchy.open("tmp/focused/report.html")
+  end
 end

@@ -9,13 +9,15 @@ import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.hobbes.interpreter.ErrorHandler;
 import org.norecess.hobbes.interpreter.IErrorHandler;
 import org.norecess.hobbes.interpreter.IInterpreter;
-import org.norecess.hobbes.interpreter.ITranslatorSystem;
 import org.norecess.hobbes.interpreter.Interpreter;
+import org.norecess.hobbes.interpreter.InterpreterAsTranslator;
 import org.norecess.hobbes.interpreter.InterpreterSystem;
 import org.norecess.hobbes.interpreter.operators.Appliable;
 import org.norecess.hobbes.interpreter.operators.AppliableFactory;
 import org.norecess.hobbes.output.HobbesOutput;
 import org.norecess.hobbes.output.IHobbesOutput;
+import org.norecess.hobbes.translator.ITranslator;
+import org.norecess.hobbes.translator.ITranslatorSystem;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -28,6 +30,7 @@ public class InterpreterModule extends AbstractModule {
 		bind(IErrorHandler.class).to(ErrorHandler.class);
 		bind(IInterpreter.class).to(Interpreter.class);
 		bind(ITranslatorSystem.class).to(InterpreterSystem.class);
+		bind(ITranslator.class).to(InterpreterAsTranslator.class);
 	}
 
 	@Provides
