@@ -26,7 +26,8 @@ public class InterpreterSystem implements ITranslatorSystem {
 		myHobbesOutput = hobbesOutput;
 	}
 
-	public void evalAndPrint(PrintStream out, ExpressionTIR tir) {
+	public void evalAndPrint(PrintStream out, HobbesType returnType,
+			ExpressionTIR tir) {
 		out
 				.println(myHobbesOutput.asHobbesOutput(myInterpreter
 						.interpret(tir)));

@@ -9,6 +9,6 @@ public interface ITranslatorSystem {
 
 	HobbesType typeCheck(PrintStream err, ExpressionTIR tir);
 
-	void evalAndPrint(PrintStream out, ExpressionTIR tir);
+	void evalAndPrint(PrintStream out, HobbesType returnType, ExpressionTIR tir);
 
 }

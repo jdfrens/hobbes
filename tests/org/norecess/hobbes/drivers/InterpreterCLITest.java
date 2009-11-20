@@ -48,7 +48,7 @@ public class InterpreterCLITest {
 		EasyMock.expect(myFrontend.process()).andReturn(tir);
 		EasyMock.expect(myInterpreterSystem.typeCheck(err, tir)).andReturn(
 				returnType);
-		myInterpreterSystem.evalAndPrint(out, tir);
+		myInterpreterSystem.evalAndPrint(out, returnType, tir);
 		myExternalSystem.exit(CLIStatusCodes.STATUS_OK);
 
 		myMocksControl.replay();

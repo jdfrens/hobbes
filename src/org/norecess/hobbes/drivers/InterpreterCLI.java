@@ -5,6 +5,7 @@ import java.io.PrintStream;
 
 import org.antlr.runtime.RecognitionException;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.types.HobbesType;
 import org.norecess.hobbes.drivers.injection.ExternalSystemModule;
 import org.norecess.hobbes.drivers.injection.FrontEndModule;
 import org.norecess.hobbes.drivers.injection.InterpreterModule;
@@ -33,8 +34,8 @@ public class InterpreterCLI {
 			throws IOException, RecognitionException {
 		try {
 			ExpressionTIR tir = myFrontEnd.process();
-			myTranslatorSystem.typeCheck(err, tir);
-			myTranslatorSystem.evalAndPrint(out, tir);
+			HobbesType returnType = myTranslatorSystem.typeCheck(err, tir);
+			myTranslatorSystem.evalAndPrint(out, returnType, tir);
 			myExternalSystem.exit(CLIStatusCodes.STATUS_OK);
 		} catch (AbortInterpretationException e) {
 			myExternalSystem.exit(e.getStatus());

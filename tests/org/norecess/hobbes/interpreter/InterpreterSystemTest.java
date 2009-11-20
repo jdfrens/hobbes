@@ -56,7 +56,7 @@ public class InterpreterSystemTest {
 				"the output");
 
 		myMocksControl.replay();
-		mySystem.evalAndPrint(new PrintStream(out), tir);
+		mySystem.evalAndPrint(new PrintStream(out), null, tir);
 		assertEquals("the output\n", out.toString());
 		myMocksControl.verify();
 	}
