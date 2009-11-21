@@ -10,6 +10,7 @@ import org.norecess.hobbes.drivers.injection.ExternalSystemModule;
 import org.norecess.hobbes.drivers.injection.FrontEndModule;
 import org.norecess.hobbes.drivers.injection.InterpreterModule;
 import org.norecess.hobbes.drivers.injection.TypeCheckerModule;
+import org.norecess.hobbes.drivers.system.IExternalSystem;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
 import org.norecess.hobbes.translator.ITranslator;
 import org.norecess.hobbes.typechecker.ITopLevelTypeChecker;
@@ -41,7 +42,7 @@ public class InterpreterCLI {
 			ExpressionTIR expression = myFrontEnd.process();
 			HobbesType returnType = myTypeChecker.typeCheck(err, expression);
 			myTranslator.evalAndPrint(out, returnType, expression);
-			myExternalSystem.exit(CLIStatusCodes.STATUS_OK);
+			myExternalSystem.exit(StatusCodes.STATUS_OK);
 		} catch (AbortTranslatorException e) {
 			myExternalSystem.exit(e.getStatus());
 		}

@@ -1,7 +1,7 @@
 package org.norecess.hobbes.drivers.injection;
 
-import org.norecess.hobbes.drivers.ExternalSystem;
-import org.norecess.hobbes.drivers.IExternalSystem;
+import org.norecess.hobbes.drivers.system.ExternalSystem;
+import org.norecess.hobbes.drivers.system.IExternalSystem;
 
 import com.google.inject.AbstractModule;
 

@@ -10,7 +10,7 @@ public class PIRCompilerCLITest {
 	public void shouldProduceCLI() {
 		String[] args = new String[] { "foo", "bar" };
 		Guice.createInjector(PIRCompilerCLI.generateInjectorModules(args))
-				.getInstance(PIRCompilerCLI.class);
+				.getInstance(InterpreterCLI.class);
 	}
 
 }

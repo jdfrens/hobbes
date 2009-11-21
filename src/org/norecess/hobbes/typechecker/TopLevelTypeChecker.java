@@ -5,7 +5,7 @@ import java.io.PrintStream;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.types.HobbesType;
 import org.norecess.hobbes.drivers.AbortTranslatorException;
-import org.norecess.hobbes.drivers.CLIStatusCodes;
+import org.norecess.hobbes.drivers.StatusCodes;
 
 import com.google.inject.Inject;
 
@@ -24,7 +24,7 @@ public class TopLevelTypeChecker implements ITopLevelTypeChecker {
 		} catch (HobbesTypeException e) {
 			err.println("Error on line " + e.getPosition().getPosition() + ": "
 					+ e.getMessage());
-			throw new AbortTranslatorException(CLIStatusCodes.STATUS_TYPE_ERROR);
+			throw new AbortTranslatorException(StatusCodes.STATUS_TYPE_ERROR);
 		}
 	}
 

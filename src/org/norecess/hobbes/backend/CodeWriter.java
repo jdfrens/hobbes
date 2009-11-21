@@ -1,9 +1,7 @@
 package org.norecess.hobbes.backend;
 
 import java.io.IOException;
-
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
+import java.io.PrintStream;
 
 /*
  * Writes out the instructions for PIR.  Mostly this means putting a tab
@@ -11,16 +9,9 @@ import com.google.inject.name.Named;
  */
 public class CodeWriter implements ICodeWriter {
 
-	private final Appendable	myAppendable;
-
-	@Inject
-	public CodeWriter(@Named("output") Appendable appendable) {
-		myAppendable = appendable;
-	}
-
-	public void writeCode(ICode code) throws IOException {
+	public void writeCode(PrintStream out, ICode code) throws IOException {
 		for (String instruction : code) {
-			myAppendable.append(instruction).append("\n");
+			out.append(instruction).append("\n");
 		}
 	}
 

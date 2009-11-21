@@ -1,4 +1,4 @@
-package org.norecess.hobbes.drivers;
+package org.norecess.hobbes.drivers.system;
 
 public interface IExternalSystem {
 

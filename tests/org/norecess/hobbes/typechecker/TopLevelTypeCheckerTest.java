@@ -18,7 +18,7 @@ import org.norecess.citkit.tir.IPosition;
 import org.norecess.citkit.tir.Position;
 import org.norecess.citkit.types.PrimitiveType;
 import org.norecess.hobbes.drivers.AbortTranslatorException;
-import org.norecess.hobbes.drivers.CLIStatusCodes;
+import org.norecess.hobbes.drivers.StatusCodes;
 
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 
@@ -71,7 +71,7 @@ public class TopLevelTypeCheckerTest {
 			myTopLevelTypeChecker.typeCheck(new PrintStream(err), expression);
 			fail("should fail to type check");
 		} catch (AbortTranslatorException e) {
-			assertEquals(CLIStatusCodes.STATUS_TYPE_ERROR, e.getStatus());
+			assertEquals(StatusCodes.STATUS_TYPE_ERROR, e.getStatus());
 			assertEquals("Error on line 55: <type error message>\n", err
 					.toString());
 		}

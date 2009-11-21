@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.types.HobbesType;
+import org.norecess.hobbes.drivers.system.IExternalSystem;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
 import org.norecess.hobbes.translator.ITranslator;
 import org.norecess.hobbes.typechecker.ITopLevelTypeChecker;
@@ -59,7 +60,7 @@ public class InterpreterCLITest {
 		EasyMock.expect(myTypeChecker.typeCheck(err, tir))
 				.andReturn(returnType);
 		myTranslator.evalAndPrint(out, returnType, tir);
-		myExternalSystem.exit(CLIStatusCodes.STATUS_OK);
+		myExternalSystem.exit(StatusCodes.STATUS_OK);
 
 		myMocksControl.replay();
 		myInterpreterCLI.doit(new String[0], out, err);

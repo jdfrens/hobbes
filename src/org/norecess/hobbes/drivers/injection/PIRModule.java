@@ -11,6 +11,7 @@ import org.norecess.hobbes.backend.CodeWriter;
 import org.norecess.hobbes.backend.ICodeWriter;
 import org.norecess.hobbes.backend.IPIRCleaner;
 import org.norecess.hobbes.backend.PIRCleaner;
+import org.norecess.hobbes.compiler.CompilerAsTranslator;
 import org.norecess.hobbes.compiler.CompilerFactory;
 import org.norecess.hobbes.compiler.ICompilerFactory;
 import org.norecess.hobbes.compiler.IPIRCompiler;
@@ -29,10 +30,10 @@ import org.norecess.hobbes.compiler.resources.IResourceAllocator;
 import org.norecess.hobbes.compiler.resources.ResourceAllocator;
 import org.norecess.hobbes.interpreter.ErrorHandler;
 import org.norecess.hobbes.interpreter.IErrorHandler;
+import org.norecess.hobbes.translator.ITranslator;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.name.Names;
 
 public class PIRModule extends AbstractModule {
 
@@ -41,8 +42,7 @@ public class PIRModule extends AbstractModule {
 		bind(IPIRCleaner.class).to(PIRCleaner.class);
 		bind(IResourceAllocator.class).to(ResourceAllocator.class);
 		bind(ICodeWriter.class).to(CodeWriter.class);
-		bind(Appendable.class).annotatedWith(Names.named("output")).toInstance(
-				System.out);
+		bind(ITranslator.class).to(CompilerAsTranslator.class);
 		bind(IPIRCompiler.class).to(PIRCompiler.class);
 		bind(IPIRPrologCompiler.class).to(PIRPrologCompiler.class);
 		bind(IPIRBodyCompiler.class).to(PIRBodyCompiler.class);
