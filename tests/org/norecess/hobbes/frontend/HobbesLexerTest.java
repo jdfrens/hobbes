@@ -31,6 +31,20 @@ public class HobbesLexerTest {
 	}
 
 	@Test
+	public void shouldRecognizeAsFloat() {
+		assertToken(HobbesLexer.FLOAT, "5.0", myTester.scanInput("5.0"));
+		assertToken(HobbesLexer.FLOAT, "3.14159", myTester.scanInput("3.14159"));
+		assertToken(HobbesLexer.FLOAT, "0.001234",
+				myTester.scanInput("0.001234"));
+	}
+
+	@Test
+	public void shouldNotRecognizeAsFloat() {
+		refuteToken(HobbesLexer.FLOAT, myTester.scanInput(".123"));
+		refuteToken(HobbesLexer.FLOAT, myTester.scanInput("5."));
+	}
+
+	@Test
 	public void shouldRecognizeBooleans() {
 		assertToken(HobbesLexer.BOOLEAN, "#f", myTester.scanInput("#f"));
 		assertToken(HobbesLexer.BOOLEAN, "#t", myTester.scanInput("#t"));
@@ -82,7 +96,7 @@ public class HobbesLexerTest {
 		assertToken(HobbesLexer.INTEGER, "5", myTester.scanInput("5 "));
 		assertToken(HobbesLexer.INTEGER, "5", myTester.scanInput("5\t"));
 		assertToken(HobbesLexer.INTEGER, "5", myTester.scanInput("5\n"));
-		assertToken(HobbesLexer.INTEGER, "5", myTester
-				.scanInput("  \t  5\n\n \t"));
+		assertToken(HobbesLexer.INTEGER, "5",
+				myTester.scanInput("  \t  5\n\n \t"));
 	}
 }

@@ -14,18 +14,18 @@ import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.LValueTIR;
 import org.norecess.citkit.tir.declarations.VariableDTIR;
+import org.norecess.citkit.tir.expressions.FloatingPointETIR;
+import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.LetETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
-import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
 import org.norecess.hobbes.HobbesBoolean;
 import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.backend.ICode;
-import org.norecess.hobbes.compiler.prolog.PIRPrologCompiler;
 import org.norecess.hobbes.support.HobbesEasyMock;
 import org.norecess.hobbes.support.IHobbesMocksControl;
 
@@ -60,16 +60,25 @@ public class PIRPrologCompilerTest {
 	@Test
 	public void shouldGeneratePrologForInteger() {
 		myMocksControl.replay();
-		assertEquals(new Code(), myPrologCompiler
-				.visitIntegerETIR(new IntegerETIR(5)));
+		assertEquals(new Code(),
+				myPrologCompiler.visitIntegerETIR(new IntegerETIR(5)));
+		myMocksControl.verify();
+	}
+
+	@Test
+	public void shouldGeneratePrologForFloat() {
+		myMocksControl.replay();
+		assertEquals(new Code(),
+				myPrologCompiler.visitFloatingPointETIR(new FloatingPointETIR(
+						5.0)));
 		myMocksControl.verify();
 	}
 
 	@Test
 	public void shouldGeneratePrologForBoolean() {
 		myMocksControl.replay();
-		assertEquals(new Code(), myPrologCompiler
-				.visitBooleanETIR(HobbesBoolean.TRUE));
+		assertEquals(new Code(),
+				myPrologCompiler.visitBooleanETIR(HobbesBoolean.TRUE));
 		myMocksControl.verify();
 	}
 
@@ -81,8 +90,8 @@ public class PIRPrologCompilerTest {
 				new Code("lvalue prolog"));
 
 		myMocksControl.replay();
-		assertEquals(new Code("lvalue prolog"), myPrologCompiler
-				.visitVariableETIR(new VariableETIR(lvalue)));
+		assertEquals(new Code("lvalue prolog"),
+				myPrologCompiler.visitVariableETIR(new VariableETIR(lvalue)));
 		myMocksControl.verify();
 	}
 
@@ -91,8 +100,8 @@ public class PIRPrologCompilerTest {
 		ISymbol symbol = myMocksControl.createMock(ISymbol.class);
 
 		myMocksControl.replay();
-		assertEquals(new Code(), myPrologCompiler
-				.visitSimpleLValue(new SimpleLValueTIR(symbol)));
+		assertEquals(new Code(),
+				myPrologCompiler.visitSimpleLValue(new SimpleLValueTIR(symbol)));
 		myMocksControl.verify();
 	}
 
@@ -102,8 +111,9 @@ public class PIRPrologCompilerTest {
 		ExpressionTIR index = myMocksControl.createMock(ExpressionTIR.class);
 
 		myMocksControl.replay();
-		assertEquals(new Code(".param pmc argv"), myPrologCompiler
-				.visitSubscriptLValue(new SubscriptLValueTIR(variable, index)));
+		assertEquals(new Code(".param pmc argv"),
+				myPrologCompiler.visitSubscriptLValue(new SubscriptLValueTIR(
+						variable, index)));
 		myMocksControl.verify();
 	}
 
@@ -119,8 +129,9 @@ public class PIRPrologCompilerTest {
 				new Code("right prolog"));
 
 		myMocksControl.replay();
-		assertEquals(new Code("left prolog", "right prolog"), myPrologCompiler
-				.visitOperatorETIR(new OperatorETIR(left, operator, right)));
+		assertEquals(new Code("left prolog", "right prolog"),
+				myPrologCompiler.visitOperatorETIR(new OperatorETIR(left,
+						operator, right)));
 		myMocksControl.verify();
 	}
 
@@ -156,8 +167,8 @@ public class PIRPrologCompilerTest {
 				new Code("body prolog"));
 
 		myMocksControl.replay();
-		assertEquals(new Code("body prolog"), myPrologCompiler
-				.visitLetETIR(new LetETIR(declarations, body)));
+		assertEquals(new Code("body prolog"),
+				myPrologCompiler.visitLetETIR(new LetETIR(declarations, body)));
 		myMocksControl.verify();
 	}
 
@@ -181,8 +192,8 @@ public class PIRPrologCompilerTest {
 
 		myMocksControl.replay();
 		assertEquals(new Code("declaration 0", "declaration 1",
-				"declaration 2", "body prolog"), myPrologCompiler
-				.visitLetETIR(new LetETIR(declarations, body)));
+				"declaration 2", "body prolog"),
+				myPrologCompiler.visitLetETIR(new LetETIR(declarations, body)));
 		myMocksControl.verify();
 	}
 

@@ -16,12 +16,13 @@ import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.LValueTIR;
 import org.norecess.citkit.tir.expressions.BooleanETIR;
+import org.norecess.citkit.tir.expressions.FloatingPointETIR;
+import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.LetETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
-import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
 import org.norecess.hobbes.backend.ICode;
@@ -71,8 +72,8 @@ public class PIRBodyVisitorTest {
 		EasyMock.expect(myRecurser.createBinder(environment)).andReturn(binder);
 
 		myMocksControl.replay();
-		assertSame(code, myVisitor.bind(Arrays.<DeclarationTIR> asList(),
-				environment));
+		assertSame(code,
+				myVisitor.bind(Arrays.<DeclarationTIR> asList(), environment));
 		myMocksControl.verify();
 	}
 
@@ -105,8 +106,8 @@ public class PIRBodyVisitorTest {
 		EasyMock.expect(code.append(declarationCode[2])).andReturn(code);
 
 		myMocksControl.replay();
-		assertSame(code, myVisitor.bind(Arrays.asList(declarations),
-				environment));
+		assertSame(code,
+				myVisitor.bind(Arrays.asList(declarations), environment));
 		myMocksControl.verify();
 	}
 
@@ -118,6 +119,18 @@ public class PIRBodyVisitorTest {
 
 		myMocksControl.replay();
 		assertSame(code, myVisitor.visitIntegerETIR(new IntegerETIR(8)));
+		myMocksControl.verify();
+	}
+
+	@Test
+	public void shouldCompileFloat() {
+		ICode code = expectNewCode();
+
+		EasyMock.expect(code.add(myTarget, " = 5.0")).andReturn(code);
+
+		myMocksControl.replay();
+		assertSame(code,
+				myVisitor.visitFloatingPointETIR(new FloatingPointETIR(5.0)));
 		myMocksControl.verify();
 	}
 
@@ -207,8 +220,8 @@ public class PIRBodyVisitorTest {
 		EasyMock.expect(code.add(endLabel)).andReturn(code);
 
 		myMocksControl.replay();
-		assertSame(code, myVisitor.visitIfETIR(new IfETIR(test, consequence,
-				otherwise)));
+		assertSame(code,
+				myVisitor.visitIfETIR(new IfETIR(test, consequence, otherwise)));
 		myMocksControl.verify();
 	}
 
@@ -231,8 +244,8 @@ public class PIRBodyVisitorTest {
 
 		EasyMock.expect(myResourceAllocator.createCode()).andReturn(code);
 		EasyMock.expect(
-				myRecurser.recurse(EasyMock.eq(new IntegerETIR(88)), EasyMock
-						.same(myTarget))).andReturn(indexcode);
+				myRecurser.recurse(EasyMock.eq(new IntegerETIR(88)),
+						EasyMock.same(myTarget))).andReturn(indexcode);
 		EasyMock.expect(code.append(indexcode)).andReturn(code);
 		EasyMock.expect(code.add(myTarget, " = argv[", myTarget, "]"))
 				.andReturn(code);
@@ -264,8 +277,8 @@ public class PIRBodyVisitorTest {
 		EasyMock.expect(code.append(bodyCode)).andReturn(code);
 
 		myMocksControl.replay();
-		assertSame(code, myVisitor
-				.visitLetETIR(new LetETIR(declarations, body)));
+		assertSame(code,
+				myVisitor.visitLetETIR(new LetETIR(declarations, body)));
 		myMocksControl.verify();
 	}
 
@@ -279,8 +292,8 @@ public class PIRBodyVisitorTest {
 		EasyMock.expect(code.add(myTarget, " = ", register)).andReturn(code);
 
 		myMocksControl.replay();
-		assertSame(code, myVisitor
-				.visitSimpleLValue(new SimpleLValueTIR(symbol)));
+		assertSame(code,
+				myVisitor.visitSimpleLValue(new SimpleLValueTIR(symbol)));
 		myMocksControl.verify();
 	}
 

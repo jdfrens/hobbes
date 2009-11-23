@@ -6,6 +6,7 @@ import org.norecess.citkit.tir.declarations.IFunctionDTIR;
 import org.norecess.citkit.tir.declarations.ITypeDTIR;
 import org.norecess.citkit.tir.declarations.IVariableDTIR;
 import org.norecess.citkit.tir.expressions.BreakETIR;
+import org.norecess.citkit.tir.expressions.FloatingPointETIR;
 import org.norecess.citkit.tir.expressions.IArrayETIR;
 import org.norecess.citkit.tir.expressions.IAssignmentETIR;
 import org.norecess.citkit.tir.expressions.IBooleanETIR;
@@ -40,6 +41,10 @@ public class PIRPrologCompiler implements IPIRPrologCompiler {
 	}
 
 	public ICode visitIntegerETIR(IIntegerETIR integer) {
+		return new Code();
+	}
+
+	public ICode visitFloatingPointETIR(FloatingPointETIR floatingPointETIR) {
 		return new Code();
 	}
 

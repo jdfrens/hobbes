@@ -13,12 +13,13 @@ import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.Position;
 import org.norecess.citkit.tir.declarations.VariableDTIR;
+import org.norecess.citkit.tir.expressions.FloatingPointETIR;
 import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.LetETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
-import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR.Operator;
+import org.norecess.citkit.tir.expressions.VariableETIR;
 import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
 import org.norecess.hobbes.HobbesBoolean;
@@ -44,6 +45,19 @@ public class HobbesTIRBuilderTest {
 		assertLine(1, "23");
 		assertLine(2, "\n 23");
 		assertLine(5, "\n\n\n\n 23");
+	}
+
+	@Test
+	public void shouldBuildFloats() {
+		assertEquals(new FloatingPointETIR(5.0), myTester.treeParseInput("5.0"));
+		assertEquals(new FloatingPointETIR(3.14159),
+				myTester.treeParseInput("3.14159"));
+	}
+
+	@Test
+	public void shouldBuildFloatsWithPosition() {
+		assertLine(1, "5.0");
+		assertLine(3, "\n \n 5.0");
 	}
 
 	@Test
@@ -124,11 +138,11 @@ public class HobbesTIRBuilderTest {
 		assertEquals(new OperatorETIR(new IntegerETIR(1), Operator.NOT_EQUALS,
 				new IntegerETIR(2)), myTester.treeParseInput("1 != 2"));
 		assertEquals(new OperatorETIR(new IntegerETIR(1),
-				Operator.GREATER_EQUALS, new IntegerETIR(2)), myTester
-				.treeParseInput("1 >= 2"));
+				Operator.GREATER_EQUALS, new IntegerETIR(2)),
+				myTester.treeParseInput("1 >= 2"));
 		assertEquals(new OperatorETIR(new IntegerETIR(1),
-				Operator.GREATER_THAN, new IntegerETIR(2)), myTester
-				.treeParseInput("1 > 2"));
+				Operator.GREATER_THAN, new IntegerETIR(2)),
+				myTester.treeParseInput("1 > 2"));
 	}
 
 	@Test
@@ -137,10 +151,10 @@ public class HobbesTIRBuilderTest {
 				new IntegerETIR(5)), myTester.treeParseInput("let in 5 end"));
 		assertEquals(
 				new LetETIR(new ArrayList<DeclarationTIR>(), new OperatorETIR(
-						new VariableETIR(new SimpleLValueTIR(Symbol
-								.createSymbol("x"))), Operator.ADD,
-						new IntegerETIR(5))), myTester
-						.treeParseInput("let in x + 5 end"));
+						new VariableETIR(new SimpleLValueTIR(
+								Symbol.createSymbol("x"))), Operator.ADD,
+						new IntegerETIR(5))),
+				myTester.treeParseInput("let in x + 5 end"));
 		assertEquals(
 				new LetETIR( //
 						Arrays.asList(new VariableDTIR(
@@ -153,20 +167,23 @@ public class HobbesTIRBuilderTest {
 
 	@Test
 	public void shouldBuildDecls() {
-		assertEquals(Arrays.asList(new VariableDTIR(Symbol.createSymbol("x"),
-				new IntegerETIR(8))), myTester.scanInput("var x := 8").parseAs(
-				"decls").treeParseAs("declarations"));
+		assertEquals(
+				Arrays.asList(new VariableDTIR(Symbol.createSymbol("x"),
+						new IntegerETIR(8))),
+				myTester.scanInput("var x := 8").parseAs("decls")
+						.treeParseAs("declarations"));
 		assertEquals(Arrays.asList(new VariableDTIR(Symbol.createSymbol("y"),
 				HobbesBoolean.TRUE)), myTester.scanInput("var y := #t")
 				.parseAs("decls").treeParseAs("declarations"));
-		assertEquals(Arrays
-				.asList(new VariableDTIR(Symbol.createSymbol("z"),
+		assertEquals(
+				Arrays.asList(new VariableDTIR(Symbol.createSymbol("z"),
 						new OperatorETIR(new VariableETIR(new SimpleLValueTIR(
 								Symbol.createSymbol("x"))), Operator.ADD,
-								new IntegerETIR(23)))), myTester.scanInput(
-				"var z := x + 23").parseAs("decls").treeParseAs("declarations"));
-		assertEquals(Arrays.asList(new VariableDTIR(Symbol.createSymbol("x"),
-				new IntegerETIR(8)), //
+								new IntegerETIR(23)))),
+				myTester.scanInput("var z := x + 23").parseAs("decls")
+						.treeParseAs("declarations"));
+		assertEquals(Arrays.asList(
+				new VariableDTIR(Symbol.createSymbol("x"), new IntegerETIR(8)), //
 				new VariableDTIR(Symbol.createSymbol("y"), HobbesBoolean.TRUE), //
 				new VariableDTIR(Symbol.createSymbol("z"), new OperatorETIR(
 						new VariableETIR(new SimpleLValueTIR(Symbol
@@ -179,11 +196,13 @@ public class HobbesTIRBuilderTest {
 
 	@Test
 	public void shouldBuildVariableLValues() {
-		assertEquals(new VariableETIR(new SimpleLValueTIR(Symbol
-				.createSymbol("foo"))), //
+		assertEquals(
+				new VariableETIR(
+						new SimpleLValueTIR(Symbol.createSymbol("foo"))), //
 				myTester.treeParseInput("foo"));
-		assertEquals(new VariableETIR(new SimpleLValueTIR(Symbol
-				.createSymbol("thx1138"))), //
+		assertEquals(
+				new VariableETIR(new SimpleLValueTIR(
+						Symbol.createSymbol("thx1138"))), //
 				myTester.treeParseInput("thx1138"));
 	}
 
@@ -214,13 +233,13 @@ public class HobbesTIRBuilderTest {
 	@Test
 	public void shouldBuildIfExpressions() {
 		assertEquals(new IfETIR(HobbesBoolean.TRUE, new IntegerETIR(2),
-				new IntegerETIR(3)), myTester
-				.treeParseInput("if #t then 2 else 3 end"));
+				new IntegerETIR(3)),
+				myTester.treeParseInput("if #t then 2 else 3 end"));
 		assertEquals(new IfETIR(HobbesBoolean.FALSE, new OperatorETIR(
 				new IntegerETIR(2), Operator.ADD, new IntegerETIR(8)),
 				new OperatorETIR(new IntegerETIR(3), Operator.MULTIPLY,
-						new IntegerETIR(4))), myTester
-				.treeParseInput("if #f then 2+8 else 3*4 end"));
+						new IntegerETIR(4))),
+				myTester.treeParseInput("if #f then 2+8 else 3*4 end"));
 	}
 
 	@Test
@@ -231,8 +250,9 @@ public class HobbesTIRBuilderTest {
 	}
 
 	private void assertLine(int line, String expression) {
-		assertEquals(new Position(line), ((ExpressionTIR) myTester
-				.treeParseInput(expression)).getPosition());
+		assertEquals(new Position(line),
+				((ExpressionTIR) myTester.treeParseInput(expression))
+						.getPosition());
 	}
 
 }

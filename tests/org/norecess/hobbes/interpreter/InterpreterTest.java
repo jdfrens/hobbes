@@ -18,13 +18,14 @@ import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.LValueTIR;
 import org.norecess.citkit.tir.data.DatumTIR;
 import org.norecess.citkit.tir.expressions.BooleanETIR;
+import org.norecess.citkit.tir.expressions.FloatingPointETIR;
 import org.norecess.citkit.tir.expressions.IIntegerETIR;
+import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.LetETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
-import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
 import org.norecess.hobbes.HobbesBoolean;
@@ -72,18 +73,28 @@ public class InterpreterTest {
 
 	@Test
 	public void shouldInterpretInteger() {
-		assertEquals(new IntegerETIR(5), myInterpreter
-				.interpret(new IntegerETIR(5)));
-		assertEquals(new IntegerETIR(555), myInterpreter
-				.interpret(new IntegerETIR(555)));
+		assertEquals(new IntegerETIR(5),
+				myInterpreter.interpret(new IntegerETIR(5)));
+		assertEquals(new IntegerETIR(555),
+				myInterpreter.interpret(new IntegerETIR(555)));
+	}
+
+	@Test
+	public void shouldInterpretFloat() {
+		assertEquals(new FloatingPointETIR(5.0),
+				myInterpreter
+						.visitFloatingPointETIR(new FloatingPointETIR(5.0)));
+		assertEquals(new FloatingPointETIR(3.14159),
+				myInterpreter.visitFloatingPointETIR(new FloatingPointETIR(
+						3.14159)));
 	}
 
 	@Test
 	public void shouldInterpretBooleans() {
-		assertEquals(BooleanETIR.TRUE, myInterpreter
-				.interpret(BooleanETIR.TRUE));
-		assertEquals(BooleanETIR.FALSE, myInterpreter
-				.interpret(BooleanETIR.FALSE));
+		assertEquals(BooleanETIR.TRUE,
+				myInterpreter.interpret(BooleanETIR.TRUE));
+		assertEquals(BooleanETIR.FALSE,
+				myInterpreter.interpret(BooleanETIR.FALSE));
 	}
 
 	@Test
@@ -94,8 +105,8 @@ public class InterpreterTest {
 		EasyMock.expect(lvalue.accept(myInterpreter)).andReturn(result);
 
 		myMocksControl.replay();
-		assertSame(result, myInterpreter.visitVariableETIR(new VariableETIR(
-				lvalue)));
+		assertSame(result,
+				myInterpreter.visitVariableETIR(new VariableETIR(lvalue)));
 		myMocksControl.verify();
 	}
 
@@ -179,8 +190,8 @@ public class InterpreterTest {
 				result);
 
 		myMocksControl.replay();
-		assertSame(result, myInterpreter.visitLetETIR(new LetETIR(declarations,
-				body)));
+		assertSame(result,
+				myInterpreter.visitLetETIR(new LetETIR(declarations, body)));
 		myMocksControl.verify();
 	}
 
@@ -192,27 +203,27 @@ public class InterpreterTest {
 		EasyMock.expect(myEnvironment.get(symbol)).andReturn(result);
 
 		myMocksControl.replay();
-		assertSame(result, myInterpreter.visitSimpleLValue(new SimpleLValueTIR(
-				symbol)));
+		assertSame(result,
+				myInterpreter.visitSimpleLValue(new SimpleLValueTIR(symbol)));
 		myMocksControl.verify();
 	}
 
 	@Test
 	public void shouldInterpretSubscriptLValue() {
 		myArgv[8] = new IntegerETIR(7);
-		assertEquals(new IntegerETIR(7), myInterpreter
-				.visitSubscriptLValue(createArgvTree(8)));
+		assertEquals(new IntegerETIR(7),
+				myInterpreter.visitSubscriptLValue(createArgvTree(8)));
 		myArgv[3] = new IntegerETIR(55);
-		assertEquals(new IntegerETIR(55), myInterpreter
-				.visitSubscriptLValue(createArgvTree(3)));
+		assertEquals(new IntegerETIR(55),
+				myInterpreter.visitSubscriptLValue(createArgvTree(3)));
 	}
 
 	//
 	// Helpers
 	//
 	private SubscriptLValueTIR createArgvTree(int i) {
-		return new SubscriptLValueTIR(new SimpleLValueTIR(Symbol
-				.createSymbol("ARGV")), new IntegerETIR(i));
+		return new SubscriptLValueTIR(new SimpleLValueTIR(
+				Symbol.createSymbol("ARGV")), new IntegerETIR(i));
 	}
 
 }

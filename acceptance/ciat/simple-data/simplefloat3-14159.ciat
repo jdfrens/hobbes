@@ -1,0 +1,12 @@
+pi as a floating point number.
+==== source
+3.14159
+==== compilation
+.sub main
+	load_bytecode "print.pbc"
+	$N0 = 3.14159
+	print $N0
+	print "\n"
+.end
+==== execution
+3.14159

@@ -34,7 +34,7 @@ public class PIRCompiler implements IPIRCompiler {
 			throws IOException {
 		ICode code = new Code();
 		code.append(myPrologCompiler.generateProlog(tir));
-		code.append(myBodyCompiler.generate(tir));
+		code.append(myBodyCompiler.generate(returnType, tir));
 		code.append(myBodyCompiler.generatePrint(returnType, tir));
 		code.append(myEpilogCompiler.generate());
 		return code;

@@ -45,7 +45,7 @@ public class PIRCompilerTest {
 
 		EasyMock.expect(myPrologCompiler.generateProlog(tir)).andReturn(
 				new Code("prolog"));
-		EasyMock.expect(myBodyCompiler.generate(tir)).andReturn(
+		EasyMock.expect(myBodyCompiler.generate(returnType, tir)).andReturn(
 				new Code("body"));
 		EasyMock.expect(myBodyCompiler.generatePrint(returnType, tir))
 				.andReturn(new Code("print"));
@@ -53,8 +53,8 @@ public class PIRCompilerTest {
 				new Code("epilog"));
 
 		myControl.replay();
-		assertEquals(new Code("prolog", "body", "print", "epilog"), myCompiler
-				.compile(returnType, tir));
+		assertEquals(new Code("prolog", "body", "print", "epilog"),
+				myCompiler.compile(returnType, tir));
 		myControl.verify();
 	}
 }

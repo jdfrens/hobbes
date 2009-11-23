@@ -22,7 +22,7 @@ public class TopLevelTypeChecker implements ITopLevelTypeChecker {
 		try {
 			return expression.accept(myTypeChecker);
 		} catch (HobbesTypeException e) {
-			err.println("Error on line " + e.getPosition().getPosition() + ": "
+			err.println("Error on line " + e.getPosition().getLine() + ": "
 					+ e.getMessage());
 			throw new AbortTranslatorException(StatusCodes.STATUS_TYPE_ERROR);
 		}

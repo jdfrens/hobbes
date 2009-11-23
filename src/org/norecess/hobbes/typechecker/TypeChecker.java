@@ -8,6 +8,7 @@ import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.IPosition;
 import org.norecess.citkit.tir.expressions.BreakETIR;
+import org.norecess.citkit.tir.expressions.FloatingPointETIR;
 import org.norecess.citkit.tir.expressions.IArrayETIR;
 import org.norecess.citkit.tir.expressions.IAssignmentETIR;
 import org.norecess.citkit.tir.expressions.IBooleanETIR;
@@ -19,17 +20,18 @@ import org.norecess.citkit.tir.expressions.IIntegerETIR;
 import org.norecess.citkit.tir.expressions.ILambdaETIR;
 import org.norecess.citkit.tir.expressions.ILetETIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR;
+import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.expressions.IRecordETIR;
 import org.norecess.citkit.tir.expressions.ISequenceETIR;
 import org.norecess.citkit.tir.expressions.IStringETIR;
 import org.norecess.citkit.tir.expressions.IVariableETIR;
 import org.norecess.citkit.tir.expressions.IWhileETIR;
 import org.norecess.citkit.tir.expressions.NilETIR;
-import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.lvalues.IFieldValueTIR;
 import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
 import org.norecess.citkit.types.BooleanType;
+import org.norecess.citkit.types.FloatingPointType;
 import org.norecess.citkit.types.IntegerType;
 import org.norecess.citkit.types.PrimitiveType;
 import org.norecess.hobbes.interpreter.IErrorHandler;
@@ -92,13 +94,19 @@ public class TypeChecker implements ITypeChecker {
 		return IntegerType.INTEGER_TYPE;
 	}
 
+	public PrimitiveType visitFloatingPointETIR(
+			FloatingPointETIR floatingPointETIR) {
+		return FloatingPointType.FLOATING_POINT_TYPE;
+	}
+
 	public PrimitiveType visitBooleanETIR(IBooleanETIR b) {
 		return BooleanType.BOOLEAN_TYPE;
 	}
 
 	public PrimitiveType visitOperatorETIR(IOperatorETIR expression) {
-		return visitInterpretedOperatorETIR(expression, expression
-				.getOperator(), myRecurser.recurse(expression.getLeft()),
+		return visitInterpretedOperatorETIR(expression,
+				expression.getOperator(),
+				myRecurser.recurse(expression.getLeft()),
 				myRecurser.recurse(expression.getRight()));
 	}
 

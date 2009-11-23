@@ -7,6 +7,7 @@ import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.expressions.BreakETIR;
+import org.norecess.citkit.tir.expressions.FloatingPointETIR;
 import org.norecess.citkit.tir.expressions.IArrayETIR;
 import org.norecess.citkit.tir.expressions.IAssignmentETIR;
 import org.norecess.citkit.tir.expressions.IBooleanETIR;
@@ -18,13 +19,13 @@ import org.norecess.citkit.tir.expressions.IIntegerETIR;
 import org.norecess.citkit.tir.expressions.ILambdaETIR;
 import org.norecess.citkit.tir.expressions.ILetETIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR;
+import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.expressions.IRecordETIR;
 import org.norecess.citkit.tir.expressions.ISequenceETIR;
 import org.norecess.citkit.tir.expressions.IStringETIR;
 import org.norecess.citkit.tir.expressions.IVariableETIR;
 import org.norecess.citkit.tir.expressions.IWhileETIR;
 import org.norecess.citkit.tir.expressions.NilETIR;
-import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.lvalues.IFieldValueTIR;
 import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
@@ -96,9 +97,14 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 				" = " + integer.getValue());
 	}
 
-	public ICode visitBooleanETIR(IBooleanETIR b) {
+	public ICode visitFloatingPointETIR(FloatingPointETIR number) {
+		return myResourceAllocator.createCode().add(myTarget,
+				" = " + number.getValue());
+	}
+
+	public ICode visitBooleanETIR(IBooleanETIR bool) {
 		ICode code = myResourceAllocator.createCode();
-		code.add(myTarget, " = ", HobbesBoolean.TRUE.equals(b) ? "1" : "0");
+		code.add(myTarget, " = ", HobbesBoolean.TRUE.equals(bool) ? "1" : "0");
 		return code;
 	}
 
@@ -141,9 +147,7 @@ public class PIRBodyVisitor implements IPIRBodyVisitor {
 		ICode code = myResourceAllocator.createCode();
 		IEnvironment<IRegister> newEnvironment = myEnvironment.create();
 		code.append(myRecurser.bind(let.getDeclarations(), newEnvironment));
-		code
-				.append(myRecurser.recurse(newEnvironment, let.getBody(),
-						myTarget));
+		code.append(myRecurser.recurse(newEnvironment, let.getBody(), myTarget));
 		return code;
 	}
 

@@ -14,7 +14,7 @@ public class ResourceAllocator implements IResourceAllocator {
 	}
 
 	public IRegister nextRegister() {
-		return new Register(myRegisterCounter++);
+		return new IntegerRegister(myRegisterCounter++);
 	}
 
 	public ILabel nextLabel() {

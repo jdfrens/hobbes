@@ -9,10 +9,10 @@ public class ResourceAllocatorTest {
 	@Test
 	public void shouldAllocateRegisters() {
 		ResourceAllocator allocator = new ResourceAllocator();
-		assertEquals(new Register(1), allocator.nextRegister());
-		assertEquals(new Register(2), allocator.nextRegister());
-		assertEquals(new Register(3), allocator.nextRegister());
-		assertEquals(new Register(4), allocator.nextRegister());
+		assertEquals(new IntegerRegister(1), allocator.nextRegister());
+		assertEquals(new IntegerRegister(2), allocator.nextRegister());
+		assertEquals(new IntegerRegister(3), allocator.nextRegister());
+		assertEquals(new IntegerRegister(4), allocator.nextRegister());
 	}
 
 	@Test
@@ -21,7 +21,7 @@ public class ResourceAllocatorTest {
 		for (int i = 1; i < 2000; i++) {
 			allocator.nextRegister();
 		}
-		assertEquals(new Register(2000), allocator.nextRegister());
+		assertEquals(new IntegerRegister(2000), allocator.nextRegister());
 	}
 
 }

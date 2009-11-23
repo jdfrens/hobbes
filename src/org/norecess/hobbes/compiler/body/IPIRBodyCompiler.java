@@ -10,7 +10,7 @@ import org.norecess.hobbes.backend.ICode;
  */
 public interface IPIRBodyCompiler {
 
-	public ICode generate(ExpressionTIR tir);
+	public ICode generate(HobbesType returnType, ExpressionTIR tir);
 
 	public ICode generatePrint(HobbesType returnType, ExpressionTIR tir);
 

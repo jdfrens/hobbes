@@ -18,15 +18,17 @@ import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.IPosition;
 import org.norecess.citkit.tir.LValueTIR;
+import org.norecess.citkit.tir.expressions.FloatingPointETIR;
+import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.citkit.tir.expressions.LetETIR;
 import org.norecess.citkit.tir.expressions.OperatorETIR;
 import org.norecess.citkit.tir.expressions.VariableETIR;
-import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.lvalues.SimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.SubscriptLValueTIR;
 import org.norecess.citkit.types.BooleanType;
+import org.norecess.citkit.types.FloatingPointType;
 import org.norecess.citkit.types.IntegerType;
 import org.norecess.citkit.types.PrimitiveType;
 import org.norecess.hobbes.HobbesBoolean;
@@ -62,18 +64,28 @@ public class TypeCheckerTest {
 
 	@Test
 	public void shouldCheckIntegers() {
-		assertEquals(IntegerType.INTEGER_TYPE, myTypeChecker
-				.visitIntegerETIR(new IntegerETIR(3)));
-		assertEquals(IntegerType.INTEGER_TYPE, myTypeChecker
-				.visitIntegerETIR(new IntegerETIR(-234)));
+		assertEquals(IntegerType.INTEGER_TYPE,
+				myTypeChecker.visitIntegerETIR(new IntegerETIR(3)));
+		assertEquals(IntegerType.INTEGER_TYPE,
+				myTypeChecker.visitIntegerETIR(new IntegerETIR(-234)));
+	}
+
+	@Test
+	public void shouldCheckFloats() {
+		assertEquals(FloatingPointType.FLOATING_POINT_TYPE,
+				myTypeChecker
+						.visitFloatingPointETIR(new FloatingPointETIR(5.0)));
+		assertEquals(FloatingPointType.FLOATING_POINT_TYPE,
+				myTypeChecker
+						.visitFloatingPointETIR(new FloatingPointETIR(5.0)));
 	}
 
 	@Test
 	public void shouldCheckBooleans() {
-		assertEquals(BooleanType.BOOLEAN_TYPE, myTypeChecker
-				.visitBooleanETIR(HobbesBoolean.TRUE));
-		assertEquals(BooleanType.BOOLEAN_TYPE, myTypeChecker
-				.visitBooleanETIR(HobbesBoolean.FALSE));
+		assertEquals(BooleanType.BOOLEAN_TYPE,
+				myTypeChecker.visitBooleanETIR(HobbesBoolean.TRUE));
+		assertEquals(BooleanType.BOOLEAN_TYPE,
+				myTypeChecker.visitBooleanETIR(HobbesBoolean.FALSE));
 	}
 
 	@Test
@@ -122,10 +134,9 @@ public class TypeCheckerTest {
 				operatorTypeChecker);
 		EasyMock.expect(operatorTypeChecker.check(leftType, rightType))
 				.andThrow(new OperatorTypeException());
-		EasyMock
-				.expect(
-						myErrorHandler.handleTypeError(expression, leftType,
-								rightType)).andReturn(expected);
+		EasyMock.expect(
+				myErrorHandler.handleTypeError(expression, leftType, rightType))
+				.andReturn(expected);
 
 		myMocksControl.replay();
 		try {
@@ -146,8 +157,8 @@ public class TypeCheckerTest {
 		EasyMock.expect(lvalue.accept(myTypeChecker)).andReturn(type);
 
 		myMocksControl.replay();
-		assertSame(type, myTypeChecker.visitVariableETIR(new VariableETIR(
-				lvalue)));
+		assertSame(type,
+				myTypeChecker.visitVariableETIR(new VariableETIR(lvalue)));
 		myMocksControl.verify();
 	}
 
@@ -247,8 +258,8 @@ public class TypeCheckerTest {
 					otherwise));
 			fail("should have throw a type-checking exception");
 		} catch (HobbesTypeException actual) {
-			assertEquals("then clause is ASD, else clause is QWE", actual
-					.getMessage());
+			assertEquals("then clause is ASD, else clause is QWE",
+					actual.getMessage());
 			myMocksControl.verify();
 		}
 	}
@@ -270,8 +281,8 @@ public class TypeCheckerTest {
 				result);
 
 		myMocksControl.replay();
-		assertSame(result, myTypeChecker.visitLetETIR(new LetETIR(declarations,
-				body)));
+		assertSame(result,
+				myTypeChecker.visitLetETIR(new LetETIR(declarations, body)));
 		myMocksControl.verify();
 	}
 
@@ -312,8 +323,8 @@ public class TypeCheckerTest {
 				newEnvironment);
 
 		myMocksControl.replay();
-		assertSame(newEnvironment, myTypeChecker.bind(newEnvironment, Arrays
-				.asList(declarations)));
+		assertSame(newEnvironment,
+				myTypeChecker.bind(newEnvironment, Arrays.asList(declarations)));
 		myMocksControl.verify();
 	}
 
@@ -325,8 +336,8 @@ public class TypeCheckerTest {
 		EasyMock.expect(myEnvironment.get(symbol)).andReturn(type);
 
 		myMocksControl.replay();
-		assertSame(type, myTypeChecker.visitSimpleLValue(new SimpleLValueTIR(
-				symbol)));
+		assertSame(type,
+				myTypeChecker.visitSimpleLValue(new SimpleLValueTIR(symbol)));
 		myMocksControl.verify();
 	}
 
@@ -336,8 +347,9 @@ public class TypeCheckerTest {
 		ExpressionTIR index = myMocksControl.createMock(ExpressionTIR.class);
 
 		myMocksControl.replay();
-		assertSame(IntegerType.INTEGER_TYPE, myTypeChecker
-				.visitSubscriptLValue(new SubscriptLValueTIR(variable, index)));
+		assertSame(IntegerType.INTEGER_TYPE,
+				myTypeChecker.visitSubscriptLValue(new SubscriptLValueTIR(
+						variable, index)));
 		myMocksControl.verify();
 	}
 

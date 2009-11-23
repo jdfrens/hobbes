@@ -6,6 +6,7 @@ import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.data.DatumTIR;
 import org.norecess.citkit.tir.expressions.BreakETIR;
+import org.norecess.citkit.tir.expressions.FloatingPointETIR;
 import org.norecess.citkit.tir.expressions.IArrayETIR;
 import org.norecess.citkit.tir.expressions.IAssignmentETIR;
 import org.norecess.citkit.tir.expressions.IBooleanETIR;
@@ -17,13 +18,13 @@ import org.norecess.citkit.tir.expressions.IIntegerETIR;
 import org.norecess.citkit.tir.expressions.ILambdaETIR;
 import org.norecess.citkit.tir.expressions.ILetETIR;
 import org.norecess.citkit.tir.expressions.IOperatorETIR;
+import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.expressions.IRecordETIR;
 import org.norecess.citkit.tir.expressions.ISequenceETIR;
 import org.norecess.citkit.tir.expressions.IStringETIR;
 import org.norecess.citkit.tir.expressions.IVariableETIR;
 import org.norecess.citkit.tir.expressions.IWhileETIR;
 import org.norecess.citkit.tir.expressions.NilETIR;
-import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.citkit.tir.lvalues.IFieldValueTIR;
 import org.norecess.citkit.tir.lvalues.ISimpleLValueTIR;
 import org.norecess.citkit.tir.lvalues.ISubscriptLValueTIR;
@@ -74,6 +75,10 @@ public class Interpreter implements IInterpreter {
 		return integer;
 	}
 
+	public DatumTIR visitFloatingPointETIR(FloatingPointETIR floatingPoint) {
+		return floatingPoint;
+	}
+
 	public IBooleanETIR visitBooleanETIR(IBooleanETIR bool) {
 		return bool;
 	}
@@ -108,8 +113,9 @@ public class Interpreter implements IInterpreter {
 	}
 
 	public DatumTIR visitLetETIR(ILetETIR let) {
-		return myRecursion.interpret(myRecursion.createBinder().bind(
-				let.getDeclarations()), let.getBody());
+		return myRecursion.interpret(
+				myRecursion.createBinder().bind(let.getDeclarations()),
+				let.getBody());
 	}
 
 	public IDeclarationBinder createBinder() {

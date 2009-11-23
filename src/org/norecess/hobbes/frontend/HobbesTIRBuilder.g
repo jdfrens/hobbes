@@ -27,6 +27,8 @@ program returns [ExpressionTIR tir]
 expression returns [ExpressionTIR tir]
   : i=INTEGER
     { tir = new IntegerETIR(new Position(i.getLine()), i.getText()); }
+  | f=FLOAT
+    { tir = new FloatingPointETIR(new Position(f.getLine()), f.getText()); }
   | b=BOOLEAN
     { tir = new BooleanETIR(new Position(b.getLine()), b.getText()); }
   | s=symbol

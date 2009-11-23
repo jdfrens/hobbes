@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.types.BooleanType;
+import org.norecess.citkit.types.FloatingPointType;
+import org.norecess.citkit.types.HobbesType;
 import org.norecess.citkit.types.IntegerType;
 import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.compiler.ICompilerFactory;
@@ -33,17 +35,39 @@ public class PIRBodyCompilerTest {
 	public void shouldCompileExpression() {
 		ExpressionTIR expression = myMocksControl
 				.createMock(ExpressionTIR.class);
+		HobbesType returnType = myMocksControl.createMock(HobbesType.class);
 		IPIRBodyVisitor bodyVisitor = myMocksControl
 				.createMock(IPIRBodyVisitor.class);
 
-		EasyMock.expect(myCompilerFactory.createBodyVisitor()).andReturn(
-				bodyVisitor);
+		EasyMock.expect(
+				myCompilerFactory.createBodyVisitor(PIRBodyCompiler.ACC))
+				.andReturn(bodyVisitor);
 		EasyMock.expect(expression.accept(bodyVisitor)).andReturn(
 				new Code("expression computation"));
 
 		myMocksControl.replay();
-		assertEquals(new Code("expression computation"), myCompiler
-				.generate(expression));
+		assertEquals(new Code("expression computation"),
+				myCompiler.generate(returnType, expression));
+		myMocksControl.verify();
+	}
+
+	@Test
+	public void shouldCompileFloatingPointExpression() {
+		ExpressionTIR expression = myMocksControl
+				.createMock(ExpressionTIR.class);
+		HobbesType returnType = FloatingPointType.FLOATING_POINT_TYPE;
+		IPIRBodyVisitor bodyVisitor = myMocksControl
+				.createMock(IPIRBodyVisitor.class);
+
+		EasyMock.expect(
+				myCompilerFactory.createBodyVisitor(PIRBodyCompiler.FLOAT_ACC))
+				.andReturn(bodyVisitor);
+		EasyMock.expect(expression.accept(bodyVisitor)).andReturn(
+				new Code("expression computation"));
+
+		myMocksControl.replay();
+		assertEquals(new Code("expression computation"),
+				myCompiler.generate(returnType, expression));
 		myMocksControl.verify();
 	}
 
@@ -54,8 +78,8 @@ public class PIRBodyCompilerTest {
 
 		myMocksControl.replay();
 		assertEquals(new Code("print $I0", //
-				"print \"\\n\""), myCompiler.generatePrint(
-				IntegerType.INTEGER_TYPE, expression));
+				"print \"\\n\""),
+				myCompiler.generatePrint(IntegerType.INTEGER_TYPE, expression));
 		myMocksControl.verify();
 	}
 
@@ -66,8 +90,8 @@ public class PIRBodyCompilerTest {
 
 		myMocksControl.replay();
 		assertEquals(new Code("print_bool($I0)", //
-				"print \"\\n\""), myCompiler.generatePrint(
-				BooleanType.BOOLEAN_TYPE, expression));
+				"print \"\\n\""),
+				myCompiler.generatePrint(BooleanType.BOOLEAN_TYPE, expression));
 		myMocksControl.verify();
 	}
 

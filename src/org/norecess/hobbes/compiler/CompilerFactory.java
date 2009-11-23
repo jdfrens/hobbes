@@ -5,7 +5,6 @@ import java.util.Map;
 import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
 import org.norecess.hobbes.compiler.body.IPIRBodyVisitor;
-import org.norecess.hobbes.compiler.body.PIRBodyCompiler;
 import org.norecess.hobbes.compiler.body.PIRBodyVisitor;
 import org.norecess.hobbes.compiler.operators.OperatorInstruction;
 import org.norecess.hobbes.compiler.resources.IRegister;
@@ -28,9 +27,9 @@ public class CompilerFactory implements ICompilerFactory {
 		myEnvironment = environment;
 	}
 
-	public IPIRBodyVisitor createBodyVisitor() {
+	public IPIRBodyVisitor createBodyVisitor(IRegister target) {
 		return new PIRBodyVisitor(myResourceAllocator, myOperatorInstructions,
-				myEnvironment, PIRBodyCompiler.ACC);
+				myEnvironment, target);
 	}
 
 }

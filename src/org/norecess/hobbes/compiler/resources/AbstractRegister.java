@@ -1,10 +1,10 @@
 package org.norecess.hobbes.compiler.resources;
 
-public class Register implements IRegister {
+public class AbstractRegister implements IRegister {
 
-	private final int	myI;
+	protected final int	myI;
 
-	public Register(int i) {
+	public AbstractRegister(int i) {
 		myI = i;
 	}
 
@@ -27,16 +27,11 @@ public class Register implements IRegister {
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		Register other = (Register) obj;
+		IntegerRegister other = (IntegerRegister) obj;
 		if (myI != other.myI) {
 			return false;
 		}
 		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "$I" + myI;
 	}
 
 }

@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.compiler.operators.ComparisonOperator;
-import org.norecess.hobbes.compiler.resources.Register;
+import org.norecess.hobbes.compiler.resources.IntegerRegister;
 import org.norecess.hobbes.compiler.resources.ResourceAllocator;
 
 public class ComparisonOperatorTest {
@@ -23,9 +23,9 @@ public class ComparisonOperatorTest {
 	@Test
 	public void shouldCompileComparisonInstructions() {
 		assertEquals(new Code("$I2 = $I2 @ $I3"), myAtOperator.compile(
-				new ResourceAllocator(), new Register(2), new Register(3)));
+				new ResourceAllocator(), new IntegerRegister(2), new IntegerRegister(3)));
 		assertEquals(new Code("$I89 = $I89 # $I45"), myPoundOperator.compile(
-				new ResourceAllocator(), new Register(89), new Register(45)));
+				new ResourceAllocator(), new IntegerRegister(89), new IntegerRegister(45)));
 	}
 
 }

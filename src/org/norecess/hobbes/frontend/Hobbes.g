@@ -56,7 +56,7 @@ multiplicative_op
   ;
 	
 simple_expression
-  : INTEGER | BOOLEAN | IDENTIFIER
+  : INTEGER | FLOAT | BOOLEAN | IDENTIFIER
   | '('! expression ')'!
   | MINUS INTEGER
     -> ^(MINUS INTEGER)
@@ -71,6 +71,10 @@ simple_expression
 INTEGER
   : ('0'..'9')+
 	;
+	
+FLOAT
+  : DIGITS+ '.' DIGITS+
+  ;
 	
 BOOLEAN
   : '#f' | '#t'
@@ -97,3 +101,6 @@ WS
   :	(' ' | '\t' | '\n')+
 		{ skip(); }
 	;
+
+fragment
+DIGITS : ('0'..'9') ;
