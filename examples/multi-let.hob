@@ -1,0 +1,10 @@
+let var x := 3.5
+    var y := 88.1
+    var i := 8
+    var j := 2
+in
+  let var left := x + y
+      var right := i * j
+  in left
+  end
+end

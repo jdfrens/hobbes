@@ -1,0 +1,7 @@
+ARGV has int elements.
+==== source
+10.1 + ARGV[1]
+==== compilation error
+Error on line 1: float + int is not defined
+==== execution error
+Error on line 1: float + int is not defined

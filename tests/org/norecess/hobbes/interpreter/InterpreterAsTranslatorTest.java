@@ -46,7 +46,7 @@ public class InterpreterAsTranslatorTest {
 				"the output");
 
 		myMocksControl.replay();
-		myTranslator.evalAndPrint(new PrintStream(out), null, tir);
+		myTranslator.evalAndPrint(new PrintStream(out), tir);
 		assertEquals("the output\n", out.toString());
 		myMocksControl.verify();
 	}

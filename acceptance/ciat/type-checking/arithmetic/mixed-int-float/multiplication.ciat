@@ -1,0 +1,7 @@
+Multiplication will not tolerate an int and a float!
+==== source
+3.14159 * 8
+==== compilation error
+Error on line 1: float * int is not defined
+==== execution error
+Error on line 1: float * int is not defined

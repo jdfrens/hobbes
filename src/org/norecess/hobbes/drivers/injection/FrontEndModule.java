@@ -3,6 +3,8 @@ package org.norecess.hobbes.drivers.injection;
 import java.io.File;
 
 import org.norecess.citkit.tir.expressions.IIntegerETIR;
+import org.norecess.citkit.tir.factories.ExpressionTIRFactory;
+import org.norecess.citkit.tir.factories.IExpressionTIRFactory;
 import org.norecess.hobbes.drivers.ArgsToIntegers;
 import org.norecess.hobbes.frontend.HobbesFrontEnd;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
@@ -33,4 +35,8 @@ public class FrontEndModule extends AbstractModule {
 		return new ArgsToIntegers().convertArgs(myArgs);
 	}
 
+	@Provides
+	public IExpressionTIRFactory provideExpressionTIRFactory() {
+		return new ExpressionTIRFactory();
+	}
 }

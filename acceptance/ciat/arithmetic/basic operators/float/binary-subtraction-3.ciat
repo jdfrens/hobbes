@@ -1,0 +1,14 @@
+Should be able to subtract negative floats.
+==== source
+-0.32 - -0.08
+==== compilation
+.sub main
+	load_bytecode "print.pbc"
+	$N0 = -0.32
+	$N1 = -0.08
+	$N0 -= $N1
+	print $N0
+	print "\n"
+.end
+==== execution
+-0.24

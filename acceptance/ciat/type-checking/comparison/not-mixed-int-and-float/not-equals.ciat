@@ -1,0 +1,7 @@
+int not-equals float is a type error.
+==== source
+82 != 3.14159
+==== compilation error
+Error on line 1: int <> float is not defined
+==== execution error
+Error on line 1: int <> float is not defined

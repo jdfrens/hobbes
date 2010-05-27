@@ -1,0 +1,31 @@
+Multiple variables, multiple types.
+==== source
+let var x := 3.5
+    var y := 88.1
+    var i := 8
+    var j := 2
+in
+  let var left := x + y
+      var right := i * j
+  in left
+  end
+end
+==== compilation
+.sub main
+	load_bytecode "print.pbc"
+	$N1 = 3.5
+	$N2 = 88.1
+	$I3 = 8
+	$I4 = 2
+	$N5 = $N1
+	$N6 = $N2
+	$N5 += $N6
+	$I7 = $I3
+	$I8 = $I4
+	$I7 *= $I8
+	$N0 = $N5
+	print $N0
+	print "\n"
+.end
+==== execution
+91.6

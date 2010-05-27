@@ -1,0 +1,40 @@
+If expressions as factors in a multiplication
+==== source
+if #t then
+  1 + 2
+else
+  8 * 4
+end
+*
+if #f then
+  5
+else
+  9
+end
+==== compilation
+.sub main
+	load_bytecode "print.pbc"
+	$I0 = 1
+	if $I0 goto label_1
+	$I0 = 8
+	$I2 = 4
+	$I0 *= $I2
+	goto label_2
+label_1:
+	$I0 = 1
+	$I3 = 2
+	$I0 += $I3
+label_2:
+	$I1 = 0
+	if $I1 goto label_3
+	$I1 = 9
+	goto label_4
+label_3:
+	$I1 = 5
+label_4:
+	$I0 *= $I1
+	print $I0
+	print "\n"
+.end
+==== execution
+27

@@ -1,0 +1,14 @@
+Should be able to add two multi-digit floats together.
+==== source
+1024.1+36.5
+==== compilation
+.sub main
+	load_bytecode "print.pbc"
+	$N0 = 1024.1
+	$N1 = 36.5
+	$N0 += $N1
+	print $N0
+	print "\n"
+.end
+==== execution
+1060.6

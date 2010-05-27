@@ -1,0 +1,7 @@
+Float plus integer equals error!
+==== source
+10.1 + 5
+==== compilation error
+Error on line 1: float + int is not defined
+==== execution error
+Error on line 1: float + int is not defined

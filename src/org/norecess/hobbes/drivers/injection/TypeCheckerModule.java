@@ -5,7 +5,7 @@ import java.util.Map;
 import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.environment.NullEnvironment;
 import org.norecess.citkit.tir.expressions.IOperatorETIR.IOperator;
-import org.norecess.citkit.types.PrimitiveType;
+import org.norecess.citkit.types.HobbesType;
 import org.norecess.hobbes.typechecker.ITopLevelTypeChecker;
 import org.norecess.hobbes.typechecker.ITypeChecker;
 import org.norecess.hobbes.typechecker.TopLevelTypeChecker;
@@ -25,8 +25,8 @@ public class TypeCheckerModule extends AbstractModule {
 	}
 
 	@Provides
-	public IEnvironment<PrimitiveType> provideInitialTypeEnvironment() {
-		return new NullEnvironment<PrimitiveType>();
+	public IEnvironment<HobbesType> provideInitialTypeEnvironment() {
+		return new NullEnvironment<HobbesType>();
 	}
 
 	@Provides

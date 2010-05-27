@@ -10,14 +10,14 @@ import org.norecess.citkit.ISymbol;
 import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.declarations.VariableDTIR;
+import org.norecess.citkit.types.HobbesType;
 import org.norecess.citkit.types.PrimitiveType;
 
 public class TypeBinderTest {
 
 	private IMocksControl				myMocksControl;
 
-	private IEnvironment<PrimitiveType>	myEnvironment;
-	private ITypeChecker				myTypeChecker;
+	private IEnvironment<HobbesType>	myEnvironment;
 
 	private TypeBinder					myBinder;
 
@@ -27,9 +27,8 @@ public class TypeBinderTest {
 		myMocksControl = EasyMock.createControl();
 
 		myEnvironment = myMocksControl.createMock(IEnvironment.class);
-		myTypeChecker = myMocksControl.createMock(ITypeChecker.class);
 
-		myBinder = new TypeBinder(myEnvironment, myTypeChecker);
+		myBinder = new TypeBinder(myEnvironment);
 	}
 
 	@Test
@@ -39,7 +38,7 @@ public class TypeBinderTest {
 				.createMock(ExpressionTIR.class);
 		PrimitiveType type = myMocksControl.createMock(PrimitiveType.class);
 
-		EasyMock.expect(myTypeChecker.recurse(initialization)).andReturn(type);
+		EasyMock.expect(initialization.getType()).andReturn(type);
 		myEnvironment.add(symbol, type);
 
 		myMocksControl.replay();

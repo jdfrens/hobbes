@@ -7,24 +7,35 @@ import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.data.DatumTIR;
+import org.norecess.citkit.tir.expressions.FloatingPointETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
 import org.norecess.hobbes.typechecker.OperatorTypeException;
 
+import ovm.polyd.PolyD;
+
 public class DivisionAppliableTest {
 
-	private DivisionAppliable	myOperator;
+	private Appliable	myOperator;
 
 	@Before
 	public void setUp() {
-		myOperator = new DivisionAppliable();
+		myOperator = PolyD.build(Appliable.class, new DivisionAppliable());
 	}
 
 	@Test
-	public void shouldInterpretDivision() {
-		assertEquals(new IntegerETIR(4), myOperator.apply(new IntegerETIR(8),
-				new IntegerETIR(2)));
-		assertEquals(new IntegerETIR(2), myOperator.apply(new IntegerETIR(15),
-				new IntegerETIR(6)));
+	public void shouldInterpretIntegerDivision() {
+		assertEquals(new IntegerETIR(4),
+				myOperator.apply(new IntegerETIR(8), new IntegerETIR(2)));
+		assertEquals(new IntegerETIR(2),
+				myOperator.apply(new IntegerETIR(15), new IntegerETIR(6)));
+	}
+
+	@Test
+	public void shouldInterpretFloatDivision() {
+		assertEquals(new FloatingPointETIR(2.0), myOperator.apply(
+				new FloatingPointETIR(16.0), new FloatingPointETIR(8.0)));
+		assertEquals(new FloatingPointETIR(44.4), myOperator.apply(
+				new FloatingPointETIR(88.8), new FloatingPointETIR(2.0)));
 	}
 
 	@Test(expected = OperatorTypeException.class)

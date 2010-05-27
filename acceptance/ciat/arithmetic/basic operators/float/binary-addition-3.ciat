@@ -1,0 +1,14 @@
+Should be able to add two floats together, one of them negative.
+==== source
+100.6+-36.5
+==== compilation
+.sub main
+	load_bytecode "print.pbc"
+	$N0 = 100.6
+	$N1 = -36.5
+	$N0 += $N1
+	print $N0
+	print "\n"
+.end
+==== execution
+64.1

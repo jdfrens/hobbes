@@ -3,7 +3,6 @@ package org.norecess.hobbes.typechecker;
 import java.io.PrintStream;
 
 import org.norecess.citkit.tir.ExpressionTIR;
-import org.norecess.citkit.types.HobbesType;
 import org.norecess.hobbes.drivers.AbortTranslatorException;
 import org.norecess.hobbes.drivers.StatusCodes;
 
@@ -18,7 +17,7 @@ public class TopLevelTypeChecker implements ITopLevelTypeChecker {
 		myTypeChecker = typeChecker;
 	}
 
-	public HobbesType typeCheck(PrintStream err, ExpressionTIR expression) {
+	public ExpressionTIR typeCheck(PrintStream err, ExpressionTIR expression) {
 		try {
 			return expression.accept(myTypeChecker);
 		} catch (HobbesTypeException e) {

@@ -1,0 +1,14 @@
+Should be able to multiply two floats together, one of them negative.
+==== source
+100.0*-0.361
+==== compilation
+.sub main
+	load_bytecode "print.pbc"
+	$N0 = 100.0
+	$N1 = -0.361
+	$N0 *= $N1
+	print $N0
+	print "\n"
+.end
+==== execution
+-36.1

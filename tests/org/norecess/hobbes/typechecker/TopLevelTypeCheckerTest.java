@@ -16,7 +16,6 @@ import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.IPosition;
 import org.norecess.citkit.tir.Position;
-import org.norecess.citkit.types.PrimitiveType;
 import org.norecess.hobbes.drivers.AbortTranslatorException;
 import org.norecess.hobbes.drivers.StatusCodes;
 
@@ -44,14 +43,15 @@ public class TopLevelTypeCheckerTest {
 		ByteArrayOutputStream err = new ByteArrayOutputStream();
 		ExpressionTIR expression = myMocksControl
 				.createMock(ExpressionTIR.class);
-		PrimitiveType returnType = myMocksControl
-				.createMock(PrimitiveType.class);
+		ExpressionTIR typedExpression = myMocksControl
+				.createMock(ExpressionTIR.class);
 
-		EasyMock.expect(expression.accept(myTypeChecker)).andReturn(returnType);
+		EasyMock.expect(expression.accept(myTypeChecker)).andReturn(
+				typedExpression);
 
 		myMocksControl.replay();
-		assertSame(returnType, myTopLevelTypeChecker.typeCheck(new PrintStream(
-				err), expression));
+		assertSame(typedExpression, myTopLevelTypeChecker.typeCheck(
+				new PrintStream(err), expression));
 		myMocksControl.verify();
 	}
 
@@ -72,8 +72,8 @@ public class TopLevelTypeCheckerTest {
 			fail("should fail to type check");
 		} catch (AbortTranslatorException e) {
 			assertEquals(StatusCodes.STATUS_TYPE_ERROR, e.getStatus());
-			assertEquals("Error on line 55: <type error message>\n", err
-					.toString());
+			assertEquals("Error on line 55: <type error message>\n",
+					err.toString());
 		}
 		myMocksControl.verify();
 	}

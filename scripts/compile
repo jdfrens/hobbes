@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cp=./bin/:./lib/antlr-runtime-3.1.jar:./lib/citkit.jar
+cp=./bin/:./lib/antlr-runtime-3.1.jar:./lib/citkit.jar:./lib/guice-2.0.jar:./lib/aopalliance.jar:./lib/polyd-20050403-0031.jar:./lib/asm-1.5.3.jar
 source=$1
 shift
-java -cp $cp org.norecess.hobbes.drivers.PIRCompilerCLI "$source" > temp/something.pir && parrot temp/something.pir $@
+java -cp $cp org.norecess.hobbes.drivers.PIRCompilerCLI "$source" > temp/something.pir && parrot -Lpirlib temp/something.pir $@

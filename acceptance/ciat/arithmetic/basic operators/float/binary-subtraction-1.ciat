@@ -1,0 +1,14 @@
+Should be able to subtract one float from another.
+==== source
+2.1-3.7
+==== compilation
+.sub main
+	load_bytecode "print.pbc"
+	$N0 = 2.1
+	$N1 = 3.7
+	$N0 -= $N1
+	print $N0
+	print "\n"
+.end
+==== execution
+-1.6

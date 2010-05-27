@@ -5,10 +5,10 @@ Should be able to multiply three integers together.
 .sub main
 	load_bytecode "print.pbc"
 	$I0 = 2
-	$I1 = 3
-	$I0 *= $I1
-	$I2 = 4
+	$I2 = 3
 	$I0 *= $I2
+	$I1 = 4
+	$I0 *= $I1
 	print $I0
 	print "\n"
 .end

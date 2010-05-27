@@ -3,7 +3,6 @@ package org.norecess.hobbes.compiler;
 import java.io.IOException;
 
 import org.norecess.citkit.tir.ExpressionTIR;
-import org.norecess.citkit.types.HobbesType;
 import org.norecess.hobbes.backend.Code;
 import org.norecess.hobbes.backend.ICode;
 import org.norecess.hobbes.compiler.body.IPIRBodyCompiler;
@@ -30,12 +29,11 @@ public class PIRCompiler implements IPIRCompiler {
 		myEpilogCompiler = epilogCompiler;
 	}
 
-	public ICode compile(HobbesType returnType, ExpressionTIR tir)
-			throws IOException {
+	public ICode compile(ExpressionTIR tir) throws IOException {
 		ICode code = new Code();
 		code.append(myPrologCompiler.generateProlog(tir));
-		code.append(myBodyCompiler.generate(returnType, tir));
-		code.append(myBodyCompiler.generatePrint(returnType, tir));
+		code.append(myBodyCompiler.generate(tir));
+		code.append(myBodyCompiler.generatePrint(tir));
 		code.append(myEpilogCompiler.generate());
 		return code;
 	}

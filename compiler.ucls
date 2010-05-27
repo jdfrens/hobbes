@@ -1,0 +1,221 @@
+<class-diagram version="0.9.86" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.norecess.hobbes.compiler.CompilerAsTranslator" 
+    project="Hobbes Compiler 2008" 
+    file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/CompilerAsTranslator.java" binary="false">    
+    <position x="291" y="107" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" 
+    name="org.norecess.hobbes.compiler.body.declarations.PIRDeclarationCompiler" project="Hobbes Compiler 2008" 
+    file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/body/declarations/PIRDeclarationCompiler.java" 
+    binary="false">    
+    <position x="166" y="590" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.norecess.hobbes.compiler.CompilerFactory" 
+    project="Hobbes Compiler 2008" file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/CompilerFactory.java" 
+    binary="false">    
+    <position x="205" y="325" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.norecess.hobbes.compiler.ICompilerFactory" 
+    project="Hobbes Compiler 2008" file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/ICompilerFactory.java" 
+    binary="false">    
+    <position x="150" y="215" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <interface corner="BOTTOM_RIGHT" language="java" 
+    name="org.norecess.hobbes.compiler.body.declarations.IPIRDeclarationCompiler" project="Hobbes Compiler 2008" 
+    file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/body/declarations/IPIRDeclarationCompiler.java" 
+    binary="false">    
+    <position x="100" y="435" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.norecess.hobbes.compiler.IPIRCompiler" 
+    project="Hobbes Compiler 2008" file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/IPIRCompiler.java" 
+    binary="false">    
+    <position x="563" y="91" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.norecess.hobbes.compiler.PIRCompiler" 
+    project="Hobbes Compiler 2008" file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/PIRCompiler.java" 
+    binary="false">    
+    <position x="558" y="214" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.norecess.hobbes.compiler.prolog.IPIRPrologCompiler" 
+    project="Hobbes Compiler 2008" 
+    file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/prolog/IPIRPrologCompiler.java" binary="false">    
+    <position x="1313" y="149" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.norecess.hobbes.compiler.body.IPIRBodyCompiler" 
+    project="Hobbes Compiler 2008" 
+    file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/body/IPIRBodyCompiler.java" binary="false">    
+    <position x="1109" y="231" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <interface corner="BOTTOM_RIGHT" language="java" name="org.norecess.hobbes.compiler.epilog.IPIREpilogCompiler" 
+    project="Hobbes Compiler 2008" 
+    file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/epilog/IPIREpilogCompiler.java" binary="false">    
+    <position x="870" y="270" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="false" protected="false" private="false"/>    
+    </display>  
+  </interface>  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.norecess.hobbes.compiler.epilog.PIREpilogCompiler" 
+    project="Hobbes Compiler 2008" 
+    file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/epilog/PIREpilogCompiler.java" binary="false">    
+    <position x="797" y="364" width="127" height="57"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.norecess.hobbes.compiler.body.PIRBodyCompiler" 
+    project="Hobbes Compiler 2008" 
+    file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/body/PIRBodyCompiler.java" binary="false">    
+    <position x="1107" y="355" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <class corner="BOTTOM_RIGHT" language="java" name="org.norecess.hobbes.compiler.prolog.PIRPrologCompiler" 
+    project="Hobbes Compiler 2008" 
+    file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/prolog/PIRPrologCompiler.java" binary="false">    
+    <position x="1327" y="456" width="-1" height="-1"/>    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true"/>      
+      <operations public="true" package="false" protected="false" private="false"/>    
+    </display>  
+  </class>  
+  <realization>    
+    <source project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.epilog.PIREpilogCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/epilog/PIREpilogCompiler.java" binary="false"/>    
+    <target project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.epilog.IPIREpilogCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/epilog/IPIREpilogCompiler.java" binary="false"/>  
+  </realization>  
+  <realization>    
+    <source project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.body.PIRBodyCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/body/PIRBodyCompiler.java" binary="false"/>    
+    <target project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.body.IPIRBodyCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/body/IPIRBodyCompiler.java" binary="false"/>  
+  </realization>  
+  <association>    
+    <source project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.PIRCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/PIRCompiler.java" binary="false" navigable="false">      
+      <attribute name="myPrologCompiler"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </source>    
+    <target project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.prolog.IPIRPrologCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/prolog/IPIRPrologCompiler.java" binary="false" 
+      navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <source project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.PIRCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/PIRCompiler.java" binary="false"/>    
+    <target project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.IPIRCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/IPIRCompiler.java" binary="false"/>  
+  </realization>  
+  <association>    
+    <source project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.PIRCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/PIRCompiler.java" binary="false" navigable="false">      
+      <attribute name="myEpilogCompiler"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </source>    
+    <target project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.epilog.IPIREpilogCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/epilog/IPIREpilogCompiler.java" binary="false" 
+      navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <source project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.PIRCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/PIRCompiler.java" binary="false" navigable="false">      
+      <attribute name="myBodyCompiler"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </source>    
+    <target project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.body.IPIRBodyCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/body/IPIRBodyCompiler.java" binary="false" 
+      navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <source project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.CompilerAsTranslator" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/CompilerAsTranslator.java" binary="false" 
+      navigable="false">      
+      <attribute name="myCompiler"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </source>    
+    <target project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.IPIRCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/IPIRCompiler.java" binary="false" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association>    
+    <source project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.body.PIRBodyCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/body/PIRBodyCompiler.java" binary="false" 
+      navigable="false">      
+      <attribute name="myCompilerFactory"/>      
+      <multiplicity minimum="0" maximum="1"/>    
+    </source>    
+    <target project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.ICompilerFactory" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/ICompilerFactory.java" binary="false" 
+      navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization>    
+    <source project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.prolog.PIRPrologCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/prolog/PIRPrologCompiler.java" binary="false"/>    
+    <target project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.prolog.IPIRPrologCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/prolog/IPIRPrologCompiler.java" binary="false"/>  
+  </realization>  
+  <realization>    
+    <source project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.CompilerFactory" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/CompilerFactory.java" binary="false"/>    
+    <target project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.ICompilerFactory" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/ICompilerFactory.java" binary="false"/>  
+  </realization>  
+  <realization>    
+    <source project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.body.declarations.PIRDeclarationCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/body/declarations/PIRDeclarationCompiler.java" 
+      binary="false"/>    
+    <target project="Hobbes Compiler 2008" name="org.norecess.hobbes.compiler.body.declarations.IPIRDeclarationCompiler" 
+      file="/Hobbes Compiler 2008/src/org/norecess/hobbes/compiler/body/declarations/IPIRDeclarationCompiler.java" 
+      binary="false"/>  
+  </realization>  
+  <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true"/>    
+    <operations public="true" package="false" protected="false" private="false"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

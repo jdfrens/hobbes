@@ -9,43 +9,47 @@ import org.norecess.hobbes.backend.ICode;
 import org.norecess.hobbes.compiler.ICompilerFactory;
 import org.norecess.hobbes.compiler.resources.IRegister;
 import org.norecess.hobbes.compiler.resources.IntegerRegister;
+import org.norecess.hobbes.compiler.resources.NumberRegister;
 
 import com.google.inject.Inject;
 
 /*
- * A "component compiler" is a compiler that compiles only components of a program.
- * Like a single integer.
+ * Compiles the body of a function.
  */
 public class PIRBodyCompiler implements IPIRBodyCompiler {
 
-	public final static IRegister	ACC			= new IntegerRegister(0);
+	public final static IRegister	INT_ACC		= new IntegerRegister(0);
 	public final static IRegister	FLOAT_ACC	= new NumberRegister(0);
 
-	private final ICompilerFactory	myBodyVisitorFactory;
+	private final ICompilerFactory	myCompilerFactory;
 
 	@Inject
 	public PIRBodyCompiler(ICompilerFactory factory) {
-		myBodyVisitorFactory = factory;
+		myCompilerFactory = factory;
 	}
 
-	public ICode generate(HobbesType returnType, ExpressionTIR tir) {
+	public ICode generate(ExpressionTIR tir) {
 		ICode code = new Code();
-		code.append(tir.accept(myBodyVisitorFactory
-				.createBodyVisitor(getTarget(returnType))));
+		code.append(tir.accept(myCompilerFactory
+				.createBodySubcompiler(getTarget(tir.getType()))));
 		return code;
 	}
 
 	private IRegister getTarget(HobbesType returnType) {
-		return returnType == FloatingPointType.FLOATING_POINT_TYPE ? FLOAT_ACC
-				: ACC;
+		if (returnType == FloatingPointType.TYPE) {
+			return FLOAT_ACC;
+		} else {
+			return INT_ACC;
+		}
 	}
 
-	public ICode generatePrint(HobbesType returnType, ExpressionTIR tir) {
+	public ICode generatePrint(ExpressionTIR tir) {
 		ICode code = new Code();
-		if (returnType == BooleanType.BOOLEAN_TYPE) {
-			code.add("print_bool(", getTarget(returnType), ")");
+		BooleanType foo = BooleanType.TYPE;
+		if (tir.getType() == foo) {
+			code.add("print_bool(", getTarget(tir.getType()), ")");
 		} else {
-			code.add("print " + getTarget(returnType));
+			code.add("print " + getTarget(tir.getType()));
 		}
 		code.add("print \"\\n\"");
 		return code;

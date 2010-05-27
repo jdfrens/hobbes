@@ -11,22 +11,22 @@ end
 ==== compilation
 .sub main
 	load_bytecode "print.pbc"
-	$I1 = 1
-	$I2 = 2
-	$I1 += $I2
-	$I0 = $I1
-	$I3 = $I1
-	$I0 += $I3
+	$I2 = 1
+	$I3 = 2
+	$I2 += $I3
+	$I0 = $I2
+	$I4 = $I2
+	$I0 += $I4
 	$I5 = 3
 	$I6 = 4
 	$I5 += $I6
 	$I7 = 5
 	$I8 = 6
 	$I7 += $I8
-	$I4 = $I5
+	$I1 = $I5
 	$I9 = $I7
-	$I4 += $I9
-	$I0 += $I4
+	$I1 += $I9
+	$I0 += $I1
 	print $I0
 	print "\n"
 .end

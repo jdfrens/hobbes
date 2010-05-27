@@ -56,16 +56,20 @@ multiplicative_op
   ;
 	
 simple_expression
-  : INTEGER | FLOAT | BOOLEAN | IDENTIFIER
+  : atom
   | '('! expression ')'!
-  | MINUS INTEGER
-    -> ^(MINUS INTEGER)
-  | 'ARGV[' INTEGER ']'
-    -> ^(ARGV INTEGER)
+  | MINUS atom
+    -> ^(MINUS atom)
+  | 'ARGV[' expression ']'
+    -> ^(ARGV expression)
   | 'if' expression 'then' expression 'else' expression 'end'
     -> ^(IF expression*)
   | 'let' decls 'in' expression 'end'
     -> ^(LET decls expression)
+  ;
+  
+atom
+  : INTEGER | FLOAT | BOOLEAN | IDENTIFIER
   ;
   
 INTEGER

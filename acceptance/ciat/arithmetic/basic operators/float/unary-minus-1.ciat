@@ -1,0 +1,12 @@
+Unary minus of a float.
+==== source
+-10.24
+==== compilation
+.sub main
+	load_bytecode "print.pbc"
+	$N0 = -10.24
+	print $N0
+	print "\n"
+.end
+==== execution
+-10.24

@@ -1,0 +1,7 @@
+Division will not tolerate an int and a float!
+==== source
+8 / 3.14
+==== compilation error
+Error on line 1: int / float is not defined
+==== execution error
+Error on line 1: int / float is not defined

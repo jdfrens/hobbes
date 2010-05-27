@@ -1,0 +1,14 @@
+Greater than is false.
+==== source
+34.6 > 244.4
+==== compilation
+.sub main
+	load_bytecode "print.pbc"
+	$N1 = 34.6
+	$N2 = 244.4
+	$I0 = $N1 > $N2
+	print_bool($I0)
+	print "\n"
+.end
+==== execution
+#f

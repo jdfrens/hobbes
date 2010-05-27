@@ -5,10 +5,10 @@ Multiply before add.  Always.
 .sub main
 	load_bytecode "print.pbc"
 	$I0 = 2
-	$I1 = 3
-	$I0 *= $I1
-	$I2 = 1
-	$I0 += $I2
+	$I2 = 3
+	$I0 *= $I2
+	$I1 = 1
+	$I0 += $I1
 	print $I0
 	print "\n"
 .end

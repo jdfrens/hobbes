@@ -1,0 +1,18 @@
+Float expression.
+==== source
+let var x := 3.5 + 88.1
+in
+  x
+end
+==== compilation
+.sub main
+	load_bytecode "print.pbc"
+	$N1 = 3.5
+	$N2 = 88.1
+	$N1 += $N2
+	$N0 = $N1
+	print $N0
+	print "\n"
+.end
+==== execution
+91.6

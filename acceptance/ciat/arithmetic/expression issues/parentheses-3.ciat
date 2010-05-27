@@ -5,12 +5,12 @@ Parentheses override normal precedence.
 .sub main
 	load_bytecode "print.pbc"
 	$I0 = 8
-	$I1 = 2
-	$I0 += $I1
-	$I2 = 23
+	$I2 = 2
+	$I0 += $I2
+	$I1 = 23
 	$I3 = 20
-	$I2 -= $I3
-	$I0 *= $I2
+	$I1 -= $I3
+	$I0 *= $I1
 	print $I0
 	print "\n"
 .end

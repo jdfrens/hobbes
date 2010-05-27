@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import org.norecess.citkit.tir.ExpressionTIR;
-import org.norecess.citkit.types.HobbesType;
 import org.norecess.hobbes.backend.ICodeWriter;
 import org.norecess.hobbes.backend.IPIRCleaner;
 import org.norecess.hobbes.translator.ITranslator;
@@ -25,10 +24,10 @@ public class CompilerAsTranslator implements ITranslator {
 		myCodeWriter = codeWriter;
 	}
 
-	public void evalAndPrint(PrintStream out, HobbesType returnType,
-			ExpressionTIR expression) throws IOException {
-		myCodeWriter.writeCode(out, myPirCleaner.process(myCompiler.compile(
-				returnType, expression)));
+	public void evalAndPrint(PrintStream out, ExpressionTIR expression)
+			throws IOException {
+		myCodeWriter.writeCode(out,
+				myPirCleaner.process(myCompiler.compile(expression)));
 	}
 
 }

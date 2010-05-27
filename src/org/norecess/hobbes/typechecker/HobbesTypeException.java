@@ -10,6 +10,9 @@ public class HobbesTypeException extends RuntimeException {
 
 	public HobbesTypeException(IPosition position, String message) {
 		super(message);
+		if (position == null) {
+			throw new IllegalArgumentException("position must not be null.");
+		}
 		myPosition = position;
 	}
 

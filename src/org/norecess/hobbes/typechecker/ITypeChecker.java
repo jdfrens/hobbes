@@ -5,22 +5,26 @@ import java.util.List;
 import org.norecess.citkit.environment.IEnvironment;
 import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
-import org.norecess.citkit.types.PrimitiveType;
+import org.norecess.citkit.tir.LValueTIR;
+import org.norecess.citkit.types.HobbesType;
+import org.norecess.citkit.visitors.DeclarationTIRVisitor;
 import org.norecess.citkit.visitors.ExpressionTIRVisitor;
 import org.norecess.citkit.visitors.LValueTIRVisitor;
 
-public interface ITypeChecker extends ExpressionTIRVisitor<PrimitiveType>,
-		LValueTIRVisitor<PrimitiveType> {
+public interface ITypeChecker extends ExpressionTIRVisitor<ExpressionTIR>,
+		LValueTIRVisitor<LValueTIR>, DeclarationTIRVisitor<DeclarationTIR> {
 
-	PrimitiveType recurse(IEnvironment<PrimitiveType> newEnvironment,
+	ExpressionTIR recurse(IEnvironment<HobbesType> newEnvironment,
 			ExpressionTIR expression);
 
-	PrimitiveType recurse(ExpressionTIR expression);
+	ExpressionTIR recurse(ExpressionTIR expression);
 
-	IEnvironment<PrimitiveType> bind(
-			IEnvironment<PrimitiveType> newEnvironment,
-			List<? extends DeclarationTIR> declarations);
+	DeclarationTIR recurse(DeclarationTIR declarationTIR);
 
-	ITypeBinder createBinder(IEnvironment<PrimitiveType> environment);
+	IEnvironment<HobbesType> bind(List<? extends DeclarationTIR> declarations);
+
+	ITypeBinder createBinder(IEnvironment<HobbesType> environment);
+
+	List<DeclarationTIR> recurse(List<? extends DeclarationTIR> declarations);
 
 }

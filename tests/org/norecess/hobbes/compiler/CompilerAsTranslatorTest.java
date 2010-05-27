@@ -9,7 +9,6 @@ import org.easymock.IMocksControl;
 import org.junit.Before;
 import org.junit.Test;
 import org.norecess.citkit.tir.ExpressionTIR;
-import org.norecess.citkit.types.HobbesType;
 import org.norecess.hobbes.backend.ICode;
 import org.norecess.hobbes.backend.ICodeWriter;
 import org.norecess.hobbes.backend.IPIRCleaner;
@@ -39,20 +38,18 @@ public class CompilerAsTranslatorTest {
 	@Test
 	public void shouldEvalAndPrint() throws IOException {
 		PrintStream out = new PrintStream(new ByteArrayOutputStream());
-		HobbesType returnType = myMocksControl.createMock(HobbesType.class);
 		ExpressionTIR expression = myMocksControl
 				.createMock(ExpressionTIR.class);
 		ICode compiledCode = myMocksControl.createMock(ICode.class);
 		ICode cleanedCode = myMocksControl.createMock(ICode.class);
 
-		EasyMock.expect(myCompiler.compile(returnType, expression)).andReturn(
-				compiledCode);
+		EasyMock.expect(myCompiler.compile(expression)).andReturn(compiledCode);
 		EasyMock.expect(myPirCleaner.process(compiledCode)).andReturn(
 				cleanedCode);
 		myCodeWriter.writeCode(out, cleanedCode);
 
 		myMocksControl.replay();
-		myCompilerAsTranslator.evalAndPrint(out, returnType, expression);
+		myCompilerAsTranslator.evalAndPrint(out, expression);
 		myMocksControl.verify();
 	}
 

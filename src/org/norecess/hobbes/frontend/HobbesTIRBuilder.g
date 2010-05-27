@@ -31,12 +31,14 @@ expression returns [ExpressionTIR tir]
     { tir = new FloatingPointETIR(new Position(f.getLine()), f.getText()); }
   | b=BOOLEAN
     { tir = new BooleanETIR(new Position(b.getLine()), b.getText()); }
-  | s=symbol
-    { tir = new VariableETIR(new SimpleLValueTIR(s)); }
+  | s=IDENTIFIER
+    { tir = new VariableETIR(new Position(s.getLine()), new SimpleLValueTIR(Symbol.createSymbol(s.getText()))); }
   | ^(ARGV e=expression)
-    { tir = new VariableETIR(new SubscriptLValueTIR(new SimpleLValueTIR(Symbol.createSymbol("ARGV")), e)); }
+    { tir = new VariableETIR(e.getPosition(), new SubscriptLValueTIR(e.getPosition(), new SimpleLValueTIR(Symbol.createSymbol("ARGV")), e)); }
   | ^(MINUS i=INTEGER)
     { tir = new IntegerETIR("-" + i.getText()); }
+  | ^(MINUS f=FLOAT)
+    { tir = new FloatingPointETIR(new Position(f.getLine()), "-" + f.getText()); }
   | ^(op=operator left=expression right=expression)
     { tir = new OperatorETIR(new Position(op.line), left, op.operator, right); }
   | ^(IF test=expression consequence=expression otherwise=expression)

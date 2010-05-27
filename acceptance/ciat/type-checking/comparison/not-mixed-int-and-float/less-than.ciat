@@ -1,0 +1,7 @@
+int and float in less than is an error.
+==== source
+3.14159 < 10
+==== compilation error
+Error on line 1: float < int is not defined
+==== execution error
+Error on line 1: float < int is not defined

@@ -1,0 +1,9 @@
+Subtractions doesn't like int and float; and the line number matters.
+==== source
+8
+-
+3.4
+==== compilation error
+Error on line 2: int - float is not defined
+==== execution error
+Error on line 2: int - float is not defined

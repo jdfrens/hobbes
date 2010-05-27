@@ -1,6 +1,7 @@
 package org.norecess.hobbes.frontend;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import org.norecess.antlr.ANTLRTester;
 import org.norecess.citkit.Symbol;
 import org.norecess.citkit.tir.DeclarationTIR;
 import org.norecess.citkit.tir.ExpressionTIR;
+import org.norecess.citkit.tir.HobbesTIR;
 import org.norecess.citkit.tir.Position;
 import org.norecess.citkit.tir.declarations.VariableDTIR;
 import org.norecess.citkit.tir.expressions.FloatingPointETIR;
@@ -90,9 +92,15 @@ public class HobbesTIRBuilderTest {
 	}
 
 	@Test
-	public void shouldBuildUnaryMinus() {
+	public void shouldBuildUnaryMinusForIntegers() {
 		assertEquals(new IntegerETIR(-5), myTester.treeParseInput("-5"));
 		assertEquals(new IntegerETIR(-1223), myTester.treeParseInput("-1223"));
+	}
+
+	@Test
+	public void shouldBuildUnaryMinusForFloats() {
+		assertEquals(new FloatingPointETIR(-3.14159),
+				myTester.treeParseInput("-3.14159"));
 	}
 
 	@Test
@@ -196,26 +204,39 @@ public class HobbesTIRBuilderTest {
 
 	@Test
 	public void shouldBuildVariableLValues() {
-		assertEquals(
+		assertTIR(
 				new VariableETIR(
-						new SimpleLValueTIR(Symbol.createSymbol("foo"))), //
+						new SimpleLValueTIR(Symbol.createSymbol("foo"))),
 				myTester.treeParseInput("foo"));
-		assertEquals(
+		assertTIR(
 				new VariableETIR(new SimpleLValueTIR(
 						Symbol.createSymbol("thx1138"))), //
 				myTester.treeParseInput("thx1138"));
 	}
 
 	@Test
-	public void shouldBuildCommandLineArgumentRequest() {
-		assertEquals(new VariableETIR(new SubscriptLValueTIR(
-				new SimpleLValueTIR(Symbol.createSymbol("ARGV")),
-				new IntegerETIR(1))), //
+	public void shouldBuildCommandLineArgumentReference() {
+		assertTIR(new VariableETIR(new SubscriptLValueTIR(new SimpleLValueTIR(
+				Symbol.createSymbol("ARGV")), new IntegerETIR(1))), //
 				myTester.treeParseInput("ARGV[1]"));
+		assertTIR(new VariableETIR(new SubscriptLValueTIR(new SimpleLValueTIR(
+				Symbol.createSymbol("ARGV")), new IntegerETIR(8))), //
+				myTester.treeParseInput("ARGV[8]"));
+	}
+
+	@Test
+	public void shouldHavePositionInSubscriptLValue() {
+		VariableETIR tree = (VariableETIR) myTester.treeParseInput("ARGV[1]");
+		assertNotNull(tree.getLValue().getPosition());
+	}
+
+	@Test
+	public void shouldBuildOperatorAsCommandLineArgumentIndex() {
 		assertEquals(new VariableETIR(new SubscriptLValueTIR(
 				new SimpleLValueTIR(Symbol.createSymbol("ARGV")),
-				new IntegerETIR(8))), //
-				myTester.treeParseInput("ARGV[8]"));
+				new OperatorETIR(new IntegerETIR(1), Operator.ADD,
+						new IntegerETIR(2)))), //
+				myTester.treeParseInput("ARGV[1+2]"));
 	}
 
 	@Test
@@ -253,6 +274,12 @@ public class HobbesTIRBuilderTest {
 		assertEquals(new Position(line),
 				((ExpressionTIR) myTester.treeParseInput(expression))
 						.getPosition());
+	}
+
+	private void assertTIR(VariableETIR expectedTIR, Object actualTIR) {
+		assertNotNull("should have a position",
+				((HobbesTIR) actualTIR).getPosition());
+		assertEquals(expectedTIR, actualTIR);
 	}
 
 }

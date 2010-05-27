@@ -1,0 +1,14 @@
+Should be able to divide one floats by another.
+==== source
+13.0/2.0
+==== compilation
+.sub main
+	load_bytecode "print.pbc"
+	$N0 = 13.0
+	$N1 = 2.0
+	$N0 /= $N1
+	print $N0
+	print "\n"
+.end
+==== execution
+6.5

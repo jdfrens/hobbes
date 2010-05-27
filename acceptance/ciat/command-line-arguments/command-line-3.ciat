@@ -1,4 +1,4 @@
-Adds argv[1] to 8.
+Adds argv[5] to 8.
 ==== source
 ARGV[5] + 8
 ==== compilation

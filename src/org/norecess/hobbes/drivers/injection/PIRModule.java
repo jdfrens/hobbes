@@ -17,12 +17,14 @@ import org.norecess.hobbes.compiler.ICompilerFactory;
 import org.norecess.hobbes.compiler.IPIRCompiler;
 import org.norecess.hobbes.compiler.PIRCompiler;
 import org.norecess.hobbes.compiler.body.IPIRBodyCompiler;
+import org.norecess.hobbes.compiler.body.IRegisterStrategy;
 import org.norecess.hobbes.compiler.body.PIRBodyCompiler;
+import org.norecess.hobbes.compiler.body.RegisterStrategy;
+import org.norecess.hobbes.compiler.body.operators.ArithmeticOperator;
+import org.norecess.hobbes.compiler.body.operators.ComparisonOperator;
+import org.norecess.hobbes.compiler.body.operators.OperatorInstruction;
 import org.norecess.hobbes.compiler.epilog.IPIREpilogCompiler;
 import org.norecess.hobbes.compiler.epilog.PIREpilogCompiler;
-import org.norecess.hobbes.compiler.operators.ArithmeticOperator;
-import org.norecess.hobbes.compiler.operators.ComparisonOperator;
-import org.norecess.hobbes.compiler.operators.OperatorInstruction;
 import org.norecess.hobbes.compiler.prolog.IPIRPrologCompiler;
 import org.norecess.hobbes.compiler.prolog.PIRPrologCompiler;
 import org.norecess.hobbes.compiler.resources.IRegister;
@@ -37,10 +39,15 @@ import com.google.inject.Provides;
 
 public class PIRModule extends AbstractModule {
 
+	private final ResourceAllocator	myResourceAllocator;
+
+	public PIRModule() {
+		myResourceAllocator = new ResourceAllocator();
+	}
+
 	@Override
 	protected void configure() {
 		bind(IPIRCleaner.class).to(PIRCleaner.class);
-		bind(IResourceAllocator.class).to(ResourceAllocator.class);
 		bind(ICodeWriter.class).to(CodeWriter.class);
 		bind(ITranslator.class).to(CompilerAsTranslator.class);
 		bind(IPIRCompiler.class).to(PIRCompiler.class);
@@ -49,6 +56,16 @@ public class PIRModule extends AbstractModule {
 		bind(IPIREpilogCompiler.class).to(PIREpilogCompiler.class);
 		bind(ICompilerFactory.class).to(CompilerFactory.class);
 		bind(IErrorHandler.class).to(ErrorHandler.class);
+	}
+
+	@Provides
+	public IResourceAllocator provideResourceAllocator() {
+		return myResourceAllocator;
+	}
+
+	@Provides
+	IRegisterStrategy provideRegisterStrategy() {
+		return new RegisterStrategy(myResourceAllocator);
 	}
 
 	@Provides

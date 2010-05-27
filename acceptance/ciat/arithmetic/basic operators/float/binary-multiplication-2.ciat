@@ -1,0 +1,14 @@
+Should be able to multiply two multi-digit floats together.
+==== source
+10.24*4.0
+==== compilation
+.sub main
+	load_bytecode "print.pbc"
+	$N0 = 10.24
+	$N1 = 4.0
+	$N0 *= $N1
+	print $N0
+	print "\n"
+.end
+==== execution
+40.96

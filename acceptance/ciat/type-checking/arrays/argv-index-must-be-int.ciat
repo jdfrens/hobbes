@@ -1,0 +1,7 @@
+Index of ARGV must be an int.
+==== source
+ARGV[3.14159]
+==== compilation error
+Error on line 1: array index must be an int.
+==== execution error
+Error on line 1: array index must be an int.
