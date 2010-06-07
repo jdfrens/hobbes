@@ -25,12 +25,11 @@ program
 	;
 
 expression
-  : comparitive_expression
+  : logic_expression
   ;
   
-decls
-  : ('var' IDENTIFIER ':=' expression)*
-    -> ^(DECLS (IDENTIFIER expression)*)
+logic_expression
+  : comparitive_expression (logic_op^ comparitive_expression)*
   ;
   
 comparitive_expression
@@ -45,6 +44,9 @@ multiplicative_expression
   : simple_expression (multiplicative_op^ simple_expression)*
   ;
   
+logic_op
+  : AND | OR
+  ;
 comparitive_op
   : LT | LTE | EQ | NEQ | GT | GTE
   ;
@@ -70,6 +72,11 @@ simple_expression
   
 atom
   : INTEGER | FLOAT | BOOLEAN | IDENTIFIER
+  ;
+  
+decls
+  : ('var' IDENTIFIER ':=' expression)*
+    -> ^(DECLS (IDENTIFIER expression)*)
   ;
   
 INTEGER
@@ -100,6 +107,9 @@ EQ : '==' ;
 NEQ : '!=' ;
 GTE : '>=' ;
 GT : '>' ;
+
+AND : '&' ;
+OR : '|' ;
 
 WS
   :	(' ' | '\t' | '\n')+

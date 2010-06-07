@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.BaseRecognizer;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.tree.CommonTreeNodeStream;
@@ -33,9 +34,31 @@ public class HobbesFrontEnd implements IHobbesFrontEnd {
 	}
 
 	public ExpressionTIR process() throws RecognitionException, IOException {
-		Tree tree = new HobbesParser(new CommonTokenStream(new HobbesLexer(
-				getInputStream()))).program().tree;
-		return new HobbesTIRBuilder(new CommonTreeNodeStream(tree)).program();
+		return buildTir(parse());
+	}
+
+	private ExpressionTIR buildTir(Tree tree) throws RecognitionException {
+		HobbesTIRBuilder tirBuilder = new HobbesTIRBuilder(
+				new CommonTreeNodeStream(tree));
+		ExpressionTIR program = tirBuilder.program();
+		reportErrors(tirBuilder, "TIR builder");
+		return program;
+	}
+
+	private Tree parse() throws IOException, RecognitionException {
+		HobbesLexer lexer = new HobbesLexer(getInputStream());
+		HobbesParser parser = new HobbesParser(new CommonTokenStream(lexer));
+		Tree tree = parser.program().tree;
+		reportErrors(lexer, "lexer");
+		reportErrors(parser, "parser");
+		return tree;
+	}
+
+	private void reportErrors(BaseRecognizer recognizer, String where) {
+		if (recognizer.getNumberOfSyntaxErrors() > 0) {
+			throw new TooManySyntaxErrors(recognizer.getNumberOfSyntaxErrors()
+					+ " in the " + where);
+		}
 	}
 
 	private ANTLRStringStream getInputStream() throws IOException {

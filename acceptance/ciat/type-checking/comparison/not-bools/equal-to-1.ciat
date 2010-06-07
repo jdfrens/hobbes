@@ -1,4 +1,4 @@
-Equals works only on integers.  (Really?)
+bool == int is an error.
 ==== source
 #f == 10
 ==== compilation error

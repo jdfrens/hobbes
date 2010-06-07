@@ -1,4 +1,4 @@
-Not equals works only on integers.
+int != bool is an error.
 ==== source
 82 != #f
 ==== compilation error

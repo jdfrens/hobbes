@@ -89,6 +89,12 @@ public class HobbesLexerTest {
 	}
 
 	@Test
+	public void shouldRecognizeLogicOperators() {
+		assertToken(HobbesLexer.AND, "&", myTester.scanInput("&"));
+		assertToken(HobbesLexer.OR, "|", myTester.scanInput("|"));
+	}
+
+	@Test
 	public void shouldIgnoreWhitespace() {
 		assertToken(HobbesLexer.INTEGER, "5", myTester.scanInput(" 5"));
 		assertToken(HobbesLexer.INTEGER, "5", myTester.scanInput("\t5"));

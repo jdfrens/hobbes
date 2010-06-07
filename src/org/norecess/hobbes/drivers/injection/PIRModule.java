@@ -22,6 +22,7 @@ import org.norecess.hobbes.compiler.body.PIRBodyCompiler;
 import org.norecess.hobbes.compiler.body.RegisterStrategy;
 import org.norecess.hobbes.compiler.body.operators.ArithmeticOperator;
 import org.norecess.hobbes.compiler.body.operators.ComparisonOperator;
+import org.norecess.hobbes.compiler.body.operators.LogicOperator;
 import org.norecess.hobbes.compiler.body.operators.OperatorInstruction;
 import org.norecess.hobbes.compiler.epilog.IPIREpilogCompiler;
 import org.norecess.hobbes.compiler.epilog.PIREpilogCompiler;
@@ -78,7 +79,14 @@ public class PIRModule extends AbstractModule {
 		Map<IOperator, OperatorInstruction> operatorInstructions = new HashMap<IOperator, OperatorInstruction>();
 		addArithmeticOperators(operatorInstructions);
 		addComparisonOperators(operatorInstructions);
+		addLogicOperators(operatorInstructions);
 		return operatorInstructions;
+	}
+
+	private void addLogicOperators(
+			Map<IOperator, OperatorInstruction> operatorInstructions) {
+		operatorInstructions.put(Operator.AND, new LogicOperator("and"));
+		operatorInstructions.put(Operator.OR, new LogicOperator("or"));
 	}
 
 	private void addComparisonOperators(

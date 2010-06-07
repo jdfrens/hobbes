@@ -61,7 +61,7 @@ declarations returns [List<DeclarationTIR> decls = new ArrayList<DeclarationTIR>
   ;
 
 operator returns [Operator operator, int line]
-  : op=( PLUS | MINUS | MULTIPLY | DIVIDE | MODULUS | LT | LTE | GTE | GT )
+  : op=( PLUS | MINUS | MULTIPLY | DIVIDE | MODULUS | LT | LTE | GTE | GT | AND | OR )
     { 
       $line = op.getLine(); 
       $operator = Operator.convertPunctuation(op.getText());

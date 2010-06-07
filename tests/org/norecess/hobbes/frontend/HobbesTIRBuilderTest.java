@@ -15,6 +15,7 @@ import org.norecess.citkit.tir.ExpressionTIR;
 import org.norecess.citkit.tir.HobbesTIR;
 import org.norecess.citkit.tir.Position;
 import org.norecess.citkit.tir.declarations.VariableDTIR;
+import org.norecess.citkit.tir.expressions.BooleanETIR;
 import org.norecess.citkit.tir.expressions.FloatingPointETIR;
 import org.norecess.citkit.tir.expressions.IfETIR;
 import org.norecess.citkit.tir.expressions.IntegerETIR;
@@ -154,6 +155,28 @@ public class HobbesTIRBuilderTest {
 	}
 
 	@Test
+	public void shouldBuildAnd() {
+		assertTIR(new OperatorETIR(new BooleanETIR(true), Operator.AND,
+				new BooleanETIR(false)), myTester.treeParseInput("#t & #f"));
+		assertTIR(
+				new OperatorETIR(new VariableETIR(new SimpleLValueTIR(
+						Symbol.createSymbol("foo"))), Operator.AND,
+						new BooleanETIR(true)),
+				myTester.treeParseInput("foo & #t"));
+	}
+
+	@Test
+	public void shouldBuildOr() {
+		assertTIR(new OperatorETIR(new BooleanETIR(true), Operator.OR,
+				new BooleanETIR(false)), myTester.treeParseInput("#t | #f"));
+		assertTIR(
+				new OperatorETIR(new VariableETIR(new SimpleLValueTIR(
+						Symbol.createSymbol("foo"))), Operator.OR,
+						new BooleanETIR(true)),
+				myTester.treeParseInput("foo | #t"));
+	}
+
+	@Test
 	public void shouldBuildLetExpressions() {
 		assertEquals(new LetETIR(new ArrayList<DeclarationTIR>(),
 				new IntegerETIR(5)), myTester.treeParseInput("let in 5 end"));
@@ -276,7 +299,8 @@ public class HobbesTIRBuilderTest {
 						.getPosition());
 	}
 
-	private void assertTIR(VariableETIR expectedTIR, Object actualTIR) {
+	private void assertTIR(ExpressionTIR expectedTIR, Object actualTIR) {
+		assertNotNull("should have a TIR", actualTIR);
 		assertNotNull("should have a position",
 				((HobbesTIR) actualTIR).getPosition());
 		assertEquals(expectedTIR, actualTIR);

@@ -1,0 +1,14 @@
+Compute logical AND.
+==== source
+#t & #t
+==== compilation
+.sub main
+	load_bytecode "print.pbc"
+	$I0 = 1
+	$I1 = 1
+	$I0 = and $I0, $I1
+	print_bool($I0)
+	print "\n"
+.end
+==== execution
+#t

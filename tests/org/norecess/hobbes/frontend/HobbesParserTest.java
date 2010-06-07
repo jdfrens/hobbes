@@ -126,6 +126,21 @@ public class HobbesParserTest {
 	}
 
 	@Test
+	public void shouldParseAndExpression() {
+		assertTree(HobbesParser.AND, "(&(#t)(#f))",
+				myTester.parseInput("#t & #f"));
+		assertTree(HobbesParser.AND, "(&(x)(#t))",
+				myTester.parseInput("x & #t"));
+	}
+
+	@Test
+	public void shouldParseOrExpression() {
+		assertTree(HobbesParser.OR, "(|(#t)(#f))",
+				myTester.parseInput("#t | #f"));
+		assertTree(HobbesParser.OR, "(|(x)(#t))", myTester.parseInput("x | #t"));
+	}
+
+	@Test
 	public void shouldParseLeftAssociativeExpressions() {
 		assertTree(HobbesParser.PLUS, "(+(+(8)(12))(32))",
 				myTester.parseInput("8+12+32"));
@@ -145,6 +160,10 @@ public class HobbesParserTest {
 				myTester.parseInput("2 + 3 >= 1"));
 		assertTree(HobbesParser.GTE, "(>=(2)(+(3)(1)))",
 				myTester.parseInput("2 >= 3 + 1"));
+		assertTree(HobbesParser.AND, "(&(#t)(<(3)(1)))",
+				myTester.parseInput("#t & 3 < 1"));
+		assertTree(HobbesParser.AND, "(&(<(3)(1))(#t))",
+				myTester.parseInput("3 < 1 & #t"));
 	}
 
 	@Test

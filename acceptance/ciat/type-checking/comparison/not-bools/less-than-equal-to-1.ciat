@@ -1,4 +1,4 @@
-Less than or equals works only on integers.
+bool <= int is an error
 ==== source
 #f <= 10
 ==== compilation error

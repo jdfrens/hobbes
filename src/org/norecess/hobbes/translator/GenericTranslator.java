@@ -9,6 +9,7 @@ import org.norecess.hobbes.drivers.AbortTranslatorException;
 import org.norecess.hobbes.drivers.StatusCodes;
 import org.norecess.hobbes.drivers.system.IExternalSystem;
 import org.norecess.hobbes.frontend.IHobbesFrontEnd;
+import org.norecess.hobbes.frontend.TooManySyntaxErrors;
 import org.norecess.hobbes.typechecker.ITopLevelTypeChecker;
 
 import com.google.inject.Inject;
@@ -39,6 +40,8 @@ public class GenericTranslator {
 			myExternalSystem.exit(StatusCodes.STATUS_OK);
 		} catch (AbortTranslatorException e) {
 			myExternalSystem.exit(e.getStatus());
+		} catch (TooManySyntaxErrors e) {
+			myExternalSystem.exit(500);
 		}
 	}
 

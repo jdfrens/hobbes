@@ -22,9 +22,10 @@ public class OperatorTypeCheckersFactory {
 				Operator.DIVIDE);
 		add(new ModulusTypeChecker(), Operator.MODULUS);
 		add(new ComparisonTypeChecker(), //
-		Operator.LESS_THAN, Operator.LESS_EQUALS, Operator.EQUALS,
-				Operator.GREATER_EQUALS, Operator.GREATER_THAN,
-				Operator.NOT_EQUALS);
+		Operator.LESS_THAN, Operator.LESS_EQUALS,
+				Operator.GREATER_EQUALS, Operator.GREATER_THAN);
+		add(new EqualityTypeChecker(), Operator.EQUALS, Operator.NOT_EQUALS);
+		add(new LogicTypeChecker(), Operator.AND, Operator.OR);
 		return myTypeCheckers;
 	}
 

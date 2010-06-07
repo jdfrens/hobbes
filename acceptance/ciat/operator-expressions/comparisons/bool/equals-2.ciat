@@ -1,0 +1,14 @@
+Equals is false.
+==== source
+#t == #f
+==== compilation
+.sub main
+	load_bytecode "print.pbc"
+	$I0 = 1
+	$I1 = 0
+	$I0 = $I0 == $I1
+	print_bool($I0)
+	print "\n"
+.end
+==== execution
+#f

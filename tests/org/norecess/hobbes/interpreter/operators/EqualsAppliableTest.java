@@ -51,4 +51,16 @@ public class EqualsAppliableTest {
 				new FloatingPointETIR(23.6), new FloatingPointETIR(23.6)));
 	}
 
+	@Test
+	public void shouldCompareBools() {
+		assertEquals(HobbesBoolean.TRUE,
+				myOperator.apply(HobbesBoolean.TRUE, HobbesBoolean.TRUE));
+		assertEquals(HobbesBoolean.TRUE,
+				myOperator.apply(HobbesBoolean.FALSE, HobbesBoolean.FALSE));
+		assertEquals(HobbesBoolean.FALSE,
+				myOperator.apply(HobbesBoolean.TRUE, HobbesBoolean.FALSE));
+		assertEquals(HobbesBoolean.FALSE,
+				myOperator.apply(HobbesBoolean.FALSE, HobbesBoolean.TRUE));
+	}
+
 }

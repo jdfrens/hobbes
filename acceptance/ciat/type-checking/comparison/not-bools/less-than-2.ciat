@@ -1,0 +1,7 @@
+bool < float is an error.
+==== source
+#f < 1.1
+==== compilation error
+Error on line 1: bool < float is not defined
+==== execution error
+Error on line 1: bool < float is not defined

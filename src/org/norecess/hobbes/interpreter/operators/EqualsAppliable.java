@@ -1,6 +1,7 @@
 package org.norecess.hobbes.interpreter.operators;
 
 import org.norecess.citkit.tir.data.DatumTIR;
+import org.norecess.citkit.tir.expressions.IBooleanETIR;
 import org.norecess.citkit.tir.expressions.IFloatingPointETIR;
 import org.norecess.citkit.tir.expressions.IIntegerETIR;
 import org.norecess.hobbes.HobbesBoolean;
@@ -18,6 +19,10 @@ public class EqualsAppliable implements Appliable {
 
 	public DatumTIR apply(IFloatingPointETIR x, IFloatingPointETIR y) {
 		return HobbesBoolean.convert(x.getValue() == y.getValue());
+	}
+
+	public DatumTIR apply(IBooleanETIR a, IBooleanETIR b) {
+		return HobbesBoolean.convert(a.getValue() == b.getValue());
 	}
 
 }

@@ -5,9 +5,9 @@ let var x := 3.5
     var i := 8
     var j := 2
 in
-  let var left := x + y
-      var right := i * j
-  in left
+  let var left := x < y
+      var right := i < j
+  in left & right
   end
 end
 ==== compilation
@@ -17,15 +17,17 @@ end
 	$N2 = 88.1
 	$I3 = 8
 	$I4 = 2
-	$N5 = $N1
-	$N6 = $N2
-	$N5 += $N6
-	$I7 = $I3
-	$I8 = $I4
-	$I7 *= $I8
-	$N0 = $N5
-	print $N0
+	$N6 = $N1
+	$N7 = $N2
+	$I5 = $N6 < $N7
+	$I8 = $I3
+	$I9 = $I4
+	$I8 = $I8 < $I9
+	$I0 = $I5
+	$I10 = $I8
+	$I0 = and $I0, $I10
+	print_bool($I0)
 	print "\n"
 .end
 ==== execution
-91.6
+#f

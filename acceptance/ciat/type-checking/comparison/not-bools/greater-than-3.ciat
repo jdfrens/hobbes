@@ -1,0 +1,7 @@
+bool > bool is an error.
+==== source
+#t > #f
+==== compilation error
+Error on line 1: bool > bool is not defined
+==== execution error
+Error on line 1: bool > bool is not defined
